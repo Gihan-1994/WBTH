@@ -1,0 +1,9 @@
+{
+  "name": "ml",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "python api.py",
+    "start": "python api.py"
+  }
+}

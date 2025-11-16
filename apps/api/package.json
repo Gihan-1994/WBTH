@@ -1,0 +1,10 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'API service not yet implemented. See apps/web for v1 API routes.'",
+    "build": "echo 'API service not yet implemented.'",
+    "start": "echo 'API service not yet implemented.'"
+  }
+}

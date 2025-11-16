@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  tourist
+  guide
+  accommodation_provider
+  admin
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  password_hash String
+  contact_no    String?
+  role          UserRole  @default(tourist)
+  created_at    DateTime  @default(now()) @map("created_at")
+
+  guide                Guide?
+  accommodationProvider AccommodationProvider?
+  bookings             Booking[]
+  paymentsSent         Payment[]              @relation("SenderPayments")
+  paymentsReceived     Payment[]              @relation("ReceiverPayments")
+  notifications        Notification[]
+  admin                Admin?
+
+  @@map("users")
+}
+
+model Guide {
+  user_id      String   @id
+  user         User     @relation(fields: [user_id], references: [id])
+  experience   String[]
+  languages    String[]
+  expertise    String[]
+  rating       Float?
+  account_no   String?
+  price        Float?
+
+  @@map("guides")
+}
+
+model AccommodationProvider {
+  user_id      String @id
+  user         User   @relation(fields: [user_id], references: [id])
+  provider_id  String @unique @default(uuid())
+  company_name String
+
+  accommodations Accommodation[]
+
+  @@map("accommodation_providers")
+}
+
+model Accommodation {
+  id                String                 @id @default(uuid())
+  provider_id       String
+  provider          AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
+  name              String
+  type              String[]
+  amenities         String[]
+  rating            Float?
+  account_no        String?
+  budget            String[] // Consider a more structured type if needed
+  location          String // city + lat/lng or district
+  price_range_min   Float?
+  price_range_max   Float?
+  province          String?
+  interests         String[]
+  group_size        Int?
+  num_booking_dates Int?
+  prior_bookings    Int?
+
+  bookings Booking[]
+
+  @@map("accommodations")
+}
+
+enum BookingType {
+  accommodation
+  guide
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  cancelled
+}
+
+model Booking {
+  id          String        @id @default(uuid())
+  user_id     String
+  user        User          @relation(fields: [user_id], references: [id])
+  type        BookingType
+  start_date  DateTime      @map("start_date")
+  end_date    DateTime      @map("end_date")
+  location    String?
+  price       Float
+  status      BookingStatus @default(pending)
+  description String[]
+
+  accommodation_id String?
+  accommodation    Accommodation? @relation(fields: [accommodation_id], references: [id])
+
+  payments Payment[]
+
+  @@map("bookings")
+}
+
+model Rating {
+  id          String  @id @default(uuid())
+  provider_id String // This could be user_id of Guide or AccommodationProvider
+  rating      Int     // Removed @min(1) @max(5) as these are not valid Prisma attributes.
+                        // Validation should be handled at the application level.
+
+  @@map("ratings")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  category    String
+  date        DateTime
+  location    String
+  description String[]
+
+  @@map("events")
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  receiver_id String
+  receiver    User     @relation("ReceiverPayments", fields: [receiver_id], references: [id])
+  sender_id   String
+  sender      User     @relation("SenderPayments", fields: [sender_id], references: [id])
+  booking_id  String
+  booking     Booking  @relation(fields: [booking_id], references: [id])
+  amount      Float
+  status      String // e.g., "completed", "pending", "failed"
+
+  @@map("payments")
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id])
+  type       String
+  message    String[]
+  created_at DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
+}
+
+model Admin {
+  id            String @id @default(uuid())
+  user_id       String @unique
+  user          User   @relation(fields: [user_id], references: [id])
+  email         String @unique
+  password_hash String
+
+  @@map("admins")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

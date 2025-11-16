@@ -1,0 +1,22 @@
+{
+  "name": "wbth",
+  "private": true,
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "migrate": "yarn -C packages/prisma prisma migrate deploy",
+    "seed": "yarn -C packages/prisma prisma db seed"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "prettier": "^3.3.3"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/config/*"
+  ]
+}
