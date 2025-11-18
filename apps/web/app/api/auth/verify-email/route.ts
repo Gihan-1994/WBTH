@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/prisma/src/client";
 import { consumeEmailVerificationToken } from "@/app/lib/auth";
-
+//comment test
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
