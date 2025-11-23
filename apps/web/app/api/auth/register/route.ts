@@ -3,9 +3,9 @@ import { prisma } from "@repo/prisma/src/client";
 import { hashPassword, createEmailVerificationToken } from "@/app/lib/auth";
 
 export async function POST(req: NextRequest) {
-  const { name, email, password } = await req.json();
+  const { name, email, password, role } = await req.json();
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !role) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
@@ -19,12 +19,18 @@ export async function POST(req: NextRequest) {
 
   const password_hash = await hashPassword(password);
 
+  // Validate role against allowed values (basic check, though Zod on frontend handles it too)
+  const allowedRoles = ["tourist", "guide", "accommodation_provider"];
+  if (!allowedRoles.includes(role)) {
+    return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+  }
+
   await prisma.user.create({
     data: {
       name,
       email,
       password_hash,
-      // role will use your default, e.g. "tourist"
+      role,
     },
   });
 

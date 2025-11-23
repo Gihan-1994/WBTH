@@ -1,23 +1,36 @@
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { verifySessionToken } from "@/app/lib/auth";
+import { authOptions } from "../../lib/auth-options";
 
-export default function DashboardPage() {
-  const cookieStore = cookies();
-  const token = cookieStore.get("session")?.value;
+export default async function DashboardPage() {
+  /**
+   * Main Dashboard Entry Point.
+   * Redirects users to their specific dashboard based on their role.
+   */
+  const session = await getServerSession(authOptions);
 
-  if (!token) {
+  if (!session || !session.user) {
     redirect("/login");
   }
 
-  const payload = verifySessionToken(token);
-  if (!payload) {
-    redirect("/login");
-  }
+  // @ts-ignore
+  const role = session.user.role;
 
-  return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-3xl font-bold">Dashboard (Protected)</h1>
-    </main>
-  );
+  switch (role) {
+    case "tourist":
+      redirect("/dashboard/tourist");
+    case "guide":
+      redirect("/dashboard/guide");
+    case "accommodation_provider":
+      redirect("/dashboard/provider");
+    case "admin":
+      redirect("/dashboard/admin");
+    default:
+      return (
+        <div className="p-8">
+          <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
+          <p>Unknown user role: {role}</p>
+        </div>
+      );
+  }
 }

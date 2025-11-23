@@ -1,7 +1,18 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
@@ -9,10 +20,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
+
   useEffect(() => {
     const authError = searchParams.get("error");
     if (authError) {
-      // Map NextAuth error codes to user-friendly messages
       if (authError === "CredentialsSignin") {
         setError("Invalid email or password.");
       } else {
@@ -21,31 +39,30 @@ export default function LoginPage() {
     }
   }, [searchParams]);
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit(data: LoginFormValues) {
     setLoading(true);
     setError(null);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      console.log("Attempting sign in...");
+      const res = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
       });
+      console.log("Sign in response:", res);
 
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        setError(data.error ?? "An unknown error occurred. Please try again.");
-        return;
+      if (res?.error) {
+        console.error("Sign in error:", res.error);
+        setError("Invalid email or password.");
+      } else if (res?.ok) {
+        console.log("Sign in successful, redirecting...");
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        console.warn("Unknown sign in state");
+        setError("An unknown error occurred. Please try again.");
       }
-
-      router.push("/dashboard");
     } catch (err) {
       setError("Network error. Please try again.");
     } finally {
@@ -54,44 +71,68 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <form
-        onSubmit={onSubmit}
-        className="w-full max-w-md space-y-4 border p-6 rounded"
-      >
-        <h1 className="text-2xl font-bold">Login</h1>
+    <main className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md space-y-6 border p-8 rounded-lg shadow-sm bg-white">
+        <h1 className="text-3xl font-bold text-center text-gray-800">
+          Welcome Back
+        </h1>
 
         {searchParams.get("verified") && (
-          <p className="text-green-600 text-sm">
+          <div className="p-3 bg-green-50 text-green-700 text-sm rounded border border-green-200">
             Email verified! You can log in now.
-          </p>
+          </div>
         )}
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-full border p-2 rounded"
-          required
-        />
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
+            <input
+              type="email"
+              {...register("email")}
+              placeholder="john@example.com"
+              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded"
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              {...register("password")}
+              placeholder="••••••••"
+              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded transition duration-200 disabled:opacity-70"
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+          {error && (
+            <div className="p-3 bg-red-50 text-red-700 text-sm rounded border border-red-200">
+              {error}
+            </div>
+          )}
+        </form>
+      </div>
     </main>
   );
 }
