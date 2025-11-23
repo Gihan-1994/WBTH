@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@repo/prisma/src/client";
-import { verifyPassword, createSessionToken, isEmailVerified } from "@/app/lib/auth";
+import { verifyPassword, createSessionToken, isEmailVerified } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
