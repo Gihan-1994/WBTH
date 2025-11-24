@@ -5,7 +5,8 @@
   "scripts": {
     "build": "prisma generate",
     "migrate": "prisma migrate deploy",
-    "seed": "ts-node seed.ts"
+    "seed": "ts-node seed.ts",
+    "dev": "prisma db pull && prisma generate"
   },
   "devDependencies": {
     "prisma": "^5.10.2",
