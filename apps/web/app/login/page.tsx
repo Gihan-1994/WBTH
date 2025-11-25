@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,7 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
@@ -71,68 +71,76 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-6 border p-8 rounded-lg shadow-sm bg-white">
-        <h1 className="text-3xl font-bold text-center text-gray-800">
-          Welcome Back
-        </h1>
+    <div className="w-full max-w-md space-y-6 border p-8 rounded-lg shadow-sm bg-white">
+      <h1 className="text-3xl font-bold text-center text-gray-800">
+        Welcome Back
+      </h1>
 
-        {searchParams.get("verified") && (
-          <div className="p-3 bg-green-50 text-green-700 text-sm rounded border border-green-200">
-            Email verified! You can log in now.
+      {searchParams.get("verified") && (
+        <div className="p-3 bg-green-50 text-green-700 text-sm rounded border border-green-200">
+          Email verified! You can log in now.
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email Address
+          </label>
+          <input
+            type="email"
+            {...register("email")}
+            placeholder="john@example.com"
+            className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Password
+          </label>
+          <input
+            type="password"
+            {...register("password")}
+            placeholder="••••••••"
+            className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+          />
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded transition duration-200 disabled:opacity-70"
+        >
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        {error && (
+          <div className="p-3 bg-red-50 text-red-700 text-sm rounded border border-red-200">
+            {error}
           </div>
         )}
+      </form>
+    </div>
+  );
+}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              {...register("email")}
-              placeholder="john@example.com"
-              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              {...register("password")}
-              placeholder="••••••••"
-              className="w-full border border-gray-300 p-2 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded transition duration-200 disabled:opacity-70"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-
-          {error && (
-            <div className="p-3 bg-red-50 text-red-700 text-sm rounded border border-red-200">
-              {error}
-            </div>
-          )}
-        </form>
-      </div>
+export default function LoginPage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-gray-50">
+      <Suspense fallback={<div>Loading...</div>}>
+        <LoginForm />
+      </Suspense>
     </main>
   );
 }

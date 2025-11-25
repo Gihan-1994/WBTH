@@ -44,7 +44,9 @@ model Guide {
   rating     Float?
   account_no String?
   price      Float?
+  availability Boolean @default(true)
   user       User     @relation(fields: [user_id], references: [id])
+  bookings   Booking[]
 
   @@map("guides")
 }
@@ -94,6 +96,8 @@ model Booking {
   description      String[]
   accommodation_id String?
   accommodation    Accommodation? @relation(fields: [accommodation_id], references: [id])
+  guide_id         String?
+  guide            Guide?         @relation(fields: [guide_id], references: [user_id])
   user             User           @relation(fields: [user_id], references: [id])
   payments         Payment[]
 

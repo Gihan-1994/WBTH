@@ -9,6 +9,7 @@ description: Process the next pending task from tasks.md
     b.Ask from user if more clarifications needed on task.
     c. Create an implementation plan (if complex) or proceed to execution.
     d. Implement the requested changes.
-    e. Verify the changes.
-    f. Update `/home/gihan/WBTH/tasks.md` to mark the task as completed (`- [x]`).
+    e. Always type check the code and ensure it is free of errors.
+    f. Verify the changes.
+    g. Update `/home/gihan/WBTH/tasks.md` to mark the task as completed (`- [x]`).
 4. If no unchecked tasks are found, report that all tasks are complete.

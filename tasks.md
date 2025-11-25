@@ -23,5 +23,15 @@
         - [x] Booking History: List with status, view details modal, cancel action
         - [x] Bottom section: Booking Statistics
         - [x] Navigation: Button to Home Page
+- [x] Implement Guide Dashboard
+    - [x] Update Schema: Add `Guide` model (specialization, experience, languages, availability) linked to `User`
+    - [x] Backend: API for Guide Profile (get/update) and Change Password
+    - [x] Backend: API for Guide Bookings (get history, cancel booking)
+    - [x] Frontend: Guide Dashboard UI
+        - [x] Top section: Guide details
+        - [x] Profile section: Edit info (name, email, phone, specialization, experience, languages, availability) & Change Password
+        - [x] Booking History: List with status, view details modal, cancel action
+        - [x] Bottom section: Booking Statistics(total, pending, confirmed, cancelled, income from payments)
+        - [x] Navigation: Button to Home Page
 
 

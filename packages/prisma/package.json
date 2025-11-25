@@ -5,16 +5,18 @@
   "scripts": {
     "build": "prisma generate",
     "migrate": "prisma migrate deploy",
-    "seed": "ts-node seed.ts",
+    "seed": "ts-node seed/index.ts",
     "dev": "prisma db pull && prisma generate"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "prisma": "^5.10.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
     "@types/node": "^24.10.1",
+    "bcrypt": "^6.0.0",
     "ts-node": "^10.9.2"
   }
 }
