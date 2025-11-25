@@ -12,6 +12,7 @@ interface GuideProfile {
     expertise: string[];
     price: number;
     availability: boolean;
+    profile_picture: string | null;
 }
 
 interface Booking {
@@ -112,6 +113,30 @@ export default function GuideDashboard() {
                         <h2 className="text-xl font-semibold mb-4">My Profile</h2>
                         {profile && (
                             <div className="space-y-3">
+                                {/* Profile Picture */}
+                                <div className="flex justify-center mb-4">
+                                    {profile.profile_picture ? (
+                                        <img
+                                            src={profile.profile_picture}
+                                            alt="Profile"
+                                            className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
+                                        />
+                                    ) : (
+                                        <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300">
+                                            <svg
+                                                className="w-16 h-16 text-gray-400"
+                                                fill="currentColor"
+                                                viewBox="0 0 20 20"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                        </div>
+                                    )}
+                                </div>
                                 <p><span className="font-medium">Name:</span> {profile.name}</p>
                                 <p><span className="font-medium">Email:</span> {profile.email}</p>
                                 <p><span className="font-medium">Phone:</span> {profile.contact_no || "N/A"}</p>
@@ -262,10 +287,31 @@ export default function GuideDashboard() {
 
 function EditProfileModal({ profile, onClose, onSave }: any) {
     const [formData, setFormData] = useState(profile);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [uploading, setUploading] = useState(false);
 
     async function handleSubmit(e: any) {
         e.preventDefault();
         try {
+            // First upload the profile picture if one was selected
+            if (selectedImage) {
+                setUploading(true);
+                const uploadRes = await fetch("/api/guide/profile-picture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: selectedImage }),
+                });
+
+                if (!uploadRes.ok) {
+                    const error = await uploadRes.json();
+                    alert(error.error || "Failed to upload profile picture");
+                    setUploading(false);
+                    return;
+                }
+                setUploading(false);
+            }
+
+            // Then update the profile
             const res = await fetch("/api/guide/profile", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -279,6 +325,7 @@ function EditProfileModal({ profile, onClose, onSave }: any) {
             }
         } catch (err) {
             alert("Error updating profile");
+            setUploading(false);
         }
     }
 
@@ -286,11 +333,107 @@ function EditProfileModal({ profile, onClose, onSave }: any) {
         setFormData({ ...formData, [field]: value.split(",").map((s: string) => s.trim()) });
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith("image/")) {
+            alert("Please select an image file");
+            return;
+        }
+
+        // Validate file size (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert("Image size must be less than 2MB");
+            return;
+        }
+
+        // Convert to Base64
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setSelectedImage(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleRemoveImage = async () => {
+        if (!confirm("Are you sure you want to remove your profile picture?")) return;
+
+        try {
+            const res = await fetch("/api/guide/profile-picture", {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                setSelectedImage(null);
+                setFormData({ ...formData, profile_picture: null });
+                alert("Profile picture removed!");
+                onSave();
+            } else {
+                alert("Failed to remove profile picture");
+            }
+        } catch (err) {
+            alert("Error removing profile picture");
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
                 <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Profile Picture Upload */}
+                    <div>
+                        <label className="block text-sm font-medium mb-2">Profile Picture</label>
+                        <div className="flex flex-col items-center gap-3">
+                            {/* Image Preview */}
+                            {(selectedImage || formData.profile_picture) ? (
+                                <img
+                                    src={selectedImage || formData.profile_picture}
+                                    alt="Preview"
+                                    className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
+                                />
+                            ) : (
+                                <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300">
+                                    <svg
+                                        className="w-16 h-16 text-gray-400"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                            clipRule="evenodd"
+                                        />
+                                    </svg>
+                                </div>
+                            )}
+
+                            {/* Upload Button */}
+                            <div className="flex gap-2">
+                                <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm">
+                                    Choose Image
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                                {(formData.profile_picture || selectedImage) && (
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveImage}
+                                        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 text-sm"
+                                    >
+                                        Remove
+                                    </button>
+                                )}
+                            </div>
+                            <p className="text-xs text-gray-500">Max size: 2MB. Formats: JPEG, PNG, WebP</p>
+                        </div>
+                    </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Name</label>
                         <input
@@ -351,8 +494,10 @@ function EditProfileModal({ profile, onClose, onSave }: any) {
                         />
                     </div>
                     <div className="flex justify-end gap-2 mt-6">
-                        <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600">Cancel</button>
-                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+                        <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600" disabled={uploading}>Cancel</button>
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded" disabled={uploading}>
+                            {uploading ? "Uploading..." : "Save"}
+                        </button>
                     </div>
                 </form>
             </div>

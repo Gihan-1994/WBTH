@@ -37,16 +37,17 @@ model Tourist {
 }
 
 model Guide {
-  user_id    String   @id
-  experience String[]
-  languages  String[]
-  expertise  String[]
-  rating     Float?
-  account_no String?
-  price      Float?
-  availability Boolean @default(true)
-  user       User     @relation(fields: [user_id], references: [id])
-  bookings   Booking[]
+  user_id         String   @id
+  experience      String[]
+  languages       String[]
+  expertise       String[]
+  rating          Float?
+  account_no      String?
+  price           Float?
+  availability    Boolean  @default(true)
+  profile_picture String?  @db.Text
+  user            User     @relation(fields: [user_id], references: [id])
+  bookings        Booking[]
 
   @@map("guides")
 }

@@ -32,6 +32,7 @@ export async function GET(req: NextRequest) {
             expertise: user.guide?.expertise || [],
             price: user.guide?.price || 0,
             availability: user.guide?.availability || false,
+            profile_picture: user.guide?.profile_picture || null,
         });
     } catch (error) {
         console.error("Error fetching profile:", error);
