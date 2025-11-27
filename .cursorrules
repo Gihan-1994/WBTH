@@ -1,0 +1,26 @@
+# Antigravity Rules
+
+## General Behavior
+- Be concise and direct.
+- Always use TypeScript for code changes.
+- Follow the existing project structure (Monorepo with Turbo).
+- Ensure all new code is typed strictly.
+-Always use performance optimized code.
+-Create new document on `docs/ changes` folder for each change and update it with changes.
+
+## Code Style
+- Use functional components for React.
+- Use `const` over `let` where possible.
+- Ensure all new code is typed strictly.
+- Use descriptive variable names.
+- Use descriptive function names.
+- Use descriptive class names.
+- Use descriptive file names.
+- Use descriptive directory names.
+- Use descriptive component names.
+- Use common design patterns.
+
+
+
+## Testing
+- Verify changes before reporting completion.

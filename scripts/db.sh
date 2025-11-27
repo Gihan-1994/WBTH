@@ -54,17 +54,15 @@ start_db() {
             print_success "Container started."
         fi
     else
-        # Container does not exist, so create it
-        print_info "Creating and starting new database container '${CONTAINER_NAME}'..."
-        docker run \
-            --name "${CONTAINER_NAME}" \
-            -e POSTGRES_USER="${DB_USER}" \
-            -e POSTGRES_PASSWORD="${DB_PASSWORD}" \
-            -e POSTGRES_DB="${DB_NAME}" \
-            -p "${DB_PORT}:5432" \
-            -d postgres
-
-        print_success "Database container created and started."
+        # Container does not exist, so create it using Docker Compose
+        print_info "Starting database with Docker Compose..."
+        
+        # Navigate to project root to run docker compose
+        cd "$(dirname "$0")/.." || exit 1
+        
+        docker compose -f infra/db/docker-compose.postgres.yml up -d
+        
+        print_success "Database container started with Docker Compose."
         print_info "Waiting for PostgreSQL to be ready..."
         sleep 5 # Give the DB a moment to initialize
     fi

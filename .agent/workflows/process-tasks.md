@@ -12,4 +12,5 @@ description: Process the next pending task from tasks.md
     e. Always type check the code and ensure it is free of errors.
     f. Verify the changes.
     g. Update `/home/gihan/WBTH/tasks.md` to mark the task as completed (`- [x]`).
+    h. Create documentation for the changes in `docs/`.
 4. If no unchecked tasks are found, report that all tasks are complete.
