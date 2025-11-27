@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@repo/prisma/src/client";
+import { prisma } from "@repo/prisma";
 import { hashPassword, createEmailVerificationToken } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {

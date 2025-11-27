@@ -11,12 +11,15 @@
     "seed": "yarn -C packages/prisma prisma db seed"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "turbo": "^2.0.0"
   },
   "workspaces": [
     "apps/*",
     "packages/*",
     "packages/config/*"
-  ]
+  ],
+  "dependencies": {
+    "@prisma/client": "^7.0.1"
+  }
 }

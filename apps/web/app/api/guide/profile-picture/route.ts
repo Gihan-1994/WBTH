@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
-import { prisma } from "@repo/prisma/src/client";
+import { prisma } from "@repo/prisma";
 
 // Maximum file size: 2MB
 const MAX_FILE_SIZE = 2 * 1024 * 1024;

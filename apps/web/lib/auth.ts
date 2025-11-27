@@ -1,5 +1,5 @@
 // apps/web/lib/auth.ts
-import { prisma } from "@repo/prisma/src/client";
+import { prisma } from "@repo/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { randomBytes } from "crypto";

@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -37,16 +36,16 @@ model Tourist {
 }
 
 model Guide {
-  user_id         String   @id
+  user_id         String    @id
   experience      String[]
   languages       String[]
   expertise       String[]
   rating          Float?
   account_no      String?
   price           Float?
-  availability    Boolean  @default(true)
-  profile_picture String?  @db.Text
-  user            User     @relation(fields: [user_id], references: [id])
+  availability    Boolean   @default(true)
+  profile_picture String?   @db.Text
+  user            User      @relation(fields: [user_id], references: [id])
   bookings        Booking[]
 
   @@map("guides")
@@ -56,6 +55,7 @@ model AccommodationProvider {
   user_id        String          @id
   provider_id    String          @unique @default(uuid())
   company_name   String
+  logo           String?         @db.Text
   user           User            @relation(fields: [user_id], references: [id])
   accommodations Accommodation[]
 
@@ -76,6 +76,7 @@ model Accommodation {
   price_range_max   Float?
   province          String?
   interests         String[]
+  images            String[]
   group_size        Int?
   num_booking_dates Int?
   prior_bookings    Int?

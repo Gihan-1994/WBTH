@@ -33,5 +33,16 @@
         - [x] Booking History: List with status, view details modal, cancel action
         - [x] Bottom section: Booking Statistics(total, pending, confirmed, cancelled, income from payments)
         - [x] Navigation: Button to Home Page
-
-
+- [x] Implement Accommodation Provider Dashboard
+    - [x] Update Schema: Add `AccommodationProvider` model (company name, list of accommodations owned) linked to `User`
+    - [x] Update Schema: Add `Accommodation` model (name, type, amenities, rating, account no, budget, location, price range, province, interests, group size, num booking dates, prior bookings) linked to `AccommodationProvider`
+    - [x] Backend: API for Accommodation Provider Profile (get/update) and Change Password
+    - [x] Backend: API for Accommodation Provider Bookings (get history, cancel booking)
+    - [x] Backend: API for Accommodation Provider Accommodations (get / update / delete / create)
+    - [x] Frontend: Accommodation Provider Dashboard UI
+        - [x] Top section: Accommodation Provider details
+        - [x] Profile section: Edit info (company name, email, phone,company logo image) & Change Password
+        - [x] Accommodations section: List with status, view details modal, update action,add some images action,delete action
+        - [x] Booking History: List with status, view details modal, cancel action
+        - [x] Bottom section: Booking Statistics(total, pending, confirmed, cancelled, income from payments)
+        - [x] Navigation: Button to Home Page

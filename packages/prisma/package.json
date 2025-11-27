@@ -2,6 +2,14 @@
   "name": "@repo/prisma",
   "version": "0.0.0",
   "private": true,
+  "main": "./dist/src/client.js",
+  "types": "./dist/src/client.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/client.d.ts",
+      "default": "./dist/src/client.js"
+    }
+  },
   "scripts": {
     "build": "tsc && prisma generate",
     "migrate": "prisma migrate deploy",
@@ -10,14 +18,18 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
-    "prisma": "^5.10.2",
+    "@types/pg": "^8.15.6",
     "tsx": "^4.20.6",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@prisma/client": "5.22.0",
+    "@prisma/adapter-pg": "^7.0.1",
+    "@prisma/client": "^7.0.1",
     "@types/node": "^24.10.1",
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3",
+    "prisma": "^7.0.1",
     "ts-node": "^10.9.2"
   }
 }

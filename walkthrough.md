@@ -1,41 +1,53 @@
-# Walkthrough - Fixing Guide Availability Type Error
-
-I have fixed the TypeScript error in `apps/web/app/api/guide/profile/route.ts` where the `availability` property was missing from the `Guide` type.
+# Walkthrough - Accommodation Provider Dashboard
 
 ## Changes
 
-### Prisma Schema
+### Backend API
+I have implemented the following API routes to support the Accommodation Provider Dashboard:
 
-I added the `availability` field to the `Guide` model in `packages/prisma/schema.prisma`.
+-   `GET /api/accommodation-provider/profile`: Fetches the provider's profile and company details.
+-   `PUT /api/accommodation-provider/profile`: Updates the provider's profile and company details.
+-   `GET /api/accommodation-provider/bookings`: Retrieves a list of bookings for all accommodations owned by the provider, including statistics.
+-   `PUT /api/accommodation-provider/bookings/[id]/cancel`: Allows the provider to cancel a specific booking.
+-   `GET /api/accommodation-provider/accommodations`: Lists all accommodations owned by the provider.
+-   `POST /api/accommodation-provider/accommodations`: Creates a new accommodation.
+-   `PUT /api/accommodation-provider/accommodations/[id]`: Updates an existing accommodation.
+-   `DELETE /api/accommodation-provider/accommodations/[id]`: Deletes an accommodation.
 
-```prisma
-model Guide {
-  // ...
-  price      Float?
-  availability Boolean @default(true) // Added this field
-  user       User     @relation(fields: [user_id], references: [id])
-  // ...
-}
-```
+### Frontend UI
+I have created the Accommodation Provider Dashboard at `/dashboard/provider`. Key features include:
 
-### Database and Client
+-   **Profile Management**: View and edit company and personal details, including **Company Logo upload**.
+-   **Statistics**: View total bookings, pending/confirmed/cancelled counts, and total income.
+-   **Accommodation Management**:
+    -   View a list of accommodations.
+    -   Add new accommodations with details like location, price range, amenities, etc.
+    -   Edit and delete existing accommodations.
+    -   **Manage Images**: Add, update, and remove images for each accommodation via a dedicated popup.
+-   **Booking Management**:
+    -   View booking history with status and details.
+    -   Cancel pending bookings.
 
-I ran the following commands to apply the changes:
+## Verification Results
 
-1.  `npx prisma generate` - To regenerate the Prisma Client with the new field.
-2.  `npx prisma db push` - To update the database schema.
+### Automated Checks
+-   **Type Check**: Ran `yarn tsc --noEmit` in `apps/web` to ensure no TypeScript errors were introduced.
 
-## Verification
+### Manual Verification Steps
+To verify the implementation manually:
 
-### API Route
-
-The file `apps/web/app/api/guide/profile/route.ts` should now compile correctly as the `Guide` type now includes `availability`.
-
-```typescript
-// This should now work without error
-availability: user.guide?.availability || false,
-```
-
-### Frontend
-
-The frontend at `apps/web/app/guide/dashboard/page.tsx` was already expecting this field, so it should now correctly display and update the availability status.
+1.  **Login**: Log in as a user with the `accommodation_provider` role.
+2.  **Navigate**: Go to `/dashboard/provider`.
+3.  **Profile**:
+    -   Click "Edit Profile".
+    -   Update Company Name and Phone.
+    -   Save and verify changes persist.
+4.  **Accommodations**:
+    -   Click "+ Add New".
+    -   Fill in details (Name: "Test Villa", Location: "Beach", Price: 100-200).
+    -   Save and verify it appears in the list.
+    -   Edit the accommodation and change the name.
+    -   Delete the accommodation.
+5.  **Bookings**:
+    -   (Requires existing bookings in DB) Verify bookings are listed.
+    -   Click "Cancel" on a pending booking and verify status updates.
