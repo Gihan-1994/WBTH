@@ -26,6 +26,7 @@ export default function GuidesPage() {
         location: "",
         language: "",
         expertise: "",
+        price: "",
     });
 
     const fetchGuides = async () => {
@@ -34,6 +35,8 @@ export default function GuidesPage() {
         if (filters.location) params.append("location", filters.location);
         if (filters.language) params.append("language", filters.language);
         if (filters.expertise) params.append("expertise", filters.expertise);
+        if (filters.price) params.append("price", filters.price);
+
 
         try {
             const res = await fetch(`/api/guides?${params.toString()}`);
@@ -115,6 +118,22 @@ export default function GuidesPage() {
                                         className="w-full pl-10 pr-4 py-2 border rounded-lg"
                                         value={filters.expertise}
                                         onChange={(e) => setFilters({ ...filters, expertise: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Price
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="number"
+                                        placeholder="e.g. 100"
+                                        min={0}
+                                        step={10}
+                                        className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                                        value={filters.price}
+                                        onChange={(e) => setFilters({ ...filters, price: e.target.value })}
                                     />
                                 </div>
                             </div>

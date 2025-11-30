@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
     const location = searchParams.get("location");
     const language = searchParams.get("language");
     const expertise = searchParams.get("expertise");
+    const price = searchParams.get("price");
 
     const where: Prisma.GuideWhereInput = {};
 
@@ -29,6 +30,15 @@ export async function GET(req: NextRequest) {
         where.expertise = {
             hasSome: expertiseList,
         };
+    }
+
+    if (price) {
+        const p = parseFloat(price);
+        if (!isNaN(p)) {
+            where.price = {
+                lte: p,
+            };
+        }
     }
 
     try {
