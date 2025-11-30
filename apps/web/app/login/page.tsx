@@ -138,6 +138,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50">
+      {/* @ts-ignore */}
       <Suspense fallback={<div>Loading...</div>}>
         <LoginForm />
       </Suspense>

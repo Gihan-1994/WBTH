@@ -46,3 +46,23 @@
         - [x] Booking History: List with status, view details modal, cancel action
         - [x] Bottom section: Booking Statistics(total, pending, confirmed, cancelled, income from payments)
         - [x] Navigation: Button to Home Page
+- [x] Implement Accommodation Search
+    - [x] Backend: API for searching accommodations with filters (location, budget, amenities, etc.)
+    - [x] Frontend: Search Page (filters, list of accommodations)
+    - [x] Frontend: Accommodation Details Page
+- [x] Implement Guide Search
+    - [x] Backend: API for searching guides with filters (location, language, expertise, etc.)
+    - [x] Frontend: Search Page (filters, list of guides)
+    - [x] Frontend: Guide Details Page
+- [x] Implement Booking Creation
+    - [x] Backend: API for creating bookings
+    - [x] Frontend: Booking Flow (select dates, confirm)
+- [x] Implement Homepage
+    - [x] Main heading ("Tourism Hub") and description ("Your one-stop destination for all tourism needs")
+    - [x] Sections: Personal recommendations based on ML algorithms,
+        Accommodations, Guides, Upcoming Events , Chat bot interaction , My Profile
+        - [x] Each section should have a title and description
+        - [x] Navigation: Each section should navigate to its own page
+        - [x] when click on my profile section it should navigate to user profile page according to their role. 
+        - [x] Include some colourful suitable svg icons for each section
+    

@@ -1,53 +1,88 @@
-# Implementation Plan - Accommodation Provider Dashboard
+# Implementation Plan - Search, Booking & Homepage
 
 ## Goal Description
-Implement the Accommodation Provider Dashboard to allow providers to manage their profile, accommodations, and bookings. This includes backend API routes and a frontend dashboard UI.
+Implement the core user-facing features for Tourists: Homepage, Accommodation Search, Guide Search, and Booking Creation. This will complete the primary user flows for finding and booking services.
 
 ## User Review Required
 > [!IMPORTANT]
-> Ensure the `AccommodationProvider` and `Accommodation` models are correctly set up in the database (verified as existing in schema).
+> Ensure the `Accommodation` and `Guide` models have sufficient seed data for testing search and filtering.
 
 ## Proposed Changes
 
 ### Backend (API Routes)
 
-#### [NEW] [apps/web/app/api/accommodation-provider/profile/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodation-provider/profile/route.ts)
-- **GET**: Fetch provider profile (company name, user details).
-- **PUT**: Update provider profile.
+#### [NEW] [apps/web/app/api/accommodations/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodations/route.ts)
+- **GET**: Fetch accommodations with query parameters for filtering.
+    - `location`: Filter by city or province (partial match).
+    - `minPrice`, `maxPrice`: Filter by price range.
+    - `amenities`: Filter by amenities.
+    - `type`: Filter by accommodation type.
+    - `guests`: Filter by group size.
 
-#### [NEW] [apps/web/app/api/accommodation-provider/bookings/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodation-provider/bookings/route.ts)
-- **GET**: Fetch booking history for all accommodations owned by the provider.
-- **PUT**: Cancel a booking.
+#### [NEW] [apps/web/app/api/accommodations/[id]/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodations/[id]/route.ts)
+- **GET**: Fetch a single accommodation by ID.
 
-#### [NEW] [apps/web/app/api/accommodation-provider/accommodations/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodation-provider/accommodations/route.ts)
-- **GET**: List all accommodations for the provider.
-- **POST**: Create a new accommodation.
+#### [NEW] [apps/web/app/api/guides/route.ts](file:///home/gihan/WBTH/apps/web/app/api/guides/route.ts)
+- **GET**: Fetch guides with query parameters for filtering.
+    - `location`: Filter by city (from user profile or specific field).
+    - `language`: Filter by languages spoken.
+    - `expertise`: Filter by specialization.
 
-#### [NEW] [apps/web/app/api/accommodation-provider/accommodations/[id]/route.ts](file:///home/gihan/WBTH/apps/web/app/api/accommodation-provider/accommodations/[id]/route.ts)
-- **PUT**: Update an accommodation.
-- **DELETE**: Delete an accommodation.
+#### [NEW] [apps/web/app/api/guides/[id]/route.ts](file:///home/gihan/WBTH/apps/web/app/api/guides/[id]/route.ts)
+- **GET**: Fetch a single guide by ID.
 
-### Frontend (Dashboard UI)
+#### [NEW] [apps/web/app/api/bookings/route.ts](file:///home/gihan/WBTH/apps/web/app/api/bookings/route.ts)
+- **POST**: Create a new booking.
+    - Accepts `userId`, `type` (accommodation/guide), `itemId` (accommodation_id/guide_id), `startDate`, `endDate`, `price`.
+    - Validates availability (basic check).
 
-#### [MODIFY] [apps/web/app/dashboard/provider/page.tsx](file:///home/gihan/WBTH/apps/web/app/dashboard/provider/page.tsx)
-- Implement the dashboard layout.
-- **Top Section**: Provider details.
-- **Profile Section**: Edit form for company name, contact info, etc.
-- **Accommodations Section**: List of accommodations with Add/Edit/Delete actions.
-- **Booking History**: List of bookings with Cancel action.
-- **Statistics**: Summary cards (Total, Pending, Confirmed, Cancelled, Income).
+### Frontend (UI Pages)
+
+#### [MODIFY] [apps/web/app/page.tsx](file:///home/gihan/WBTH/apps/web/app/page.tsx)
+- **Homepage**:
+    - **Hero Section**: "Tourism Hub" heading, description, and call to action.
+    - **Sections**:
+        - **Personal Recommendations**: Placeholder for ML results.
+        - **Accommodations**: Link to `/accommodations`.
+        - **Guides**: Link to `/guides`.
+        - **Upcoming Events**: Placeholder/Link to events.
+        - **Chat Bot**: Placeholder icon/interaction.
+        - **My Profile**: Dynamic link based on user role (Tourist/Guide/Provider).
+    - **Styling**: Use colorful SVG icons and responsive grid layout.
+
+#### [NEW] [apps/web/app/accommodations/page.tsx](file:///home/gihan/WBTH/apps/web/app/accommodations/page.tsx)
+- **Search Page**:
+    - Search bar and filters sidebar.
+    - List of accommodation cards.
+
+#### [NEW] [apps/web/app/accommodations/[id]/page.tsx](file:///home/gihan/WBTH/apps/web/app/accommodations/[id]/page.tsx)
+- **Details Page**:
+    - Full details, images, amenities.
+    - **Book Now** button opening a booking modal/form.
+
+#### [NEW] [apps/web/app/guides/page.tsx](file:///home/gihan/WBTH/apps/web/app/guides/page.tsx)
+- **Search Page**:
+    - Search bar and filters sidebar.
+    - List of guide cards.
+
+#### [NEW] [apps/web/app/guides/[id]/page.tsx](file:///home/gihan/WBTH/apps/web/app/guides/[id]/page.tsx)
+- **Details Page**:
+    - Full details, profile picture, experience, languages.
+    - **Book Now** button opening a booking modal/form.
 
 ## Verification Plan
 
 ### Manual Verification
-1.  **Login**: Log in as an Accommodation Provider (may need to seed a user or register).
-2.  **Profile**: View and update profile details. Verify persistence.
-3.  **Accommodations**:
-    *   Create a new accommodation.
-    *   View the list.
-    *   Update the accommodation.
-    *   Delete the accommodation.
-4.  **Bookings**:
-    *   View booking history (seed some bookings if needed).
-    *   Cancel a pending booking.
-5.  **Statistics**: Verify the numbers match the booking data.
+1.  **Homepage**:
+    - Verify all sections are present and links work.
+    - Verify "My Profile" redirects correctly for different logged-in roles.
+2.  **Accommodation Search**:
+    - Test filters (location, price, etc.) and verify results.
+    - Click through to details page.
+3.  **Guide Search**:
+    - Test filters (language, expertise) and verify results.
+    - Click through to details page.
+4.  **Booking**:
+    - Initiate a booking from accommodation/guide details page.
+    - Submit booking.
+    - Verify booking appears in the user's dashboard (Tourist and Provider/Guide).

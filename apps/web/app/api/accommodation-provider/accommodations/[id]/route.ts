@@ -11,7 +11,7 @@ import { prisma } from "@repo/prisma";
  */
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -21,7 +21,7 @@ export async function PUT(
 
     // @ts-ignore
     const userId = session.user.id;
-    const accommodationId = params.id;
+    const { id: accommodationId } = await params;
     const data = await req.json();
 
     try {
@@ -80,7 +80,7 @@ export async function PUT(
  */
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -90,7 +90,7 @@ export async function DELETE(
 
     // @ts-ignore
     const userId = session.user.id;
-    const accommodationId = params.id;
+    const { id: accommodationId } = await params;
 
     try {
         const accommodation = await prisma.accommodation.findUnique({

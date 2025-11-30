@@ -40,6 +40,7 @@ function VerifyEmailContent() {
 export default function VerifyEmailPage() {
   return (
     <main className="flex min-h-screen items-center justify-center">
+      {/* @ts-ignore */}
       <Suspense fallback={<p>Loading...</p>}>
         <VerifyEmailContent />
       </Suspense>

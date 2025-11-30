@@ -45,6 +45,8 @@ model Guide {
   price           Float?
   availability    Boolean   @default(true)
   profile_picture String?   @db.Text
+  city            String?
+  province        String?
   user            User      @relation(fields: [user_id], references: [id])
   bookings        Booking[]
 

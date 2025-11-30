@@ -11,7 +11,7 @@ import { prisma } from "@repo/prisma";
  */
 export async function GET(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -21,7 +21,7 @@ export async function GET(
 
     // @ts-ignore
     const userId = session.user.id;
-    const accommodationId = params.id;
+    const { id: accommodationId } = await params;
 
     try {
         const accommodation = await prisma.accommodation.findUnique({
@@ -60,7 +60,7 @@ export async function GET(
  */
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -70,7 +70,7 @@ export async function PUT(
 
     // @ts-ignore
     const userId = session.user.id;
-    const accommodationId = params.id;
+    const { id: accommodationId } = await params;
     const data = await req.json();
 
     try {
