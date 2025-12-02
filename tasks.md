@@ -65,4 +65,18 @@
         - [x] Navigation: Each section should navigate to its own page
         - [x] when click on my profile section it should navigate to user profile page according to their role. 
         - [x] Include some colourful suitable svg icons for each section
+- [x] Implement ML based recommendations (Testing Phase 1)
+    - [x] Follow the wbth_6_week_build_plan_architecture_spec.md and under Modules & Responsibilities find 4)Recommendations (ML) and implement section 4.1(Accommodation Recommendation — Simple Hybrid (Rule‑first + Scored Ranking)).
+    - [x] As initial step genarate 1000 records of mock data for data columns mentioned in the wbth_6_week_build_plan_architecture_spec.md and under Modules & Responsibilities find 4)Recommendations (ML) and implement section 4.1(Accommodation Recommendation — Simple Hybrid (Rule‑first + Scored Ranking)).
+    - [x] Implemet the ML model and try to generate recommendations for a user.
+    - [x] Evaluate the model using some simple metrices.
+    - [x] Currently user inputs are entered in the same python file.
+    - [x] Use simple and efficient logics to perform functions. 
+    - [x] Use performance optimized codes.
+    - [x] Use best practices for code quality.
+    - [x] Use new dependencies only if they are actually required.
+    - [x] Add descriptive comments to the code.
+    - [x] Do not interact with DB or frontend. 
+    - [x] Update current progress and implementation in ML_progress.md file.
+    
     

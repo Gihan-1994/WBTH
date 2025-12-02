@@ -78,6 +78,7 @@ model Accommodation {
   price_range_max   Float?
   province          String?
   interests         String[]
+  travel_style      String[]
   images            String[]
   group_size        Int?
   num_booking_dates Int?

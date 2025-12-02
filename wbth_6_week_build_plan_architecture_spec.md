@@ -119,7 +119,7 @@
 
 #### 4.1 Accommodation Recommendation — Simple Hybrid (Rule‑first + Scored Ranking)
 
-**Data columns (per your spec):** `id, name, price_range, province, interests[], group_size, travel_style, num_booking_dates, location (city + lat/lng or district), amenities[], rating, prior_bookings`.
+**Data columns (per your spec):** `id, name, price_range, province, interests[], group_size, travel_style, num_booking_dates, location (city), amenities[], rating, prior_bookings`.
 
 **Hard Rule Filters (fast pre‑filter in DB):**
 1) **Availability**: candidate has open dates overlapping desired range.
