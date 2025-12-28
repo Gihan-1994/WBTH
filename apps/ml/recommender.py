@@ -20,8 +20,10 @@ class AccommodationRecommender:
     3. Ranking and reason generation
     """
     
-    # Default weights as per spec: [interests, style, price, amenities, location, group, rating, popularity]
-    DEFAULT_WEIGHTS = [0.2, 0.05, 0.10, 0.15, 0.15, 0.10, 0.20, 0.05]
+    # Default weights: [interests, style, price, amenities, location, group, rating, popularity, db_priority]
+    # Increased amenities weight from 0.15 to 0.25, reduced rating from 0.20 to 0.10
+    # Added db_priority 0.15 to favor real database accommodations over mock data
+    DEFAULT_WEIGHTS = [0.20, 0.05, 0.10, 0.20, 0.10, 0.05, 0.10, 0.05, 0.15]
     
     def __init__(self, accommodations: List[Dict], weights: Optional[List[float]] = None):
         """
@@ -35,8 +37,8 @@ class AccommodationRecommender:
         self.weights = weights if weights is not None else self.DEFAULT_WEIGHTS
         
         # Validate weights
-        if len(self.weights) != 8:
-            raise ValueError("Weights must have exactly 8 values")
+        if len(self.weights) != 9:
+            raise ValueError("Weights must have exactly 9 values")
         if not math.isclose(sum(self.weights), 1.0, rel_tol=0.01):
             print(f"Warning: Weights sum to {sum(self.weights):.2f}, not 1.0")
     
@@ -48,8 +50,9 @@ class AccommodationRecommender:
         interests: List[str],
         travel_style: str,
         group_size: int,
-        location_city: Optional[str] = None,
-        location_province: Optional[str] = None,
+        accommodation_type: Optional[str] = None,
+        district: Optional[str] = None,
+        province: Optional[str] = None,
         city_only: bool = False,
         top_k: int = 10
     ) -> Dict:
@@ -63,8 +66,9 @@ class AccommodationRecommender:
             interests: List of interest tags
             travel_style: Preferred travel style
             group_size: Number of people
-            location_city: Preferred city (optional)
-            location_province: Preferred province (optional)
+            accommodation_type: Type filter (hotel, villa, resort, homestay, or None for any)
+            district: Preferred city (optional)
+            province: Preferred province (optional)
             city_only: If True, hard filter to city only (optional)
             top_k: Number of recommendations to return
         
@@ -77,7 +81,8 @@ class AccommodationRecommender:
             budget_max=budget_max,
             required_amenities=required_amenities,
             group_size=group_size,
-            location_city=location_city if city_only else None
+            accommodation_type=accommodation_type,
+            district=district if city_only else None
         )
         
         if not candidates:
@@ -85,7 +90,7 @@ class AccommodationRecommender:
                 "recommendations": [],
                 "total_candidates": 0,
                 "filters_applied": self._get_filters_applied(
-                    budget_min, budget_max, required_amenities, group_size, location_city, city_only
+                    budget_min, budget_max, required_amenities, group_size, accommodation_type, district, city_only
                 ),
                 "message": "No accommodations match your criteria"
             }
@@ -101,8 +106,8 @@ class AccommodationRecommender:
                 travel_style=travel_style,
                 required_amenities=required_amenities,
                 group_size=group_size,
-                location_city=location_city,
-                location_province=location_province,
+                district=district,
+                province=province,
                 candidates=candidates
             )
             
@@ -126,12 +131,17 @@ class AccommodationRecommender:
         recommendations = []
         for item in scored_candidates[:top_k]:
             acc = item["accommodation"]
-            reasons = self._generate_reasons(item["score_components"], acc)
+            reasons = self._generate_reasons(
+                item["score_components"], 
+                acc,
+                user_interests=interests,
+                user_amenities=required_amenities
+            )
             
             recommendations.append({
                 "id": acc["id"],
                 "name": acc["name"],
-                "location": acc["location"],
+                "district": acc["district"],
                 "province": acc["province"],
                 "price_range_min": acc["price_range_min"],
                 "price_range_max": acc["price_range_max"],
@@ -144,7 +154,7 @@ class AccommodationRecommender:
             "recommendations": recommendations,
             "total_candidates": len(candidates),
             "filters_applied": self._get_filters_applied(
-                budget_min, budget_max, required_amenities, group_size, location_city, city_only
+                budget_min, budget_max, required_amenities, group_size, accommodation_type, district, city_only
             ),
         }
     
@@ -154,7 +164,8 @@ class AccommodationRecommender:
         budget_max: float,
         required_amenities: List[str],
         group_size: int,
-        location_city: Optional[str] = None
+        accommodation_type: Optional[str] = None,
+        district: Optional[str] = None
     ) -> List[Dict]:
         """Apply hard rule filters to accommodations."""
         filtered = []
@@ -170,16 +181,27 @@ class AccommodationRecommender:
             if not (acc_min <= budget_max and acc_max >= budget_min):
                 continue
             
-            # 3. Required amenities filter (all must be present)
-            acc_amenities = set(acc.get("amenities", []))
-            if not set(required_amenities).issubset(acc_amenities):
-                continue
+            # 3. Required amenities filter - REMOVED
+            # Now amenities are treated as preferences, not hard requirements
+            # Accommodations with more matching amenities will score higher
+            # (See _calculate_score method for amenities scoring)
+            # This allows results even with partial amenity matches
             
-            # 4. Location filter (if city_only is True)
-            if location_city and acc.get("location") != location_city:
-                continue
+            # 4. Accommodation type filter (case-insensitive)
+            if accommodation_type and accommodation_type != "any":
+                acc_types = acc.get("type", [])
+                # Convert both to lowercase for case-insensitive comparison
+                acc_types_lower = [t.lower() for t in acc_types]
+                if accommodation_type.lower() not in acc_types_lower:
+                    continue
             
-            # 5. Group size filter
+            # 5. Location filter (if city_only is True) - case-insensitive
+            if district:
+                acc_location = acc.get("district", "")
+                if acc_location.lower() != district.lower():
+                    continue
+            
+            # 6. Group size filter
             if acc.get("group_size", 0) < group_size:
                 continue
             
@@ -196,8 +218,8 @@ class AccommodationRecommender:
         travel_style: str,
         required_amenities: List[str],
         group_size: int,
-        location_city: Optional[str],
-        location_province: Optional[str],
+        district: Optional[str],
+        province: Optional[str],
         candidates: List[Dict]
     ) -> tuple[float, Dict[str, float]]:
         """Calculate weighted score for an accommodation."""
@@ -227,10 +249,10 @@ class AccommodationRecommender:
         
         # S_location: Tiered location score
         s_location = self._location_score(
-            accommodation.get("location"),
+            accommodation.get("district"),
             accommodation.get("province"),
-            location_city,
-            location_province
+            district,
+            province
         )
         
         # S_group: Binary fit check (already filtered, but score for transparency)
@@ -246,16 +268,20 @@ class AccommodationRecommender:
             candidates
         )
         
+        # S_db_priority: Strong boost for real database accommodations
+        s_db_priority = 1.0 if accommodation.get("in_system", False) else 0.0
+        
         # Calculate weighted total
         components = {
             "interests": s_interests,
             "style": s_style,
             "price": s_price,
             "amenities": s_amenities,
-            "location": s_location,
+            "district": s_location,
             "group": s_group,
             "rating": s_rating,
-            "popularity": s_popularity
+            "popularity": s_popularity,
+            "db_priority": s_db_priority
         }
         
         score = sum(
@@ -341,62 +367,100 @@ class AccommodationRecommender:
         score = math.log(1 + prior_bookings) / math.log(1 + max_bookings)
         return score
     
-    def _generate_reasons(self, score_components: Dict[str, float], accommodation: Dict) -> List[str]:
-        """Generate top 3 reasons for recommendation."""
-        # Sort components by score contribution (score * weight)
-        weighted_components = [
-            (k, score_components[k] * w) 
-            for k, w in zip(score_components.keys(), self.weights)
-        ]
-        weighted_components.sort(key=lambda x: x[1], reverse=True)
-        
+    def _generate_reasons(
+        self, 
+        score_components: Dict[str, float], 
+        accommodation: Dict,
+        user_interests: List[str] = None,
+        user_amenities: List[str] = None
+    ) -> List[str]:
+        """Generate comprehensive reasons for recommendation showing all matches."""
         reasons = []
+        user_interests = user_interests or []
+        user_amenities = user_amenities or []
         
-        for component, _ in weighted_components[:3]:
-            if component == "location":
-                if score_components["location"] >= 0.9:
-                    reasons.append(f"Within {accommodation.get('location', 'selected city')}")
-                elif score_components["location"] >= 0.5:
-                    reasons.append(f"Within {accommodation.get('province', 'selected province')}")
+        # Always show location if it matches
+        if score_components["district"] >= 0.9:
+            reasons.append(f"📍 Within {accommodation.get('district', 'selected city')}")
+        elif score_components["district"] >= 0.5:
+            reasons.append(f"📍 Within {accommodation.get('province', 'selected province')}")
+        
+        # Always show travel style if it matches
+        if score_components["style"] > 0:
+            styles = accommodation.get("travel_style", [])
+            if styles:
+                style_text = ", ".join([s.replace('_', ' ').title() for s in styles])
+                reasons.append(f"🎯 {style_text} travel style")
+        
+        # Show matching interests with user request comparison
+        if user_interests:
+            acc_interests = set([i.lower() for i in accommodation.get("interests", [])])
+            user_interests_lower = set([i.lower() for i in user_interests])
+            matching_interests = acc_interests & user_interests_lower
             
-            elif component == "interests":
-                if score_components["interests"] > 0.3:
-                    interests = accommodation.get("interests", [])[:2]
-                    if interests:
-                        reasons.append(f"Matches {' & '.join(interests)}")
+            if matching_interests:
+                matched_text = ", ".join([i.replace('_', ' ').title() for i in matching_interests])
+                reasons.append(f"💚 Matching interests: {matched_text}")
+            elif score_components["interests"] > 0.1:
+                # Show accommodation interests even if no direct match
+                interests_list = [i.replace('_', ' ').title() for i in list(acc_interests)[:3]]
+                if interests_list:
+                    reasons.append(f"💚 Interests: {', '.join(interests_list)}")
+        
+        # Show accommodation type
+        acc_types = accommodation.get("type", [])
+        if acc_types:
+            type_text = ", ".join(acc_types)
+            reasons.append(f"🏨 Type: {type_text}")
+        
+        # Show amenities with user request comparison
+        if user_amenities:
+            acc_amenities = set([a.lower() for a in accommodation.get("amenities", [])])
+            user_amenities_lower = set([a.lower() for a in user_amenities])
+            matching_amenities = acc_amenities & user_amenities_lower
+            missing_amenities = user_amenities_lower - acc_amenities
             
-            elif component == "amenities":
-                if score_components["amenities"] > 0.5:
-                    top_amenities = accommodation.get("amenities", [])[:3]
-                    if top_amenities:
-                        reasons.append(f"Has {', '.join(top_amenities)}")
+            if matching_amenities:
+                matched_text = ", ".join([a.replace('_', ' ').title() for a in matching_amenities])
+                reasons.append(f"✨ Has requested: {matched_text}")
             
-            elif component == "rating":
-                rating = accommodation.get("rating", 0)
-                if rating >= 4.5:
-                    reasons.append(f"Excellent rating ({rating:.1f}/5.0)")
-                elif rating >= 4.0:
-                    reasons.append(f"High rating ({rating:.1f}/5.0)")
-            
-            elif component == "style":
-                if score_components["style"] > 0:
-                    styles = accommodation.get("travel_style", [])
-                    if styles:
-                        reasons.append(f"{styles[0].replace('_', ' ').title()} style")
-            
-            elif component == "popularity":
-                if score_components["popularity"] > 0.7:
-                    reasons.append("Popular choice")
-            
-            elif component == "price":
-                if score_components["price"] > 0.8:
-                    reasons.append("Within budget")
+            if missing_amenities and len(missing_amenities) <= 3:
+                missing_text = ", ".join([a.replace('_', ' ').title() for a in missing_amenities])
+                reasons.append(f"⚠️ Missing: {missing_text}")
+        elif score_components["amenities"] > 0.3:
+            # Fallback: show amenities if no user request
+            amenities = accommodation.get("amenities", [])
+            if amenities:
+                amenity_text = ", ".join([a.replace('_', ' ').title() for a in amenities[:4]])
+                reasons.append(f"✨ Amenities: {amenity_text}")
+        
+        # Show rating if available and good
+        rating = accommodation.get("rating", 0)
+        if rating >= 4.0:
+            reasons.append(f"⭐ {rating:.1f}/5.0 rating")
+        
+        # Show price alignment
+        if score_components["price"] > 0.7:
+            reasons.append(f"💰 Within budget")
+        
+        # Show popularity if high
+        if score_components["popularity"] > 0.6:
+            reasons.append(f"🔥 Popular choice")
+        
+        # Group size match
+        group_size = accommodation.get("group_size", 0)
+        if group_size > 0 and score_components["group"] > 0:
+            reasons.append(f"👥 Accommodates up to {group_size} people")
+        
+        # Show database availability
+        if accommodation.get("in_system", False):
+            reasons.append("✅ Available in our system")
         
         # Ensure we have at least 1 reason
         if not reasons:
-            reasons.append(f"Located in {accommodation.get('location', 'your area')}")
+            reasons.append(f"Located in {accommodation.get('district', 'your area')}")
         
-        return reasons[:3]
+        return reasons
     
     def _get_filters_applied(
         self,
@@ -404,7 +468,8 @@ class AccommodationRecommender:
         budget_max: float,
         required_amenities: List[str],
         group_size: int,
-        location_city: Optional[str],
+        accommodation_type: Optional[str],
+        district: Optional[str],
         city_only: bool
     ) -> List[str]:
         """Generate list of applied filters."""
@@ -412,20 +477,23 @@ class AccommodationRecommender:
         filters.append(f"Budget: {budget_min:.0f}-{budget_max:.0f} LKR")
         filters.append(f"Group size: {group_size}")
         
+        if accommodation_type and accommodation_type != "any":
+            filters.append(f"Type: {accommodation_type.capitalize()}")
+        
         if required_amenities:
             filters.append(f"Amenities: {', '.join(required_amenities)}")
         
-        if city_only and location_city:
-            filters.append(f"Location: {location_city} only")
-        elif location_city:
-            filters.append(f"Preferred location: {location_city}")
+        if city_only and district:
+            filters.append(f"Location: {district} only")
+        elif district:
+            filters.append(f"Preferred location: {district}")
         
         filters.append("Availability: Available")
         
         return filters
 
 
-def load_accommodations(filename: str = "mock_accommodations.json") -> List[Dict]:
+def load_accommodations(filename: str = "data/mock_accommodations.json") -> List[Dict]:
     """Load accommodations from JSON file."""
     with open(filename, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -452,8 +520,8 @@ if __name__ == "__main__":
             "interests": ["coastal", "luxury", "romantic"],
             "travel_style": "luxury",
             "group_size": 2,
-            "location_city": "Galle",
-            "location_province": "Southern",
+            "district": "Galle",
+            "province": "Southern",
             "city_only": False,
             "top_k": 5
         },
@@ -465,7 +533,7 @@ if __name__ == "__main__":
             "interests": ["cultural", "historical", "budget_friendly"],
             "travel_style": "budget",
             "group_size": 1,
-            "location_province": "Central",
+            "province": "Central",
             "city_only": False,
             "top_k": 5
         },
@@ -477,7 +545,7 @@ if __name__ == "__main__":
             "interests": ["family_friendly", "adventure", "wildlife"],
             "travel_style": "family",
             "group_size": 4,
-            "location_province": "Central",
+            "province": "Central",
             "city_only": False,
             "top_k": 5
         }
@@ -499,7 +567,7 @@ if __name__ == "__main__":
         
         for i, rec in enumerate(results["recommendations"], 1):
             print(f"\n{i}. {rec['name']}")
-            print(f"   Location: {rec['location']}, {rec['province']}")
+            print(f"   Location: {rec['district']}, {rec['province']}")
             print(f"   Price: {rec['price_range_min']:.0f}-{rec['price_range_max']:.0f} LKR")
             print(f"   Rating: {rec['rating']:.1f}/5.0" if rec['rating'] else "   Rating: N/A")
             print(f"   Score: {rec['score']:.3f}")

@@ -1,8 +1,11 @@
 
 // packages/prisma/src/client.ts
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+
+// Export Prisma namespace for type definitions
+export { Prisma };
 
 declare global {
   var prisma: PrismaClient | undefined;

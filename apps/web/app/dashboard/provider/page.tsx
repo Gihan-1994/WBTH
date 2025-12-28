@@ -4,11 +4,43 @@ import { useEffect, useState, useCallback, memo } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
+const SRI_LANKA_DISTRICTS = [
+    "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya",
+    "Galle", "Matara", "Hambantota", "Jaffna", "Kilinochchi", "Mannar",
+    "Vavuniya", "Mullaitivu", "Batticaloa", "Ampara", "Trincomalee",
+    "Kurunegala", "Puttalam", "Anuradhapura", "Polonnaruwa", "Badulla",
+    "Moneragala", "Ratnapura", "Kegalle"
+];
+
+const SRI_LANKA_PROVINCES = [
+    "Western", "Central", "Southern", "Northern", "Eastern",
+    "North Western", "North Central", "Uva", "Sabaragamuwa"
+];
+
+const ACCOMMODATION_TYPES = ["Hotel", "Villa", "Resort", "Homestay", "Apartment", "Guesthouse"];
+
+const AMENITIES_LIST = [
+    "wifi", "hot_water", "pool", "parking", "restaurant", "bar",
+    "gym", "spa", "beach_access", "garden", "air_conditioning",
+    "room_service", "laundry", "airport_shuttle", "terrace", "bbq"
+];
+
+const TRAVEL_STYLES = ["luxury", "budget", "family", "solo", "adventure",
+    "romantic", "cultural", "relaxation", "eco_tourism", "business"];
+
+const INTERESTS = [
+    "coastal", "adventure", "cultural", "wildlife", "wellness",
+    "luxury", "budget_friendly", "eco_friendly", "romantic", "family_friendly",
+    "photography", "hiking", "surfing", "diving", "historical"
+];
+
+
 interface ProviderProfile {
     name: string;
     email: string;
     contact_no: string | null;
     company_name: string;
+    location: string;
     provider_id: string | null;
     logo: string | null;
 }
@@ -16,7 +48,8 @@ interface ProviderProfile {
 interface Accommodation {
     id: string;
     name: string;
-    location: string;
+    district: string;
+    location: string | null;
     type: string[];
     amenities: string[];
     budget: string[];
@@ -175,6 +208,7 @@ export default function ProviderDashboard() {
                                     )}
                                 </div>
                                 <p><span className="font-medium">Company:</span> {profile.company_name}</p>
+                                <p><span className="font-medium">Location:</span> {profile.location || "N/A"}</p>
                                 <p><span className="font-medium">Owner:</span> {profile.name}</p>
                                 <p><span className="font-medium">Email:</span> {profile.email}</p>
                                 <p><span className="font-medium">Phone:</span> {profile.contact_no || "N/A"}</p>
@@ -246,7 +280,7 @@ export default function ProviderDashboard() {
                                 <thead>
                                     <tr className="text-left border-b">
                                         <th className="pb-3">Name</th>
-                                        <th className="pb-3">Location</th>
+                                        <th className="pb-3">District</th>
                                         <th className="pb-3">Price Range</th>
                                         <th className="pb-3">Actions</th>
                                     </tr>
@@ -255,7 +289,7 @@ export default function ProviderDashboard() {
                                     {accommodations.map((acc) => (
                                         <tr key={acc.id} className="border-b last:border-0 hover:bg-gray-50">
                                             <td className="py-3 font-medium">{acc.name}</td>
-                                            <td className="py-3">{acc.location}</td>
+                                            <td className="py-3">{acc.district}</td>
                                             <td className="py-3">${acc.price_range_min} - ${acc.price_range_max}</td>
                                             <td className="py-3">
                                                 <button
@@ -524,6 +558,15 @@ const EditProfileModal = memo(function EditProfileModal({ profile, onClose, onSa
                         />
                     </div>
                     <div>
+                        <label className="block text-sm font-medium mb-1">Business Location</label>
+                        <input
+                            value={formData.location || ""}
+                            onChange={e => setFormData({ ...formData, location: e.target.value })}
+                            className="w-full border p-2 rounded"
+                            placeholder="e.g., Colombo, Western Province"
+                        />
+                    </div>
+                    <div>
                         <label className="block text-sm font-medium mb-1">Phone</label>
                         <input
                             value={formData.contact_no || ""}
@@ -652,11 +695,13 @@ const AccommodationModal = memo(function AccommodationModal({ accommodation, onC
     const isEditing = !!accommodation;
     const [formData, setFormData] = useState(accommodation || {
         name: "",
+        district: "",
         location: "",
         type: [],
         amenities: [],
         budget: [],
         interests: [],
+        travel_style: [],
         price_range_min: 0,
         price_range_max: 0,
         province: "",
@@ -708,12 +753,26 @@ const AccommodationModal = memo(function AccommodationModal({ accommodation, onC
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Location</label>
-                        <input
-                            value={formData.location}
-                            onChange={e => setFormData({ ...formData, location: e.target.value })}
+                        <label className="block text-sm font-medium mb-1">District *</label>
+                        <select
+                            value={formData.district}
+                            onChange={e => setFormData({ ...formData, district: e.target.value })}
                             className="w-full border p-2 rounded"
                             required
+                        >
+                            <option value="">Select District</option>
+                            {SRI_LANKA_DISTRICTS.map(district => (
+                                <option key={district} value={district}>{district}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Location/Address (Optional)</label>
+                        <input
+                            value={formData.location || ""}
+                            onChange={e => setFormData({ ...formData, location: e.target.value })}
+                            className="w-full border p-2 rounded"
+                            placeholder="e.g., 123 Beach Road, Matara"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -738,11 +797,16 @@ const AccommodationModal = memo(function AccommodationModal({ accommodation, onC
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Province</label>
-                        <input
+                        <select
                             value={formData.province || ""}
                             onChange={e => setFormData({ ...formData, province: e.target.value })}
                             className="w-full border p-2 rounded"
-                        />
+                        >
+                            <option value="">Select Province</option>
+                            {SRI_LANKA_PROVINCES.map(province => (
+                                <option key={province} value={province}>{province}</option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="block text-sm font-medium mb-1">Group Size</label>
@@ -762,22 +826,96 @@ const AccommodationModal = memo(function AccommodationModal({ accommodation, onC
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Type (comma separated)</label>
-                        <input
-                            value={formData.type?.join(", ") || ""}
-                            onChange={e => handleArrayChange("type", e.target.value)}
-                            className="w-full border p-2 rounded"
-                            placeholder="e.g. Hotel, Villa"
-                        />
+                        <label className="block text-sm font-medium mb-1">Accommodation Type *</label>
+                        <div className="space-y-2">
+                            {ACCOMMODATION_TYPES.map(type => (
+                                <label key={type} className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.type?.includes(type) || false}
+                                        onChange={e => {
+                                            const current = formData.type || [];
+                                            if (e.target.checked) {
+                                                setFormData({ ...formData, type: [...current, type] });
+                                            } else {
+                                                setFormData({ ...formData, type: current.filter((t: string) => t !== type) });
+                                            }
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    {type}
+                                </label>
+                            ))}
+                        </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium mb-1">Amenities (comma separated)</label>
-                        <input
-                            value={formData.amenities?.join(", ") || ""}
-                            onChange={e => handleArrayChange("amenities", e.target.value)}
-                            className="w-full border p-2 rounded"
-                            placeholder="e.g. Wifi, Pool"
-                        />
+                        <label className="block text-sm font-medium mb-1">Amenities</label>
+                        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border p-3 rounded">
+                            {AMENITIES_LIST.map(amenity => (
+                                <label key={amenity} className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.amenities?.includes(amenity) || false}
+                                        onChange={e => {
+                                            const current = formData.amenities || [];
+                                            if (e.target.checked) {
+                                                setFormData({ ...formData, amenities: [...current, amenity] });
+                                            } else {
+                                                setFormData({ ...formData, amenities: current.filter((a: string) => a !== amenity) });
+                                            }
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    <span className="text-sm">{amenity}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Travel Style</label>
+                        <div className="flex flex-wrap gap-3">
+                            {TRAVEL_STYLES.map(style => (
+                                <label key={style} className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.travel_style?.includes(style) || false}
+                                        onChange={e => {
+                                            const current = formData.travel_style || [];
+                                            if (e.target.checked) {
+                                                setFormData({ ...formData, travel_style: [...current, style] });
+                                            } else {
+                                                setFormData({ ...formData, travel_style: current.filter((s: string) => s !== style) });
+                                            }
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    <span className="text-sm capitalize">{style}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Interests</label>
+                        <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto border p-3 rounded">
+                            {INTERESTS.map(interest => (
+                                <label key={interest} className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.interests?.includes(interest) || false}
+                                        onChange={e => {
+                                            const current = formData.interests || [];
+                                            if (e.target.checked) {
+                                                setFormData({ ...formData, interests: [...current, interest] });
+                                            } else {
+                                                setFormData({ ...formData, interests: current.filter((i: string) => i !== interest) });
+                                            }
+                                        }}
+                                        className="mr-2"
+                                    />
+                                    <span className="text-sm">{interest}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
                     <div className="flex justify-end gap-2 mt-6">
                         <button type="button" onClick={onClose} className="px-4 py-2 text-gray-600">Cancel</button>

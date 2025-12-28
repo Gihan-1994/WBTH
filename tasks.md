@@ -78,5 +78,15 @@
     - [x] Add descriptive comments to the code.
     - [x] Do not interact with DB or frontend. 
     - [x] Update current progress and implementation in ML_progress.md file.
+- [x] Implement ML based recommendations (Testing Phase 2)
+    - [x] Refer the current accommoadation recommendation model and integrate it with the frontend.
+    - [x] When user clicks for you section  in frondend it should dirrect to reccommondation page. That page contains 2 tabs as accommodation and guide. Currently implement only accommodation tab.
+    - [x] In the accommodation tab, user should be able to select the location, budget, amenities, etc. and get recommendations based on those filters.
+    - [x] Integrate the model with the postgres DB and get current accommodation data.
+    - [x] Use both mock data and current accommodation data to generate recommendations.
+    - [x] If the suggested accommodations are not available in the db it should show flag as "not registered in the system".
+    - [x] If the suggested accommodations are available in the db it should show button as "book now".
+    - [ ] 
+    
     
     

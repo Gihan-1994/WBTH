@@ -22,7 +22,7 @@ PROVINCES = {
 }
 
 # Accommodation types
-TYPES = ["hotel", "villa", "guesthouse", "resort", "hostel", "boutique_hotel", "eco_lodge"]
+TYPES = ["hotel", "villa", "resort", "homestay"]
 
 # Amenities
 AMENITIES = [
@@ -45,17 +45,18 @@ TRAVEL_STYLES = [
 ]
 
 
-def generate_accommodation_name(location: str, accommodation_type: str) -> str:
+def generate_accommodation_name(district: str, accommodation_type: str) -> str:
     """Generate a realistic accommodation name."""
     prefixes = ["The", "Grand", "Royal", "Paradise", "Ocean", "Hill", "Palm", "Green", "Blue", "Golden"]
-    suffixes = ["Resort", "Hotel", "Villa", "Retreat", "Lodge", "Inn", "Guesthouse", "Hideaway"]
     
-    if accommodation_type == "hostel":
-        return f"{random.choice(['Backpacker', 'Traveler', 'Explorer'])} {location} Hostel"
-    elif accommodation_type == "eco_lodge":
-        return f"{location} {random.choice(['Eco', 'Nature', 'Green'])} Lodge"
-    else:
-        return f"{random.choice(prefixes)} {location} {random.choice(suffixes)}"
+    if accommodation_type == "homestay":
+        return f"{random.choice(['Cozy', 'Comfortable', 'Family', 'Traditional'])} {district} Homestay"
+    elif accommodation_type == "villa":
+        return f"{random.choice(prefixes)} {district} Villa"
+    elif accommodation_type == "resort":
+        return f"{random.choice(prefixes)} {district} Resort"
+    else:  # hotel
+        return f"{random.choice(prefixes)} {district} Hotel"
 
 
 def generate_mock_accommodations(count: int = 1000) -> List[Dict]:
@@ -78,18 +79,18 @@ def generate_mock_accommodations(count: int = 1000) -> List[Dict]:
         # Select accommodation type (weighted towards popular types)
         accom_type = random.choices(
             TYPES,
-            weights=[25, 15, 20, 20, 10, 5, 5],  # Hotels and resorts more common
+            weights=[30, 20, 30, 20],  # hotel, villa, resort, homestay
             k=1
         )[0]
         
         # Generate price range based on type
-        if accom_type == "hostel":
-            price_min = random.randint(500, 1500)
-            price_max = price_min + random.randint(500, 1000)
-        elif accom_type in ["resort", "villa", "boutique_hotel"]:
+        if accom_type == "homestay":
+            price_min = random.randint(1000, 3000)
+            price_max = price_min + random.randint(1000, 3000)
+        elif accom_type in ["resort", "villa"]:
             price_min = random.randint(5000, 15000)
             price_max = price_min + random.randint(5000, 20000)
-        else:
+        else:  # hotel
             price_min = random.randint(2000, 8000)
             price_max = price_min + random.randint(2000, 8000)
         
@@ -107,7 +108,7 @@ def generate_mock_accommodations(count: int = 1000) -> List[Dict]:
         num_interests = random.randint(2, 5)
         selected_interests = random.sample(INTERESTS, num_interests)
         
-        # Coastal locations get coastal tag
+        # Coastal districts get coastal tag
         if city in ["Galle", "Mirissa", "Hikkaduwa", "Negombo", "Trincomalee", "Arugam Bay", "Tangalle"]:
             if "coastal" not in selected_interests:
                 selected_interests.append("coastal")
@@ -126,8 +127,8 @@ def generate_mock_accommodations(count: int = 1000) -> List[Dict]:
             group_size = random.randint(2, 20)
         elif accom_type == "villa":
             group_size = random.randint(4, 12)
-        elif accom_type == "hostel":
-            group_size = random.randint(1, 8)
+        elif accom_type == "homestay":
+            group_size = random.randint(2, 6)
         else:
             group_size = random.randint(2, 6)
         
@@ -145,7 +146,7 @@ def generate_mock_accommodations(count: int = 1000) -> List[Dict]:
             "type": [accom_type],
             "amenities": selected_amenities,
             "rating": rating,
-            "location": city,
+            "district": city,
             "price_range_min": float(price_min),
             "price_range_max": float(price_max),
             "province": province,

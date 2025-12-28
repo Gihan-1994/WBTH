@@ -15,6 +15,8 @@ interface Accommodation {
     rating: number;
     type: string[];
     amenities: string[];
+    interests: string[];
+    travel_style: string[];
     description: string;
     provider: {
         user: {
@@ -141,6 +143,28 @@ export default function AccommodationDetailsPage() {
                             ))}
                         </div>
                     </div>
+
+                    {accommodation.travel_style && accommodation.travel_style.length > 0 && (
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <h2 className="text-2xl font-bold mb-4">Travel Style</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {accommodation.travel_style.map((style) => (
+                                    <span key={style} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm capitalize">{style}</span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {accommodation.interests && accommodation.interests.length > 0 && (
+                        <div className="bg-white p-6 rounded-xl shadow-sm">
+                            <h2 className="text-2xl font-bold mb-4">Interests</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {accommodation.interests.map((interest) => (
+                                    <span key={interest} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">{interest}</span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h2 className="text-2xl font-bold mb-4">Host Info</h2>

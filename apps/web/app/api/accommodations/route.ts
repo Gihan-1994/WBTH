@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@repo/prisma";
-import { Prisma } from "@prisma/client";
+import { prisma, Prisma } from "@repo/prisma";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-    const location = searchParams.get("location");
+    const district = searchParams.get("district");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
     const amenities = searchParams.get("amenities");
@@ -13,9 +12,9 @@ export async function GET(req: NextRequest) {
 
     const where: Prisma.AccommodationWhereInput = {};
 
-    if (location) {
-        where.location = {
-            contains: location,
+    if (district) {
+        where.district = {
+            contains: district,
             mode: "insensitive",
         };
     }

@@ -53,18 +53,18 @@ export default function Home() {
       {/* Sections Grid */}
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Personal Recommendations */}
-        <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
-          <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-4">
+        <Link
+          href="/recommendations"
+          className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition group"
+        >
+          <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-4 group-hover:bg-purple-200 transition">
             <Compass className="text-purple-600" size={24} />
           </div>
           <h2 className="text-xl font-bold mb-2">For You</h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600">
             Personalized recommendations based on your interests.
           </p>
-          <span className="text-sm text-purple-600 font-medium">
-            Coming Soon
-          </span>
-        </div>
+        </Link>
 
         {/* Accommodations */}
         <Link

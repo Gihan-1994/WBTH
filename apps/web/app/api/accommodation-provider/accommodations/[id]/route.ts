@@ -46,11 +46,13 @@ export async function PUT(
             where: { id: accommodationId },
             data: {
                 name: data.name,
+                district: data.district,
                 location: data.location,
                 type: data.type,
                 amenities: data.amenities,
                 budget: data.budget,
                 interests: data.interests,
+                travel_style: data.travel_style,
                 price_range_min: parseFloat(data.price_range_min),
                 price_range_max: parseFloat(data.price_range_max),
                 province: data.province,

@@ -81,11 +81,13 @@ export async function POST(req: NextRequest) {
             data: {
                 provider_id: provider.provider_id,
                 name: data.name,
+                district: data.district,
                 location: data.location,
                 type: data.type || [],
                 amenities: data.amenities || [],
                 budget: data.budget || [],
                 interests: data.interests || [],
+                travel_style: data.travel_style || [],
                 price_range_min: parseFloat(data.price_range_min) || 0,
                 price_range_max: parseFloat(data.price_range_max) || 0,
                 province: data.province,

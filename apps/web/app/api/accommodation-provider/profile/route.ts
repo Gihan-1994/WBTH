@@ -33,6 +33,7 @@ export async function GET(req: NextRequest) {
             email: user.email,
             contact_no: user.contact_no,
             company_name: user.accommodationProvider?.company_name || "",
+            location: user.accommodationProvider?.location || "",
             provider_id: user.accommodationProvider?.provider_id || null,
             logo: user.accommodationProvider?.logo || null,
         });
@@ -76,11 +77,13 @@ export async function PUT(req: NextRequest) {
             where: { user_id: userId },
             update: {
                 company_name: data.company_name,
+                location: data.location,
                 logo: data.logo,
             },
             create: {
                 user_id: userId,
                 company_name: data.company_name,
+                location: data.location,
                 logo: data.logo,
             },
         });

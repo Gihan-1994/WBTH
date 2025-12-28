@@ -20,6 +20,6 @@
     "packages/config/*"
   ],
   "dependencies": {
-    "@prisma/client": "^7.0.1"
+    "@prisma/client": "^7.2.0"
   }
 }

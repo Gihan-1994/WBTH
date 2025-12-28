@@ -13,7 +13,7 @@ import json
 # STEP 1: LOAD DATA
 # ============================================================================
 # Option A: Load 1000 mock accommodations (CURRENT)
-with open('mock_accommodations.json', 'r') as f:
+with open('../data/mock_accommodations.json', 'r') as f:
     CUSTOM_ACCOMMODATIONS = json.load(f)
 
 # Option B: Use custom accommodations (COMMENTED OUT)
@@ -23,8 +23,8 @@ CUSTOM_ACCOMMODATIONS = [
     {
         "id": "my-resort-1",
         "name": "My Dream Beach Resort",
-        "location": "Unawatuna",
-        "province": "Southern",
+        "location": "",
+        "province": "western",
         "price_range_min": 15000.0,
         "price_range_max": 30000.0,
         "amenities": ["wifi", "pool", "beach_access", "spa", "restaurant"],
@@ -74,13 +74,13 @@ Available Travel Styles:
 
 USER_QUERY = {
     "budget_min": 1500,           # Minimum budget (LKR)
-    "budget_max": 8000,          # Maximum budget (LKR)
+    "budget_max": 10000,          # Maximum budget (LKR)
     "required_amenities": ["wifi", "pool"],  # Must have these
     "interests": ["coastal", "romantic"],    # Your interests
     "travel_style": "",              # Your travel style
     "group_size": 2,                         # Number of people
-    "location_city": "Colombo",                # Preferred city (optional)
-    "location_province": "Western",         # Preferred province (optional)
+    "location_city": "Galle",                # Preferred city (optional)
+    "location_province": "Southern",         # Preferred province (optional)
     "city_only": False,          # True = only show city, False = province OK
     "top_k": 5                   # Number of recommendations
 }
@@ -94,18 +94,18 @@ def main():
     print("CUSTOM DATA RECOMMENDATION TEST")
     print("=" * 70)
     print()
-    
+
     # Show your data
     print(f"📊 Your Custom Data:")
     print(f"   Total Accommodations: {len(CUSTOM_ACCOMMODATIONS)}")
-    print()
-    for i, acc in enumerate(CUSTOM_ACCOMMODATIONS, 1):
-        print(f"   {i}. {acc['name']}")
-        print(f"      Location: {acc['location']}, {acc['province']}")
-        print(f"      Price: {acc['price_range_min']:.0f}-{acc['price_range_max']:.0f} LKR")
-        print(f"      Rating: {acc['rating']}/5.0")
-        print()
-    
+    # print()
+    # for i, acc in enumerate(CUSTOM_ACCOMMODATIONS, 1):
+    #     print(f"   {i}. {acc['name']}")
+    #     print(f"      Location: {acc['location']}, {acc['province']}")
+    #     print(f"      Price: {acc['price_range_min']:.0f}-{acc['price_range_max']:.0f} LKR")
+    #     print(f"      Rating: {acc['rating']}/5.0")
+    #     print()
+
     # Show your query
     print("-" * 70)
     print(f"🔍 Your Search Query:")
@@ -117,21 +117,21 @@ def main():
     if USER_QUERY.get('location_city'):
         print(f"   Preferred Location: {USER_QUERY['location_city']}, {USER_QUERY['location_province']}")
     print()
-    
+
     # Create recommender
     print("-" * 70)
     print("🤖 Running Recommendation Engine...")
     print()
-    
+
     recommender = AccommodationRecommender(CUSTOM_ACCOMMODATIONS)
     results = recommender.recommend(**USER_QUERY)
-    
+
     # Display results
     if results["recommendations"]:
         print(f"✅ Found {results['total_candidates']} matching accommodations")
         print(f"\n🎯 Top {len(results['recommendations'])} Recommendations:")
         print()
-        
+
         for i, rec in enumerate(results["recommendations"], 1):
             print(f"{i}. {rec['name']}")
             print(f"   📍 {rec['location']}, {rec['province']}")
@@ -154,7 +154,7 @@ def main():
         print("   - Removing some required amenities")
         print("   - Expanding location (set city_only=False)")
         print("   - Adding more accommodations to your list")
-    
+
     print("=" * 70)
 
 

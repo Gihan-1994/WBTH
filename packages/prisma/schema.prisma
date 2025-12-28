@@ -57,6 +57,7 @@ model AccommodationProvider {
   user_id        String          @id
   provider_id    String          @unique @default(uuid())
   company_name   String
+  location       String?
   logo           String?         @db.Text
   user           User            @relation(fields: [user_id], references: [id])
   accommodations Accommodation[]
@@ -73,7 +74,8 @@ model Accommodation {
   rating            Float?
   account_no        String?
   budget            String[]
-  location          String
+  district          String
+  location          String?
   price_range_min   Float?
   price_range_max   Float?
   province          String?
