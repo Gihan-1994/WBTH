@@ -59,6 +59,51 @@ export async function POST(req: NextRequest) {
             data: bookingData,
         });
 
+        // Create notifications for both parties
+        const { notifyBookingCreated } = await import("@/lib/notifications");
+
+        // Get tourist and provider details
+        const tourist = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, name: true },
+        });
+
+        let providerId: string;
+        let providerName: string;
+
+        if (type === "accommodation") {
+            const accommodation = await prisma.accommodation.findUnique({
+                where: { id: itemId },
+                include: {
+                    provider: {
+                        include: { user: { select: { id: true, name: true } } },
+                    },
+                },
+            });
+            providerId = accommodation?.provider.user.id || "";
+            providerName = accommodation?.provider.user.name || "";
+        } else {
+            const guide = await prisma.guide.findUnique({
+                where: { user_id: itemId },
+                include: { user: { select: { id: true, name: true } } },
+            });
+            providerId = guide?.user.id || "";
+            providerName = guide?.user.name || "";
+        }
+
+        if (tourist && providerId) {
+            await notifyBookingCreated({
+                bookingId: booking.id,
+                touristId: tourist.id,
+                touristName: tourist.name,
+                providerId,
+                providerName,
+                bookingType: type,
+                startDate: start,
+                endDate: end,
+            });
+        }
+
         return NextResponse.json(booking);
     } catch (error) {
         console.error("Error creating booking:", error);

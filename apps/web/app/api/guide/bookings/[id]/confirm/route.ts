@@ -5,7 +5,7 @@ import { prisma } from "@repo/prisma";
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: Promise<{ id: string }> }
+    { params }: { params: { id: string } }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -15,36 +15,46 @@ export async function PUT(
 
     // @ts-ignore
     const userId = session.user.id;
-    const { id: bookingId } = await params;
+    const bookingId = params.id;
 
     try {
+        // Find the booking and verify it belongs to this guide
         const booking = await prisma.booking.findUnique({
             where: { id: bookingId },
+            include: {
+                guide: true,
+            },
         });
 
-        if (!booking) {
-            return NextResponse.json({ error: "Booking not found" }, { status: 404 });
-        }
-
-        // Ensure the booking belongs to the guide
-        if (booking.guide_id !== userId) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-        }
-
-        if (booking.status === "cancelled") {
+        if (!booking || booking.type !== "guide") {
             return NextResponse.json(
-                { error: "Booking is already cancelled" },
+                { error: "Booking not found" },
+                { status: 404 }
+            );
+        }
+
+        if (booking.guide_id !== userId) {
+            return NextResponse.json(
+                { error: "You don't have permission to confirm this booking" },
+                { status: 403 }
+            );
+        }
+
+        if (booking.status !== "pending") {
+            return NextResponse.json(
+                { error: "Only pending bookings can be confirmed" },
                 { status: 400 }
             );
         }
 
+        // Update booking status to confirmed
         await prisma.booking.update({
             where: { id: bookingId },
-            data: { status: "cancelled" },
+            data: { status: "confirmed" },
         });
 
         // Create notifications for both parties
-        const { notifyBookingCancelled } = await import("@/lib/notifications");
+        const { notifyBookingConfirmed } = await import("@/lib/notifications");
 
         const tourist = await prisma.user.findUnique({
             where: { id: booking.user_id },
@@ -57,7 +67,7 @@ export async function PUT(
         });
 
         if (tourist && guide) {
-            await notifyBookingCancelled({
+            await notifyBookingConfirmed({
                 bookingId: booking.id,
                 touristId: tourist.id,
                 touristName: tourist.name,
@@ -66,15 +76,14 @@ export async function PUT(
                 bookingType: booking.type,
                 startDate: booking.start_date,
                 endDate: booking.end_date,
-                cancelledBy: "provider",
             });
         }
 
-        return NextResponse.json({ message: "Booking cancelled successfully" });
+        return NextResponse.json({ message: "Booking confirmed successfully" });
     } catch (error) {
-        console.error("Error cancelling booking:", error);
+        console.error("Error confirming booking:", error);
         return NextResponse.json(
-            { error: "Failed to cancel booking" },
+            { error: "Failed to confirm booking" },
             { status: 500 }
         );
     }

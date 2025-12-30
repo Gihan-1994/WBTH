@@ -32,7 +32,13 @@ export async function GET(req: NextRequest) {
             expertise: user.guide?.expertise || [],
             price: user.guide?.price || 0,
             availability: user.guide?.availability || false,
+            city: user.guide?.city || null,
+            province: user.guide?.province || null,
+            gender: user.guide?.gender || null,
+            account_no: user.guide?.account_no || null,
+            rating: user.guide?.rating || null,
             profile_picture: user.guide?.profile_picture || null,
+            email_notifications_enabled: user.email_notifications_enabled,
         });
     } catch (error) {
         console.error("Error fetching profile:", error);
@@ -73,6 +79,10 @@ export async function PUT(req: NextRequest) {
                 expertise: data.expertise,
                 price: parseFloat(data.price),
                 availability: data.availability,
+                city: data.city || null,
+                province: data.province || null,
+                gender: data.gender || null,
+                account_no: data.account_no || null,
             },
             create: {
                 user_id: userId,
@@ -81,6 +91,10 @@ export async function PUT(req: NextRequest) {
                 expertise: data.expertise,
                 price: parseFloat(data.price),
                 availability: data.availability,
+                city: data.city || null,
+                province: data.province || null,
+                gender: data.gender || null,
+                account_no: data.account_no || null,
             },
         });
 

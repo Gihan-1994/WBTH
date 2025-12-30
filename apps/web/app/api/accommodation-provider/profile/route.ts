@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
             location: user.accommodationProvider?.location || "",
             provider_id: user.accommodationProvider?.provider_id || null,
             logo: user.accommodationProvider?.logo || null,
+            email_notifications_enabled: user.email_notifications_enabled,
         });
     } catch (error) {
         console.error("Error fetching provider profile:", error);

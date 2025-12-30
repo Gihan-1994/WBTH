@@ -42,6 +42,54 @@ export async function PATCH(
             data: { status: "cancelled" },
         });
 
+        // Create notifications for both parties
+        const { notifyBookingCancelled } = await import("@/lib/notifications");
+
+        const tourist = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, name: true },
+        });
+
+        let providerId: string;
+        let providerName: string;
+
+        if (booking.type === "accommodation" && booking.accommodation_id) {
+            const accommodation = await prisma.accommodation.findUnique({
+                where: { id: booking.accommodation_id },
+                include: {
+                    provider: {
+                        include: { user: { select: { id: true, name: true } } },
+                    },
+                },
+            });
+            providerId = accommodation?.provider.user.id || "";
+            providerName = accommodation?.provider.user.name || "";
+        } else if (booking.type === "guide" && booking.guide_id) {
+            const guide = await prisma.guide.findUnique({
+                where: { user_id: booking.guide_id },
+                include: { user: { select: { id: true, name: true } } },
+            });
+            providerId = guide?.user.id || "";
+            providerName = guide?.user.name || "";
+        } else {
+            providerId = "";
+            providerName = "";
+        }
+
+        if (tourist && providerId) {
+            await notifyBookingCancelled({
+                bookingId: booking.id,
+                touristId: tourist.id,
+                touristName: tourist.name,
+                providerId,
+                providerName,
+                bookingType: booking.type,
+                startDate: booking.start_date,
+                endDate: booking.end_date,
+                cancelledBy: "tourist",
+            });
+        }
+
         return NextResponse.json({ message: "Booking cancelled successfully" });
     } catch (error) {
         console.error("Error cancelling booking:", error);

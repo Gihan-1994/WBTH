@@ -4,8 +4,10 @@ import { PrismaClient, Prisma } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
-// Export Prisma namespace for type definitions
+// Export Prisma namespace and all types for consumer packages
 export { Prisma };
+// Re-export all types from @prisma/client
+export type * from '@prisma/client';
 
 declare global {
   var prisma: PrismaClient | undefined;

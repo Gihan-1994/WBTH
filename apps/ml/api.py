@@ -1,6 +1,6 @@
 """
-Flask API for ML-based accommodation recommendations.
-Integrates with PostgreSQL database and recommendation engine.
+Flask API for ML-based accommodation and guide recommendations.
+Integrates with PostgreSQL database and recommendation engines.
 """
 
 import os
@@ -12,6 +12,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 from recommender import AccommodationRecommender, load_accommodations
+from GuidesRecommendationModel.guide_recommender import GuideRecommender
 
 # Load environment variables
 load_dotenv()
@@ -277,15 +278,178 @@ def recommend_accommodations():
         return jsonify({"error": str(e)}), 500
 
 
+def fetch_guides_from_db(
+    budget_min: Optional[float] = None,
+    budget_max: Optional[float] = None,
+    city: Optional[str] = None,
+    province: Optional[str] = None,
+    languages: Optional[List[str]] = None
+) -> List[Dict]:
+    """Fetch guides from PostgreSQL database."""
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    
+    try:
+        query = """
+            SELECT 
+                g.user_id as id,
+                u.name,
+                g.experience,
+                g.languages,
+                g.expertise,
+                g.rating,
+                g.price,
+                g.availability,
+                g.city,
+                g.province,
+                g.gender
+            FROM guides g
+            LEFT JOIN users u ON g.user_id = u.id
+            WHERE 1=1
+        """
+        params = []
+        
+        if budget_min is not None and budget_max is not None:
+            query += " AND (g.price >= %s AND g.price <= %s)"
+            params.extend([budget_min, budget_max])
+        
+        if city:
+            query += " AND g.city = %s"
+            params.append(city)
+        
+        if province:
+            query += " AND g.province = %s"
+            params.append(province)
+        
+        cur.execute(query, params)
+        results = cur.fetchall()
+        
+        guides = []
+        for row in results:
+            guide = {
+                'id': row['id'],
+                'user_id': row['id'],
+                'name': row['name'],
+                'experience': row.get('experience') or [],
+                'languages': row.get('languages') or [],
+                'expertise': row.get('expertise') or [],
+                'rating': row.get('rating'),
+                'price': row.get('price') or 0,
+                'availability': row.get('availability', True),
+                'city': row.get('city'),
+                'province': row.get('province'),
+                'gender': row.get('gender'),
+                'in_system': True
+            }
+            print(f"DEBUG: Fetched guide {guide['name']} with price {guide['price']} (type: {type(guide['price'])})")
+            guides.append(guide)
+        
+        print(f"DEBUG: Total guides fetched from DB: {len(guides)}")
+        return guides
+    finally:
+        cur.close()
+        conn.close()
+
+
+def get_hybrid_guides(
+    budget_min: float,
+    budget_max: float,
+    languages: List[str],
+    city: Optional[str] = None,
+    province: Optional[str] = None,
+    min_real_data: int = 5
+) -> List[Dict]:
+    """Get guides with hybrid approach: real DB data + mock data fallback."""
+    real_guides = fetch_guides_from_db(
+        budget_min=budget_min,
+        budget_max=budget_max,
+        city=city,
+        province=province,
+        languages=languages
+    )
+    
+    print(f"Found {len(real_guides)} real guides from database")
+    
+    if len(real_guides) < min_real_data:
+        print(f"Insufficient real data ({len(real_guides)} < {min_real_data}), adding mock data")
+        
+        with open('data/mock_guides.json', 'r', encoding='utf-8') as f:
+            mock_guides = json.load(f)
+        
+        for guide in mock_guides:
+            guide['in_system'] = False
+        
+        all_guides = real_guides + mock_guides
+    else:
+        all_guides = real_guides
+    
+    return all_guides
+
+
+@app.route('/api/recommendations/guides', methods=['POST'])
+def recommend_guides():
+    """Generate guide recommendations based on user preferences."""
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        budget_min = data.get('budget_min', 2000.0)
+        budget_max = data.get('budget_max', 20000.0)
+        languages = data.get('languages', ["English"])
+        expertise = data.get('expertise', [])
+        city = data.get('city')
+        province = data.get('province')
+        city_only = data.get('city_only', False)
+        gender_preference = data.get('gender_preference')
+        top_k = data.get('top_k', 10)
+        
+        if not languages:
+            return jsonify({"error": "At least one language is required"}), 400
+        
+        guides = get_hybrid_guides(
+            budget_min=budget_min,
+            budget_max=budget_max,
+            languages=languages,
+            city=city,
+            province=province
+        )
+        
+        if not guides:
+            return jsonify({
+                "recommendations": [],
+                "total_candidates": 0,
+                "message": "No guides found. Try adjusting your filters."
+            }), 200
+        
+        recommender = GuideRecommender(guides)
+        
+        results = recommender.recommend(
+            budget_min=budget_min,
+            budget_max=budget_max,
+            languages=languages,
+            expertise=expertise,
+            city=city,
+            province=province,
+            city_only=city_only,
+            gender_preference=gender_preference,
+            top_k=top_k
+        )
+        
+        return jsonify(results), 200
+    
+    except Exception as e:
+        print(f"Error in recommend_guides: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/match/guides', methods=['POST'])
 def match_guides():
-    """Guide matching endpoint (placeholder for future implementation)."""
-    data = request.get_json()
-    print("Received guide matching request:", data)
-    return jsonify({
-        "message": "Guide matching endpoint coming soon",
-        "matches": []
-    }), 200
+    """Alias endpoint for guide recommendations (deprecated, use /api/recommendations/guides)."""
+    return recommend_guides()
 
 
 @app.route('/health', methods=['GET'])

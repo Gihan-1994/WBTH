@@ -86,7 +86,24 @@
     - [x] Use both mock data and current accommodation data to generate recommendations.
     - [x] If the suggested accommodations are not available in the db it should show flag as "not registered in the system".
     - [x] If the suggested accommodations are available in the db it should show button as "book now".
-    - [ ] 
+- [x] Implement ML based recommendations for guides (Testing Phase 1)
+    - [x] Follow the wbth_6_week_build_plan_architecture_spec.md and under Modules & Responsibilities find 4)Recommendations (ML) and implement section 4.2(Guide Recommendation — Simple Hybrid (Rule‑first + Scored Ranking)).
+    - [x] Generate mock data for guide recommendation model and implement it (1000 records).
+    - [x] Use hard filters for province , language, price range, city only if user selects them.
+    - [x] Use seperate directory for the model named as GuidesRecommendationModel.
+    - [x] Use simple and efficient logics to perform functions. 
+    - [x] Use performance optimized codes.
+    - [x] Use best practices for code quality.
+    - [x] Use new dependencies only if they are actually required.
+    - [x] Add descriptive comments to the code. 
+    - [x] Update current progress and implementation in ML_progress.md file.
+    - [x] Evaluate the model using some simple metrices same as accommodation recommendation model.
+    - [x] Integrate the model with the postgres DB and get current guide data.
+    - [x] Use both mock data and current guide data to generate recommendations.
+    - [x] If the suggested guides are not available in the db it should show flag as "not registered in the system".
+    - [x] If the suggested guides are available in the db it should show button as "book now".
+    - [x] Give priority to the guides that are available in the db.
+    - [x] Integrate the model with the frontend and display the recommendations in the frontend in "for you" section under guides tab.
     
     
     

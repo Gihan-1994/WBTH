@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import { useRouter } from "next/navigation";
 import React from "react";
+import NotificationBell from "@/components/NotificationBell";
 
 const SRI_LANKA_DISTRICTS = [
     "Colombo", "Gampaha", "Kalutara", "Kandy", "Matale", "Nuwara Eliya",
@@ -43,6 +44,7 @@ interface ProviderProfile {
     location: string;
     provider_id: string | null;
     logo: string | null;
+    email_notifications_enabled: boolean;
 }
 
 interface Accommodation {
@@ -131,22 +133,41 @@ export default function ProviderDashboard() {
         fetchData();
     }, [fetchData]);
 
+    const handleConfirmBooking = useCallback(async (id: string) => {
+        if (!confirm("Confirm this booking?")) return;
+
+        try {
+            const res = await fetch(`/api/accommodation-provider/bookings/${id}/confirm`, {
+                method: "PUT",
+            });
+            if (res.ok) {
+                alert("Booking confirmed successfully");
+                fetchData(); // Refresh data
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to confirm booking");
+            }
+        } catch (error) {
+            alert("Error confirming booking");
+        }
+    }, [fetchData]);
+
     const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to cancel this booking?")) return;
+        if (!confirm("Are you sure you want to reject this booking?")) return;
 
         try {
             const res = await fetch(`/api/accommodation-provider/bookings/${id}/cancel`, {
                 method: "PUT",
             });
             if (res.ok) {
-                alert("Booking cancelled successfully");
+                alert("Booking rejected successfully");
                 fetchData(); // Refresh data
             } else {
                 const data = await res.json();
-                alert(data.error || "Failed to cancel booking");
+                alert(data.error || "Failed to reject booking");
             }
         } catch (error) {
-            alert("Error cancelling booking");
+            alert("Error rejecting booking");
         }
     }, [fetchData]);
 
@@ -176,12 +197,15 @@ export default function ProviderDashboard() {
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-800">Provider Dashboard</h1>
-                <button
-                    onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    Home
-                </button>
+                <div className="flex items-center gap-4">
+                    <NotificationBell />
+                    <button
+                        onClick={() => router.push("/")}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                        Home
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -212,6 +236,46 @@ export default function ProviderDashboard() {
                                 <p><span className="font-medium">Owner:</span> {profile.name}</p>
                                 <p><span className="font-medium">Email:</span> {profile.email}</p>
                                 <p><span className="font-medium">Phone:</span> {profile.contact_no || "N/A"}</p>
+
+                                {/* Email Notification Toggle */}
+                                <div className="pt-4 border-t">
+                                    <label className="flex items-center justify-between cursor-pointer">
+                                        <span className="text-sm font-medium text-gray-700">
+                                            📧 Email Notifications
+                                        </span>
+                                        <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                checked={profile.email_notifications_enabled}
+                                                onChange={async (e) => {
+                                                    const enabled = e.target.checked;
+                                                    try {
+                                                        const res = await fetch('/api/user/email-preferences', {
+                                                            method: 'PUT',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ email_notifications_enabled: enabled }),
+                                                        });
+                                                        if (res.ok) {
+                                                            setProfile({ ...profile, email_notifications_enabled: enabled });
+                                                            alert(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
+                                                        } else {
+                                                            alert('Failed to update preference');
+                                                        }
+                                                    } catch (error) {
+                                                        alert('Error updating preference');
+                                                    }
+                                                }}
+                                                className="sr-only peer"
+                                            />
+                                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </div>
+                                    </label>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        {profile.email_notifications_enabled
+                                            ? 'You will receive booking updates via email'
+                                            : 'You will only receive in-app notifications'}
+                                    </p>
+                                </div>
 
                                 <div className="flex gap-2 mt-4 pt-4 border-t">
                                     <button
@@ -369,12 +433,20 @@ export default function ProviderDashboard() {
                                                     View
                                                 </button>
                                                 {booking.status === 'pending' && (
-                                                    <button
-                                                        onClick={() => handleCancelBooking(booking.id)}
-                                                        className="text-red-600 hover:underline"
-                                                    >
-                                                        Cancel
-                                                    </button>
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleConfirmBooking(booking.id)}
+                                                            className="text-green-600 hover:underline mr-3"
+                                                        >
+                                                            Confirm
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleCancelBooking(booking.id)}
+                                                            className="text-red-600 hover:underline"
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </>
                                                 )}
                                             </td>
                                         </tr>

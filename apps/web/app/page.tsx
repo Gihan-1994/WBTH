@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import {
   MapPin,
   User,
@@ -9,10 +9,16 @@ import {
   MessageSquare,
   Hotel,
   Compass,
+  LogOut,
+  CalendarCheck,
 } from "lucide-react";
 
 export default function Home() {
   const { data: session } = useSession();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: "/" });
+  };
 
   const getProfileLink = () => {
     if (!session?.user) return "/login";
@@ -32,7 +38,31 @@ export default function Home() {
         <p className="text-xl mb-8">
           Your one-stop destination for all tourism needs
         </p>
-        {!session && (
+        {session ? (
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-lg">
+              Welcome back, <span className="font-semibold">{session.user?.name}</span>!
+            </p>
+            <div className="flex items-center gap-4">
+              {session.user?.role !== "tourist" && (
+                <Link
+                  href="/dashboard/tourist"
+                  className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition flex items-center gap-2"
+                >
+                  <CalendarCheck size={20} />
+                  View Bookings
+                </Link>
+              )}
+              <button
+                onClick={handleLogout}
+                className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white/10 transition flex items-center gap-2"
+              >
+                <LogOut size={20} />
+                Logout
+              </button>
+            </div>
+          </div>
+        ) : (
           <div className="space-x-4">
             <Link
               href="/login"

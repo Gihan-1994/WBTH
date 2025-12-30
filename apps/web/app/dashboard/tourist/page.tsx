@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import NotificationBell from "@/components/NotificationBell";
 
 interface UserProfile {
     name: string;
@@ -9,6 +10,7 @@ interface UserProfile {
     contact_no: string | null;
     country: string;
     dob: string | null;
+    email_notifications_enabled: boolean;
 }
 
 interface Booking {
@@ -17,7 +19,9 @@ interface Booking {
     end_date: string;
     price: number;
     status: string;
+    type: string;
     accommodation?: { name: string };
+    guide?: { user: { name: string } };
 }
 
 interface Stats {
@@ -89,12 +93,15 @@ export default function TouristDashboard() {
             {/* Header */}
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold text-gray-800">Tourist Dashboard</h1>
-                <button
-                    onClick={() => router.push("/")}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    Home
-                </button>
+                <div className="flex items-center gap-4">
+                    <NotificationBell />
+                    <button
+                        onClick={() => router.push("/")}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                        Home
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -109,6 +116,46 @@ export default function TouristDashboard() {
                                 <p><span className="font-medium">Phone:</span> {profile.contact_no || "N/A"}</p>
                                 <p><span className="font-medium">Country:</span> {profile.country || "N/A"}</p>
                                 <p><span className="font-medium">DOB:</span> {profile.dob ? new Date(profile.dob).toLocaleDateString() : "N/A"}</p>
+
+                                {/* Email Notification Toggle */}
+                                <div className="pt-4 border-t">
+                                    <label className="flex items-center justify-between cursor-pointer">
+                                        <span className="text-sm font-medium text-gray-700">
+                                            📧 Email Notifications
+                                        </span>
+                                        <div className="relative">
+                                            <input
+                                                type="checkbox"
+                                                checked={profile.email_notifications_enabled}
+                                                onChange={async (e) => {
+                                                    const enabled = e.target.checked;
+                                                    try {
+                                                        const res = await fetch('/api/user/email-preferences', {
+                                                            method: 'PUT',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ email_notifications_enabled: enabled }),
+                                                        });
+                                                        if (res.ok) {
+                                                            setProfile({ ...profile, email_notifications_enabled: enabled });
+                                                            alert(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
+                                                        } else {
+                                                            alert('Failed to update preference');
+                                                        }
+                                                    } catch (error) {
+                                                        alert('Error updating preference');
+                                                    }
+                                                }}
+                                                className="sr-only peer"
+                                            />
+                                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                        </div>
+                                    </label>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        {profile.email_notifications_enabled
+                                            ? 'You will receive booking updates via email'
+                                            : 'You will only receive in-app notifications'}
+                                    </p>
+                                </div>
 
                                 <div className="flex gap-2 mt-4 pt-4 border-t">
                                     <button
@@ -176,13 +223,16 @@ export default function TouristDashboard() {
                                                 {new Date(booking.start_date).toLocaleDateString()}
                                             </td>
                                             <td className="py-3">
-                                                {booking.accommodation?.name || "Booking"}
+                                                {booking.type === 'guide'
+                                                    ? (booking.guide?.user?.name || "Guide Booking")
+                                                    : (booking.accommodation?.name || "Accommodation Booking")}{"\u00A0\u00A0\u00A0\u00A0"}
+                                                <span className="text-gray-500 text-xs capitalize">({booking.type})</span>
                                             </td>
                                             <td className="py-3">${booking.price}</td>
                                             <td className="py-3">
                                                 <span className={`px-2 py-1 rounded text-xs ${booking.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                                                        booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                            'bg-red-100 text-red-800'
+                                                    booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                        'bg-red-100 text-red-800'
                                                     }`}>
                                                     {booking.status}
                                                 </span>
@@ -383,7 +433,11 @@ function ViewBookingModal({ booking, onClose }: any) {
                 <h2 className="text-xl font-bold mb-4">Booking Details</h2>
                 <div className="space-y-3">
                     <p><span className="font-medium">Booking ID:</span> {booking.id}</p>
-                    <p><span className="font-medium">Accommodation:</span> {booking.accommodation?.name || "N/A"}</p>
+                    {booking.type === 'guide' ? (
+                        <p><span className="font-medium">Guide:</span> {booking.guide?.user?.name || "N/A"}</p>
+                    ) : (
+                        <p><span className="font-medium">Accommodation:</span> {booking.accommodation?.name || "N/A"}</p>
+                    )}
                     <p><span className="font-medium">Start Date:</span> {new Date(booking.start_date).toLocaleDateString()}</p>
                     <p><span className="font-medium">End Date:</span> {new Date(booking.end_date).toLocaleDateString()}</p>
                     <p><span className="font-medium">Price:</span> ${booking.price}</p>

@@ -21,6 +21,13 @@ export async function GET(req: NextRequest) {
                 accommodation: {
                     select: { name: true },
                 },
+                guide: {
+                    include: {
+                        user: {
+                            select: { name: true },
+                        },
+                    },
+                },
             },
         });
 
