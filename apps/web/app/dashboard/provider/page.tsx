@@ -256,7 +256,7 @@ export default function ProviderDashboard() {
                                                             body: JSON.stringify({ email_notifications_enabled: enabled }),
                                                         });
                                                         if (res.ok) {
-                                                            setProfile({ ...profile, email_notifications_enabled: enabled });
+                                                            setProfile(prev => prev ? { ...prev, email_notifications_enabled: enabled } : prev);
                                                             alert(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
                                                         } else {
                                                             alert('Failed to update preference');

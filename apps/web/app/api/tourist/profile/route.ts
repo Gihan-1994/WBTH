@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
             contact_no: user.contact_no,
             country: user.tourist?.country || "",
             dob: user.tourist?.dob || null,
+            email_notifications_enabled: user.email_notifications_enabled,
         });
     } catch (error) {
         console.error("Error fetching profile:", error);

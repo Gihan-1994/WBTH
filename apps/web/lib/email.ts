@@ -74,7 +74,7 @@ export async function sendNotificationEmail(params: SendEmailParams) {
         }
 
         await resend.emails.send({
-            from: 'WBTH Notifications <notifications@wbth.com>', // You can customize this
+            from: 'WBTH Notifications <notifications@nggp94.xyz>', // Using verified domain
             to: params.to,
             subject: params.subject,
             html: `

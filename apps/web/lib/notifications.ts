@@ -78,16 +78,19 @@ export async function createNotification(params: CreateNotificationParams) {
 
     if (user?.email && user.email_notifications_enabled) {
         // Send email without awaiting (non-blocking)
+        console.log(`✉️  Sending email to ${user.email} (userId: ${params.userId}) for ${params.type}`);
         sendNotificationEmail({
             to: user.email,
             subject: getEmailSubject(params.type),
             message: params.message,
             bookingId: params.bookingId,
         }).catch(err => {
-            console.error(`Failed to send email to ${user.email}:`, err);
+            console.error(`❌ Failed to send email to ${user.email}:`, err);
         });
     } else if (user && !user.email_notifications_enabled) {
-        console.log(`User ${params.userId} has disabled email notifications`);
+        console.log(`🔕 User ${params.userId} (${user.email}) has disabled email notifications`);
+    } else {
+        console.log(`⚠️  No user found or no email for userId: ${params.userId}`);
     }
 
     return notification;
