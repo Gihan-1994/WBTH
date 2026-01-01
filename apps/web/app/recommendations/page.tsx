@@ -317,27 +317,27 @@ export default function RecommendationsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
             {/* Header */}
-            <div className="bg-purple-600 text-white py-8 px-4">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-12 px-4 shadow-lg">
                 <div className="max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-bold mb-2">For You</h1>
-                    <p className="text-lg">Personalized recommendations based on your preferences</p>
+                    <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-white to-purple-100 bg-clip-text text-transparent drop-shadow-lg">For You</h1>
+                    <p className="text-xl font-light">Personalized recommendations based on your preferences</p>
                 </div>
             </div>
 
             {/* Tabs */}
             <div className="max-w-7xl mx-auto px-4 py-6">
-                <div className="flex space-x-4 border-b border-gray-200">
+                <div className="flex space-x-2 bg-white p-2 rounded-xl shadow-md w-fit">
                     <button
                         onClick={() => {
                             setActiveTab("accommodation");
                             setRecommendations([]);
                             setError(null);
                         }}
-                        className={`pb-3 px-4 font-semibold transition ${activeTab === "accommodation"
-                            ? "border-b-2 border-purple-600 text-purple-600"
-                            : "text-gray-500 hover:text-gray-700"
+                        className={`px-6 py-3 font-semibold rounded-lg transition-all duration-200 ${activeTab === "accommodation"
+                            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md"
+                            : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
                         Accommodations
@@ -348,9 +348,9 @@ export default function RecommendationsPage() {
                             setRecommendations([]);
                             setError(null);
                         }}
-                        className={`pb-3 px-4 font-semibold transition ${activeTab === "guide"
-                            ? "border-b-2 border-purple-600 text-purple-600"
-                            : "text-gray-500 hover:text-gray-700"
+                        className={`px-6 py-3 font-semibold rounded-lg transition-all duration-200 ${activeTab === "guide"
+                            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md"
+                            : "text-gray-600 hover:bg-gray-100"
                             }`}
                     >
                         Guides
@@ -362,8 +362,8 @@ export default function RecommendationsPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                         {/* Filters Sidebar */}
                         <div className="lg:col-span-1">
-                            <div className="bg-white p-6 rounded-lg shadow-md sticky top-6">
-                                <h2 className="text-xl font-bold mb-4">Filters</h2>
+                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 sticky top-6">
+                                <h2 className="text-2xl font-bold mb-6 text-gray-800">Filters</h2>
 
                                 {activeTab === "accommodation" ? (
                                     <>
@@ -379,7 +379,7 @@ export default function RecommendationsPage() {
                                                     onChange={(e) =>
                                                         setAccommodationFilters({ ...accommodationFilters, budget_min: Number(e.target.value) })
                                                     }
-                                                    className="w-full px-3 py-2 border rounded-md"
+                                                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                                     placeholder="Min"
                                                 />
                                                 <span>-</span>
@@ -389,7 +389,7 @@ export default function RecommendationsPage() {
                                                     onChange={(e) =>
                                                         setAccommodationFilters({ ...accommodationFilters, budget_max: Number(e.target.value) })
                                                     }
-                                                    className="w-full px-3 py-2 border rounded-md"
+                                                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                                     placeholder="Max"
                                                 />
                                             </div>
@@ -407,7 +407,7 @@ export default function RecommendationsPage() {
                                                 onChange={(e) =>
                                                     setAccommodationFilters({ ...accommodationFilters, group_size: Number(e.target.value) })
                                                 }
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                             />
                                         </div>
 
@@ -419,7 +419,7 @@ export default function RecommendationsPage() {
                                             <select
                                                 value={accommodationFilters.district}
                                                 onChange={(e) => setAccommodationFilters({ ...accommodationFilters, district: e.target.value })}
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 <option value="">Any District</option>
                                                 {SRI_LANKA_DISTRICTS.map((city) => (
@@ -440,7 +440,7 @@ export default function RecommendationsPage() {
                                                 onChange={(e) =>
                                                     setAccommodationFilters({ ...accommodationFilters, province: e.target.value })
                                                 }
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 <option value="">Any Province</option>
                                                 {SRI_LANKA_PROVINCES.map((province) => (
@@ -461,7 +461,7 @@ export default function RecommendationsPage() {
                                                 onChange={(e) =>
                                                     setAccommodationFilters({ ...accommodationFilters, accommodation_type: e.target.value })
                                                 }
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 {ACCOMMODATION_TYPES.map((type) => (
                                                     <option key={type.value} value={type.value}>
@@ -478,7 +478,13 @@ export default function RecommendationsPage() {
                                             </label>
                                             <div className="space-y-2">
                                                 {TRAVEL_STYLES.map((style) => (
-                                                    <label key={style} className="flex items-center">
+                                                    <label
+                                                        key={style}
+                                                        className={`flex items-center px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${accommodationFilters.travel_style === style
+                                                                ? 'bg-purple-50 border-purple-500 ring-2 ring-purple-200'
+                                                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
                                                         <input
                                                             type="radio"
                                                             name="travel_style"
@@ -487,9 +493,10 @@ export default function RecommendationsPage() {
                                                             onChange={(e) =>
                                                                 setAccommodationFilters({ ...accommodationFilters, travel_style: e.target.value })
                                                             }
-                                                            className="mr-2"
+                                                            className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500"
                                                         />
-                                                        <span className="capitalize">{style}</span>
+                                                        <span className={`ml-3 capitalize font-medium ${accommodationFilters.travel_style === style ? 'text-purple-700' : 'text-gray-700'
+                                                            }`}>{style}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -500,16 +507,23 @@ export default function RecommendationsPage() {
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                                 Preferred Amenities
                                             </label>
-                                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                            <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
                                                 {AMENITIES.map((amenity) => (
-                                                    <label key={amenity} className="flex items-center">
+                                                    <label
+                                                        key={amenity}
+                                                        className={`flex items-center px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${accommodationFilters.required_amenities.includes(amenity)
+                                                                ? 'bg-purple-50 border-purple-500 ring-2 ring-purple-200'
+                                                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
                                                         <input
                                                             type="checkbox"
                                                             checked={accommodationFilters.required_amenities.includes(amenity)}
                                                             onChange={() => handleAmenityToggle(amenity)}
-                                                            className="mr-2"
+                                                            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                                         />
-                                                        <span className="capitalize">{amenity.replace("_", " ")}</span>
+                                                        <span className={`ml-3 capitalize font-medium ${accommodationFilters.required_amenities.includes(amenity) ? 'text-purple-700' : 'text-gray-700'
+                                                            }`}>{amenity.replace("_", " ")}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -520,16 +534,23 @@ export default function RecommendationsPage() {
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                                 Interests
                                             </label>
-                                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                            <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
                                                 {INTERESTS.map((interest) => (
-                                                    <label key={interest} className="flex items-center">
+                                                    <label
+                                                        key={interest}
+                                                        className={`flex items-center px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${accommodationFilters.interests.includes(interest)
+                                                                ? 'bg-purple-50 border-purple-500 ring-2 ring-purple-200'
+                                                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
                                                         <input
                                                             type="checkbox"
                                                             checked={accommodationFilters.interests.includes(interest)}
                                                             onChange={() => handleInterestToggle(interest)}
-                                                            className="mr-2"
+                                                            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                                         />
-                                                        <span className="capitalize">{interest.replace("_", " ")}</span>
+                                                        <span className={`ml-3 capitalize font-medium ${accommodationFilters.interests.includes(interest) ? 'text-purple-700' : 'text-gray-700'
+                                                            }`}>{interest.replace("_", " ")}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -539,7 +560,7 @@ export default function RecommendationsPage() {
                                         <button
                                             onClick={handleGetAccommodationRecommendations}
                                             disabled={loading}
-                                            className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3.5 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-[1.02]"
                                         >
                                             {loading ? (
                                                 <>
@@ -566,7 +587,7 @@ export default function RecommendationsPage() {
                                                     onChange={(e) =>
                                                         setGuideFilters({ ...guideFilters, budget_min: Number(e.target.value) })
                                                     }
-                                                    className="w-full px-3 py-2 border rounded-md"
+                                                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                                     placeholder="Min"
                                                 />
                                                 <span>-</span>
@@ -587,21 +608,28 @@ export default function RecommendationsPage() {
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                                 Languages * (Required)
                                             </label>
-                                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                            <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
                                                 {LANGUAGES.map((language) => (
-                                                    <label key={language} className="flex items-center">
+                                                    <label
+                                                        key={language}
+                                                        className={`flex items-center px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${guideFilters.languages.includes(language)
+                                                                ? 'bg-purple-50 border-purple-500 ring-2 ring-purple-200'
+                                                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
                                                         <input
                                                             type="checkbox"
                                                             checked={guideFilters.languages.includes(language)}
                                                             onChange={() => handleLanguageToggle(language)}
-                                                            className="mr-2"
+                                                            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                                         />
-                                                        <span>{language}</span>
+                                                        <span className={`ml-3 font-medium ${guideFilters.languages.includes(language) ? 'text-purple-700' : 'text-gray-700'
+                                                            }`}>{language}</span>
                                                     </label>
                                                 ))}
                                             </div>
                                             {guideFilters.languages.length === 0 && (
-                                                <p className="text-xs text-red-500 mt-1">Select at least one language</p>
+                                                <p className="text-xs text-red-500 mt-2 px-2">Select at least one language</p>
                                             )}
                                         </div>
 
@@ -610,16 +638,23 @@ export default function RecommendationsPage() {
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                                 Expertise (Optional)
                                             </label>
-                                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                                            <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
                                                 {EXPERTISE.map((exp) => (
-                                                    <label key={exp} className="flex items-center">
+                                                    <label
+                                                        key={exp}
+                                                        className={`flex items-center px-3 py-2.5 rounded-xl border-2 cursor-pointer transition-all ${guideFilters.expertise.includes(exp)
+                                                                ? 'bg-purple-50 border-purple-500 ring-2 ring-purple-200'
+                                                                : 'border-gray-200 hover:border-purple-300 hover:bg-gray-50'
+                                                            }`}
+                                                    >
                                                         <input
                                                             type="checkbox"
                                                             checked={guideFilters.expertise.includes(exp)}
                                                             onChange={() => handleExpertiseToggle(exp)}
-                                                            className="mr-2"
+                                                            className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
                                                         />
-                                                        <span>{exp}</span>
+                                                        <span className={`ml-3 font-medium ${guideFilters.expertise.includes(exp) ? 'text-purple-700' : 'text-gray-700'
+                                                            }`}>{exp}</span>
                                                     </label>
                                                 ))}
                                             </div>
@@ -633,7 +668,7 @@ export default function RecommendationsPage() {
                                             <select
                                                 value={guideFilters.city}
                                                 onChange={(e) => setGuideFilters({ ...guideFilters, city: e.target.value })}
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 <option value="">Any City</option>
                                                 {SRI_LANKA_DISTRICTS.map((city) => (
@@ -654,7 +689,7 @@ export default function RecommendationsPage() {
                                                 onChange={(e) =>
                                                     setGuideFilters({ ...guideFilters, province: e.target.value })
                                                 }
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 <option value="">Any Province</option>
                                                 {SRI_LANKA_PROVINCES.map((province) => (
@@ -692,7 +727,7 @@ export default function RecommendationsPage() {
                                                 onChange={(e) =>
                                                     setGuideFilters({ ...guideFilters, gender_preference: e.target.value })
                                                 }
-                                                className="w-full px-3 py-2 border rounded-md"
+                                                className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                             >
                                                 <option value="">No Preference</option>
                                                 <option value="male">Male</option>
@@ -704,7 +739,7 @@ export default function RecommendationsPage() {
                                         <button
                                             onClick={handleGetGuideRecommendations}
                                             disabled={loading || guideFilters.languages.length === 0}
-                                            className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3.5 rounded-xl font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-[1.02]"
                                         >
                                             {loading ? (
                                                 <>
@@ -723,40 +758,44 @@ export default function RecommendationsPage() {
                         {/* Results */}
                         <div className="lg:col-span-3">
                             {error && (
-                                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-                                    {error}
+                                <div className="bg-gradient-to-r from-red-50 to-rose-50 border-2 border-red-200 text-red-700 px-6 py-4 rounded-xl mb-6 shadow-md">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                                        {error}
+                                    </div>
                                 </div>
                             )}
 
                             {recommendations.length > 0 && (
-                                <div className="mb-4 text-gray-600">
-                                    Showing {recommendations.length} of {totalCandidates} matching {activeTab === "accommodation" ? "accommodations" : "guides"}
+                                <div className="mb-6 text-gray-700 font-medium bg-white px-6 py-3 rounded-xl shadow-md border border-gray-100">
+                                    Showing <span className="text-purple-600 font-bold">{recommendations.length}</span> of <span className="font-bold">{totalCandidates}</span> matching {activeTab === "accommodation" ? "accommodations" : "guides"}
                                 </div>
                             )}
 
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 {recommendations.map((rec) => (
-                                    <div key={rec.id} className="bg-white p-6 rounded-lg shadow-md">
-                                        <div className="flex justify-between items-start mb-3">
+                                    <div key={rec.id} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 hover:scale-[1.01]">
+                                        <div className="flex justify-between items-start mb-4">
                                             <div>
-                                                <h3 className="text-xl font-bold text-gray-900">{rec.name}</h3>
-                                                <p className="text-gray-600">
+                                                <h3 className="text-2xl font-bold text-gray-900 mb-1">{rec.name}</h3>
+                                                <p className="text-gray-600 flex items-center gap-1">
+                                                    <span className="text-purple-600">📍</span>
                                                     {rec.city || rec.district || rec.location}, {rec.province}
                                                 </p>
                                             </div>
                                             <div className="text-right">
                                                 {activeTab === "accommodation" && rec.price_range_min && rec.price_range_max ? (
-                                                    <div className="text-lg font-bold text-purple-600">
+                                                    <div className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                                                         {rec.price_range_min.toLocaleString()} -{" "}
                                                         {rec.price_range_max.toLocaleString()} LKR
                                                     </div>
                                                 ) : activeTab === "guide" && rec.price ? (
-                                                    <div className="text-lg font-bold text-purple-600">
+                                                    <div className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                                                         {rec.price.toLocaleString()} LKR/day
                                                     </div>
                                                 ) : null}
                                                 {rec.rating && (
-                                                    <div className="text-yellow-500">★ {rec.rating.toFixed(1)}/5.0</div>
+                                                    <div className="text-yellow-500 font-semibold mt-1">★ {rec.rating.toFixed(1)}/5.0</div>
                                                 )}
                                             </div>
                                         </div>
@@ -777,32 +816,37 @@ export default function RecommendationsPage() {
                                             </div>
                                         )}
 
-                                        <div className="mb-3">
-                                            <span className="text-sm text-gray-500">Match Score: </span>
-                                            <span className="text-sm font-semibold text-purple-600">
-                                                {(rec.score * 100).toFixed(1)}%
-                                            </span>
+                                        <div className="mb-4 inline-block">
+                                            <div className="bg-gradient-to-r from-purple-100 to-blue-100 px-4 py-2 rounded-full border border-purple-200">
+                                                <span className="text-sm text-gray-700 font-medium">Match Score: </span>
+                                                <span className="text-sm font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                                                    {(rec.score * 100).toFixed(1)}%
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div className="mb-4">
-                                            <p className="text-sm font-medium text-gray-700 mb-1">Why recommended:</p>
-                                            <ul className="list-disc list-inside text-sm text-gray-600">
+                                        <div className="mb-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                            <p className="text-sm font-bold text-gray-800 mb-2">Why recommended:</p>
+                                            <ul className="space-y-1 text-sm text-gray-700">
                                                 {rec.reasons.map((reason, idx) => (
-                                                    <li key={idx}>{reason}</li>
+                                                    <li key={idx} className="flex items-start gap-2">
+                                                        <span className="text-purple-600 mt-0.5">•</span>
+                                                        <span>{reason}</span>
+                                                    </li>
                                                 ))}
                                             </ul>
                                         </div>
 
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                                             {rec.in_system ? (
                                                 <a
                                                     href={activeTab === "accommodation" ? `/accommodations/${rec.id}` : `/guides/${rec.id}`}
-                                                    className="bg-purple-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-purple-700 transition"
+                                                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                                                 >
                                                     Book Now
                                                 </a>
                                             ) : (
-                                                <span className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium">
+                                                <span className="bg-gray-100 text-gray-600 px-6 py-3 rounded-xl text-sm font-semibold border border-gray-200">
                                                     Not Registered in System
                                                 </span>
                                             )}
@@ -812,8 +856,10 @@ export default function RecommendationsPage() {
                             </div>
 
                             {!loading && recommendations.length === 0 && !error && (
-                                <div className="text-center py-12 text-gray-500">
-                                    <p className="text-lg">Set your preferences and click "Get Recommendations"</p>
+                                <div className="text-center py-20 bg-white rounded-2xl shadow-lg border border-gray-100">
+                                    <div className="text-6xl mb-4">🔍</div>
+                                    <p className="text-xl text-gray-600 font-medium">Set your preferences and click "Get Recommendations"</p>
+                                    <p className="text-gray-500 mt-2">We'll find the perfect matches for you!</p>
                                 </div>
                             )}
                         </div>

@@ -1,0 +1,451 @@
+yarn run v1.22.22
+$ next dev
+   ▲ Next.js 15.0.3
+   - Local:        http://localhost:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 4.4s
+ ✓ Compiled /middleware in 496ms (193 modules)
+ ○ Compiling /dashboard/tourist ...
+
+warn - Your `content` configuration includes a pattern which looks like it's accidentally matching all of `node_modules` and can cause serious performance issues.
+warn - Pattern: `../../packages/ui/**/*.js`
+warn - See our documentation for recommendations:
+warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
+ ⨯ ./app/dashboard/tourist/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
+ [2m516[0m |     }
+ [2m517[0m | 
+ [2m518[0m |     return (
+ [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+     : [35;1m         ^^^[0m
+ [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+ [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
+ [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/tourist/page.tsx
+ ⨯ ./app/dashboard/tourist/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
+ [2m516[0m |     }
+ [2m517[0m | 
+ [2m518[0m |     return (
+ [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+     : [35;1m         ^^^[0m
+ [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+ [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
+ [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/tourist/page.tsx
+ ⨯ ./app/dashboard/tourist/page.tsx
+Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
+     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
+ [2m516[0m |     }
+ [2m517[0m | 
+ [2m518[0m |     return (
+ [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+     : [35;1m         ^^^[0m
+ [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
+ [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
+ [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/dashboard/tourist/page.tsx
+ GET /dashboard/tourist 500 in 14272ms
+ ✓ Compiled /_error in 1626ms (914 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /_next/static/webpack/3401909263ed041d.webpack.hot-update.json 404 in 2001ms
+ GET /dashboard/tourist 200 in 52ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 4.8s (1190 modules)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 6425ms
+ GET /api/auth/session 200 in 6465ms
+ GET /api/tourist/bookings 200 in 6495ms
+ ✓ Compiled /api/notifications in 314ms (1192 modules)
+ GET /api/notifications?limit=10 200 in 620ms
+ GET /api/notifications?limit=10 200 in 20ms
+ GET /api/notifications?limit=10 200 in 44ms
+ GET /api/auth/signin?callbackUrl=%2Fdashboard%2Ftourist 302 in 115ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 12.1s (1405 modules)
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 12555ms
+ GET /api/auth/session 200 in 2655ms
+ GET /api/notifications?limit=10 200 in 372ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 2.1s (1416 modules)
+ GET /register 200 in 3142ms
+ GET /api/auth/session 200 in 922ms
+ GET /api/auth/session 200 in 150ms
+ GET /api/notifications?limit=10 200 in 224ms
+ ○ Compiling /api/auth/register ...
+ ✓ Compiled /api/auth/register in 5.5s (1493 modules)
+[DEV] Email verification link: http://localhost:3000/verify-email?token=557da3f9fca512a609288252437bcd60c0c7af6d907acf0823050d63ce07485b&email=tourist%40test.com
+ POST /api/auth/register 200 in 6716ms
+ GET /api/notifications?limit=10 200 in 482ms
+ GET /login 200 in 301ms
+ GET /api/notifications?limit=10 200 in 310ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 3s (783 modules)
+ GET /api/auth/providers 200 in 3881ms
+ GET /api/auth/csrf 200 in 182ms
+ POST /api/auth/callback/credentials 200 in 650ms
+ GET /api/auth/session 200 in 67ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 3.3s (1427 modules)
+ GET /dashboard 200 in 4539ms
+ GET /api/notifications?limit=10 200 in 166ms
+ GET /dashboard 200 in 108ms
+ GET /dashboard/tourist 200 in 121ms
+ GET /dashboard/tourist 200 in 173ms
+ ○ Compiling /api/tourist/bookings ...
+ ✓ Compiled /api/tourist/bookings in 979ms (796 modules)
+ ✓ Compiled (798 modules)
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 3102ms
+ GET /api/tourist/bookings 200 in 3100ms
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 305ms
+ GET /api/tourist/bookings 200 in 428ms
+ GET /api/notifications?limit=10 200 in 130ms
+ GET /api/notifications?limit=10 200 in 47ms
+ GET /api/notifications?limit=10 200 in 49ms
+ GET /api/notifications?limit=10 200 in 201ms
+ ✓ Compiled in 5.7s (1428 modules)
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 553ms
+ GET /dashboard/tourist 200 in 538ms
+ GET /dashboard/tourist 200 in 540ms
+ GET /dashboard/tourist 200 in 260ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1353ms (783 modules)
+ ✓ Compiled in 1ms (787 modules)
+ ✓ Compiled in 1ms (787 modules)
+ ✓ Compiled in 11ms (787 modules)
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 7620ms
+ GET /api/auth/session 200 in 9541ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 8148ms
+ GET /dashboard/tourist 200 in 7884ms
+ GET /dashboard/tourist 200 in 7879ms
+ GET /dashboard/tourist 200 in 110ms
+ GET /api/auth/session 200 in 87ms
+ GET /api/auth/session 200 in 86ms
+ GET /api/tourist/bookings 200 in 9983ms
+ GET /api/notifications?limit=10 200 in 144ms
+ GET /api/notifications?limit=10 200 in 92ms
+ GET /api/notifications?limit=10 200 in 121ms
+ GET /api/notifications?limit=10 200 in 105ms
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 548ms
+ GET /dashboard/tourist 200 in 394ms
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+ GET /api/auth/session 200 in 205ms
+prisma:error 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+Error fetching profile: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+The column `(not available)` does not exist in the current database.
+    at async GET (app/api/tourist/profile/route.ts:18:21)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  16 |
+  17 |     try {
+> 18 |         const user = await prisma.user.findUnique({
+     |                     ^
+  19 |             where: { id: userId },
+  20 |             include: { tourist: true },
+  21 |         }); {
+  code: 'P2022',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ GET /api/tourist/profile 500 in 694ms
+ GET /api/tourist/bookings 200 in 990ms
+ GET /api/auth/session 200 in 264ms
+ GET /api/auth/session 200 in 441ms
+ GET /api/notifications?limit=10 200 in 352ms
+ GET /api/auth/session 200 in 133ms
+ GET /api/notifications?limit=10 200 in 119ms
+ GET /api/notifications?limit=10 200 in 629ms
+ GET /api/notifications?limit=10 200 in 924ms
+ GET /api/notifications?limit=10 200 in 33ms
+ GET /api/notifications?limit=10 200 in 97ms
+ GET /api/notifications?limit=10 200 in 68ms
+ GET /api/notifications?limit=10 200 in 48ms
+ GET /api/notifications?limit=10 200 in 37ms
+ GET /api/notifications?limit=10 200 in 68ms
+ GET /dashboard/tourist 200 in 403ms
+Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
+ GET /api/auth/session 200 in 380ms
+Profile API: User found: yes Test TouristTourist Test
+ GET /api/tourist/profile 200 in 576ms
+ GET /api/tourist/bookings 200 in 537ms
+ GET /api/auth/session 200 in 170ms
+ GET /api/auth/session 200 in 140ms
+ GET /api/auth/session 200 in 161ms
+ GET /api/auth/session 200 in 72ms
+ GET /api/notifications?limit=10 200 in 159ms
+ GET /api/notifications?limit=10 200 in 144ms
+ GET /api/notifications?limit=10 200 in 179ms
+ GET /api/notifications?limit=10 200 in 109ms
+ GET /api/notifications?limit=10 200 in 207ms
+ GET /api/notifications?limit=10 200 in 31ms
+ GET /api/notifications?limit=10 200 in 33ms
+ GET /api/notifications?limit=10 200 in 19ms
+ GET /api/notifications?limit=10 200 in 21ms
+ GET /api/notifications?limit=10 200 in 21ms
+ ○ Compiling / ...
+ ✓ Compiled / in 3.1s (1435 modules)
+ GET / 200 in 3267ms
+ GET /api/notifications?limit=10 200 in 276ms
+ GET /dashboard/tourist 200 in 215ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1063ms (795 modules)
+ ✓ Compiled (799 modules)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+ GET /api/auth/session 200 in 2214ms
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 2330ms
+ GET /api/tourist/bookings 200 in 2347ms
+ GET /api/notifications?limit=10 200 in 71ms
+ GET /api/notifications?limit=10 200 in 32ms
+ ○ Compiling /api/tourist/profile-picture ...
+ ✓ Compiled /api/tourist/profile-picture in 541ms (1443 modules)
+ POST /api/tourist/profile-picture 200 in 858ms
+ PUT /api/tourist/profile 200 in 116ms
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 47ms
+ GET /api/tourist/bookings 200 in 100ms
+ GET /api/notifications?limit=10 200 in 35ms

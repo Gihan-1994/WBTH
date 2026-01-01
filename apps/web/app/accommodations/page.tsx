@@ -59,29 +59,39 @@ export default function AccommodationsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold mb-8">Find Accommodations</h1>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-12 px-4 shadow-lg">
+                <div className="max-w-7xl mx-auto">
+                    <h1 className="text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent drop-shadow-lg">
+                        Find Accommodations
+                    </h1>
+                    <p className="text-xl font-light">Discover the perfect place to stay for your journey</p>
+                </div>
+            </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="max-w-7xl mx-auto px-4 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                     {/* Filters Sidebar */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm h-fit">
+                    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 h-fit sticky top-6">
                         <div className="flex items-center gap-2 mb-6">
-                            <Filter size={20} />
-                            <h2 className="text-xl font-semibold">Filters</h2>
+                            <div className="bg-gradient-to-br from-blue-100 to-purple-100 p-2 rounded-lg">
+                                <Filter size={20} className="text-blue-600" />
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-800">Filters</h2>
                         </div>
 
-                        <form onSubmit={handleSearch} className="space-y-4">
+                        <form onSubmit={handleSearch} className="space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
                                     Location
                                 </label>
                                 <div className="relative">
-                                    <MapPin className="absolute left-3 top-3 text-gray-400" size={16} />
+                                    <MapPin className="absolute left-3 top-3.5 text-gray-400" size={18} />
                                     <input
                                         type="text"
                                         placeholder="City or Province"
-                                        className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className="w-full pl-11 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                         value={filters.location}
                                         onChange={(e) => setFilters({ ...filters, location: e.target.value })}
                                     />
@@ -89,21 +99,21 @@ export default function AccommodationsPage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Price Range
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                    Price Range (LKR)
                                 </label>
                                 <div className="flex gap-2">
                                     <input
                                         type="number"
                                         placeholder="Min"
-                                        className="w-full px-3 py-2 border rounded-lg"
+                                        className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                         value={filters.minPrice}
                                         onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
                                     />
                                     <input
                                         type="number"
                                         placeholder="Max"
-                                        className="w-full px-3 py-2 border rounded-lg"
+                                        className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                         value={filters.maxPrice}
                                         onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
                                     />
@@ -111,15 +121,15 @@ export default function AccommodationsPage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
                                     Guests
                                 </label>
                                 <div className="relative">
-                                    <Users className="absolute left-3 top-3 text-gray-400" size={16} />
+                                    <Users className="absolute left-3 top-3.5 text-gray-400" size={18} />
                                     <input
                                         type="number"
                                         placeholder="Number of guests"
-                                        className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                                        className="w-full pl-11 pr-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
                                         value={filters.guests}
                                         onChange={(e) => setFilters({ ...filters, guests: e.target.value })}
                                     />
@@ -127,11 +137,11 @@ export default function AccommodationsPage() {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">
                                     Type
                                 </label>
                                 <select
-                                    className="w-full px-3 py-2 border rounded-lg bg-white"
+                                    className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all bg-white"
                                     value={filters.type}
                                     onChange={(e) => setFilters({ ...filters, type: e.target.value })}
                                 >
@@ -145,8 +155,9 @@ export default function AccommodationsPage() {
 
                             <button
                                 type="submit"
-                                className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+                                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3.5 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
                             >
+                                <Search size={20} />
                                 Apply Filters
                             </button>
                         </form>
@@ -155,54 +166,77 @@ export default function AccommodationsPage() {
                     {/* Results List */}
                     <div className="lg:col-span-3">
                         {loading ? (
-                            <div className="text-center py-12">Loading...</div>
+                            <div className="text-center py-20 bg-white rounded-2xl shadow-lg border border-gray-100">
+                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                                <p className="text-gray-600 font-medium">Loading accommodations...</p>
+                            </div>
                         ) : accommodations.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
-                                No accommodations found matching your criteria.
+                            <div className="text-center py-20 bg-white rounded-2xl shadow-lg border border-gray-100">
+                                <div className="text-6xl mb-4">🏨</div>
+                                <p className="text-xl text-gray-600 font-medium mb-2">No accommodations found</p>
+                                <p className="text-gray-500">Try adjusting your filters to see more results</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {accommodations.map((acc) => (
-                                    <Link
-                                        key={acc.id}
-                                        href={`/accommodations/${acc.id}`}
-                                        className="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden group"
-                                    >
-                                        <div className="h-48 bg-gray-200 relative">
-                                            {acc.images && acc.images.length > 0 ? (
-                                                <img src={acc.images[0]} alt={acc.name} className="w-full h-full object-cover" />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                                    <Hotel size={48} />
+                            <>
+                                <div className="mb-6 text-gray-700 font-medium bg-white px-6 py-3 rounded-xl shadow-md border border-gray-100">
+                                    Found <span className="text-purple-600 font-bold">{accommodations.length}</span> accommodation{accommodations.length !== 1 ? 's' : ''}
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {accommodations.map((acc) => (
+                                        <Link
+                                            key={acc.id}
+                                            href={`/accommodations/${acc.id}`}
+                                            className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 overflow-hidden group hover:scale-[1.02]"
+                                        >
+                                            <div className="h-52 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+                                                {acc.images && acc.images.length > 0 ? (
+                                                    <img
+                                                        src={acc.images[0]}
+                                                        alt={acc.name}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                                        <Hotel size={64} />
+                                                    </div>
+                                                )}
+                                                {/* Rating Badge */}
+                                                <div className="absolute top-4 right-4 flex items-center bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
+                                                    <span className="text-yellow-500 font-bold mr-1">★</span>
+                                                    <span className="text-sm font-bold text-gray-800">{acc.rating || "N/A"}</span>
                                                 </div>
-                                            )}
-                                        </div>
-                                        <div className="p-4">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h3 className="text-lg font-bold group-hover:text-blue-600 transition">
+                                            </div>
+                                            <div className="p-5">
+                                                <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
                                                     {acc.name}
                                                 </h3>
-                                                <div className="flex items-center bg-yellow-100 px-2 py-1 rounded text-xs font-bold text-yellow-700">
-                                                    ★ {acc.rating || "N/A"}
+                                                <div className="flex items-center text-gray-600 text-sm mb-3">
+                                                    <MapPin size={16} className="mr-1 text-purple-600" />
+                                                    {acc.location}
+                                                </div>
+                                                <div className="flex flex-wrap gap-2 mb-4">
+                                                    {acc.type.map((t, idx) => (
+                                                        <span key={idx} className="bg-gradient-to-r from-blue-100 to-purple-100 text-purple-700 text-xs px-3 py-1 rounded-full font-semibold border border-purple-200">
+                                                            {t}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+                                                    <div>
+                                                        <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                                            ${acc.price_range_min} - ${acc.price_range_max}
+                                                        </div>
+                                                        <span className="text-gray-500 text-sm">per night</span>
+                                                    </div>
+                                                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg font-semibold text-sm group-hover:shadow-lg transition-shadow">
+                                                        View Details
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center text-gray-500 text-sm mb-2">
-                                                <MapPin size={14} className="mr-1" />
-                                                {acc.location}
-                                            </div>
-                                            <div className="flex items-center text-gray-500 text-sm mb-4">
-                                                <span className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded mr-2">{acc.type.join(", ")}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center pt-4 border-t">
-                                                <div className="text-blue-600 font-bold">
-                                                    ${acc.price_range_min} - ${acc.price_range_max}
-                                                    <span className="text-gray-400 text-sm font-normal"> / night</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </>
                         )}
                     </div>
                 </div>

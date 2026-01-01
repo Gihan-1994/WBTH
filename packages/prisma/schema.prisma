@@ -28,10 +28,11 @@ model User {
 }
 
 model Tourist {
-  user_id String    @id
-  country String?
-  dob     DateTime?
-  user    User      @relation(fields: [user_id], references: [id])
+  user_id         String    @id
+  country         String?
+  dob             DateTime?
+  profile_picture String?
+  user            User      @relation(fields: [user_id], references: [id])
 
   @@map("tourists")
 }
