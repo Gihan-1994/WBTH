@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { useState, useEffect } from "react";
 import {
   MapPin,
   User,
@@ -12,11 +13,33 @@ import {
   LogOut,
   CalendarCheck,
   ArrowRight,
+  Shield,
+  UserCog,
 } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
 
 export default function Home() {
   const { data: session } = useSession();
+  const [adminExists, setAdminExists] = useState(false);
+  const [checkingAdmin, setCheckingAdmin] = useState(true);
+
+  useEffect(() => {
+    checkAdminExistence();
+  }, []);
+
+  const checkAdminExistence = async () => {
+    try {
+      const response = await fetch("/api/admin/check-exists");
+      if (response.ok) {
+        const data = await response.json();
+        setAdminExists(data.exists);
+      }
+    } catch (error) {
+      console.error("Error checking admin existence:", error);
+    } finally {
+      setCheckingAdmin(false);
+    }
+  };
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/" });
@@ -29,6 +52,7 @@ export default function Home() {
     if (role === "tourist") return "/dashboard/tourist";
     if (role === "guide") return "/dashboard/guide";
     if (role === "accommodation_provider") return "/dashboard/provider";
+    if (role === "admin") return "/dashboard/admin";
     return "/dashboard";
   };
 
@@ -44,6 +68,19 @@ export default function Home() {
       >
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-black/40"></div>
+
+        {/* Admin Area Button (top right) */}
+        {!checkingAdmin && adminExists && (
+          <div className="absolute top-6 right-6 z-20">
+            <Link
+              href="/login"
+              className="bg-white/10 backdrop-blur-sm border-2 border-white/50 text-white px-4 py-2 rounded-xl font-semibold hover:bg-white/20 transition-all duration-200 flex items-center gap-2 hover:scale-105"
+            >
+              <Shield size={20} />
+              Admin Area
+            </Link>
+          </div>
+        )}
 
         {/* Content */}
         <div className="relative z-10">
@@ -93,6 +130,16 @@ export default function Home() {
                 Register
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
+              {!checkingAdmin && !adminExists && (
+                <Link
+                  href="/admin/register"
+                  className="bg-gradient-to-r from-red-600 to-pink-600 border-2 border-white/50 text-white px-8 py-3 rounded-xl font-semibold hover:from-red-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 group"
+                >
+                  <Shield size={20} />
+                  Admin Registration
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              )}
             </div>
           )}
         </div>

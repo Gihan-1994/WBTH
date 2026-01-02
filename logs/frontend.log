@@ -5,87 +5,155 @@ $ next dev
    - Environments: .env
 
  ✓ Starting...
- ✓ Ready in 4.4s
- ✓ Compiled /middleware in 496ms (193 modules)
- ○ Compiling /dashboard/tourist ...
+ ✓ Ready in 8.8s
+ ○ Compiling /api/auth/[...nextauth] ...
 
 warn - Your `content` configuration includes a pattern which looks like it's accidentally matching all of `node_modules` and can cause serious performance issues.
 warn - Pattern: `../../packages/ui/**/*.js`
 warn - See our documentation for recommendations:
 warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
- ⨯ ./app/dashboard/tourist/page.tsx
-Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
- [2m516[0m |     }
- [2m517[0m | 
- [2m518[0m |     return (
- [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-     : [35;1m         ^^^[0m
- [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
- [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
- [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/dashboard/tourist/page.tsx
- ⨯ ./app/dashboard/tourist/page.tsx
-Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
- [2m516[0m |     }
- [2m517[0m | 
- [2m518[0m |     return (
- [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-     : [35;1m         ^^^[0m
- [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
- [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
- [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
-     `----
-
-Caused by:
-    Syntax Error
+ ⨯ ./app/page.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m         ^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
+  [31mx[0m You're importing a component that needs `useEffect`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m                   ^^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
 
 Import trace for requested module:
-./app/dashboard/tourist/page.tsx
- ⨯ ./app/dashboard/tourist/page.tsx
-Error:   [31mx[0m Unexpected token `div`. Expected jsx identifier
-     ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/dashboard/tourist/page.tsx[0m:519:1]
- [2m516[0m |     }
- [2m517[0m | 
- [2m518[0m |     return (
- [2m519[0m |         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-     : [35;1m         ^^^[0m
- [2m520[0m |             <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
- [2m521[0m |                 <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
- [2m522[0m |                 <form onSubmit={handleSubmit} className="space-y-4">
-     `----
-
-Caused by:
-    Syntax Error
+./app/page.tsx
+ ⨯ ./app/page.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m         ^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
+  [31mx[0m You're importing a component that needs `useEffect`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m                   ^^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
 
 Import trace for requested module:
-./app/dashboard/tourist/page.tsx
- GET /dashboard/tourist 500 in 14272ms
- ✓ Compiled /_error in 1626ms (914 modules)
+./app/page.tsx
+ ⨯ ./app/page.tsx
+Error:   [31mx[0m You're importing a component that needs `useState`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m         ^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
+  [31mx[0m You're importing a component that needs `useEffect`. This React hook only works in a client component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m 
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/building-your-application/rendering/client-components
+  [31m|[0m 
+  [31m|[0m 
+   ,-[[36;1;4m/home/gihan/WBTH/apps/web/app/page.tsx[0m:3:1]
+ [2m1[0m | import Link from "next/link";
+ [2m2[0m | import { useSession, signOut } from "next-auth/react";
+ [2m3[0m | import { useState, useEffect } from "react";
+   : [35;1m                   ^^^^^^^^^[0m
+ [2m4[0m | import {
+ [2m5[0m |   MapPin,
+ [2m6[0m |   User,
+   `----
+
+Import trace for requested module:
+./app/page.tsx
+ GET /api/auth/session 500 in 20535ms
+ GET /api/notifications?limit=10 500 in 18559ms
+ GET / 500 in 15375ms
+ POST /api/auth/_log 500 in 82ms
+ GET / 500 in 141ms
+ GET / 500 in 70ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/gihan/WBTH/apps/web/.next/cache/webpack/client-development-fallback/1.pack.gz_' -> '/home/gihan/WBTH/apps/web/.next/cache/webpack/client-development-fallback/1.pack.gz'
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/gihan/WBTH/apps/web/.next/cache/webpack/client-development-fallback/1.pack.gz_' -> '/home/gihan/WBTH/apps/web/.next/cache/webpack/client-development-fallback/1.pack.gz'
+ GET / 500 in 17ms
+ GET / 500 in 24ms
+ GET / 500 in 26ms
+ GET / 500 in 65ms
+ ✓ Compiled /_error in 4.8s (956 modules)
+ GET /_next/static/webpack/3401909263ed041d.webpack.hot-update.json 404 in 5653ms
  ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET /_next/static/webpack/3401909263ed041d.webpack.hot-update.json 404 in 2001ms
- GET /dashboard/tourist 200 in 52ms
+ GET / 200 in 168ms
+ GET / 200 in 204ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 4.8s (1190 modules)
-Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+ ✓ Compiled /api/auth/[...nextauth] in 2.3s (1230 modules)
+ GET /api/admin/check-exists 200 in 3990ms
+ GET /api/auth/session 200 in 4675ms
+ GET /api/auth/csrf 200 in 64ms
+ POST /api/auth/signout 200 in 25ms
+ GET / 200 in 248ms
+ GET /api/auth/session 200 in 151ms
+ GET /api/admin/check-exists 200 in 286ms
+ ○ Compiling /admin/register ...
+ ✓ Compiled /admin/register in 1019ms (1243 modules)
+ GET /admin/register 200 in 1185ms
+ GET /api/admin/check-exists 200 in 415ms
+ GET /api/admin/check-exists 200 in 22ms
+ ○ Compiling /api/admin/register ...
+ ✓ Compiled /api/admin/register in 836ms (1242 modules)
+ POST /api/admin/register 400 in 1144ms
+ POST /api/admin/register 400 in 76ms
 prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
+Invalid `prisma.admin.create()` invocation:
 
 
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
+Null constraint violation on the (not available)
+Error registering admin: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.admin.create()` invocation:
 
 
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
+Null constraint violation on the (not available)
+    at async POST (app/api/admin/register/route.ts:59:8)
     at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
     at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
     at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
@@ -103,349 +171,492 @@ The column `(not available)` does not exist in the current database.
     at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
     at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
     at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
+  57 |
+  58 |         // Create admin record
+> 59 |         await prisma.admin.create({
+     |        ^
+  60 |             data: {
+  61 |                 user_id: user.id,
+  62 |             } {
+  code: 'P2011',
   meta: [Object],
   clientVersion: '7.0.1'
 }
- GET /api/tourist/profile 500 in 6425ms
- GET /api/auth/session 200 in 6465ms
- GET /api/tourist/bookings 200 in 6495ms
- ✓ Compiled /api/notifications in 314ms (1192 modules)
- GET /api/notifications?limit=10 200 in 620ms
- GET /api/notifications?limit=10 200 in 20ms
- GET /api/notifications?limit=10 200 in 44ms
- GET /api/auth/signin?callbackUrl=%2Fdashboard%2Ftourist 302 in 115ms
+ POST /api/admin/register 500 in 474ms
+ POST /api/admin/register 400 in 119ms
+prisma:error 
+Invalid `prisma.admin.create()` invocation:
+
+
+Null constraint violation on the (not available)
+Error registering admin: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.admin.create()` invocation:
+
+
+Null constraint violation on the (not available)
+    at async POST (app/api/admin/register/route.ts:59:8)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  57 |
+  58 |         // Create admin record
+> 59 |         await prisma.admin.create({
+     |        ^
+  60 |             data: {
+  61 |                 user_id: user.id,
+  62 |             } {
+  code: 'P2011',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ POST /api/admin/register 500 in 304ms
+ GET / 200 in 64ms
+ GET /api/admin/check-exists 200 in 172ms
+ GET /api/admin/check-exists 200 in 22ms
+ GET / 200 in 215ms
+ GET /api/auth/session 200 in 188ms
+ GET /api/admin/check-exists 200 in 301ms
+ GET /admin/register 200 in 33ms
+ GET /api/admin/check-exists 200 in 28ms
+ GET /api/admin/check-exists 200 in 35ms
+prisma:error 
+Invalid `prisma.admin.create()` invocation:
+
+
+Null constraint violation on the (not available)
+Error registering admin: Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.admin.create()` invocation:
+
+
+Null constraint violation on the (not available)
+    at async POST (app/api/admin/register/route.ts:59:8)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  57 |
+  58 |         // Create admin record
+> 59 |         await prisma.admin.create({
+     |        ^
+  60 |             data: {
+  61 |                 user_id: user.id,
+  62 |             } {
+  code: 'P2011',
+  meta: [Object],
+  clientVersion: '7.0.1'
+}
+ POST /api/admin/register 500 in 358ms
+ POST /api/admin/register 400 in 39ms
+ POST /api/admin/register 200 in 273ms
+ GET /api/auth/providers 200 in 60ms
+ GET /api/auth/csrf 200 in 15ms
+ POST /api/auth/callback/credentials 200 in 133ms
+ GET /api/auth/session 200 in 16ms
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 689ms (193 modules)
+ ○ Compiling /dashboard/admin ...
+ ✓ Compiled /dashboard/admin in 2.8s (1299 modules)
+ GET /dashboard/admin 200 in 2957ms
+ ○ Compiling /api/admin/analytics ...
+ ✓ Compiled /api/admin/analytics in 722ms (1301 modules)
+ GET /api/admin/analytics?period=daily 200 in 1195ms
+ GET /api/admin/analytics?period=daily 200 in 127ms
+ GET /api/admin/analytics?period=weekly 200 in 124ms
+ GET /api/admin/analytics?period=daily 200 in 60ms
+ ✓ Compiled /api/admin/users in 454ms (1303 modules)
+ GET /api/admin/users? 200 in 765ms
+ GET /api/admin/users? 200 in 18ms
+ GET /api/admin/users?role=tourist 200 in 58ms
+ GET /api/admin/users?role=guide 200 in 47ms
+ GET /api/admin/users?role=accommodation_provider 200 in 89ms
+ GET /api/admin/users?role=admin 200 in 57ms
+ ○ Compiling /api/admin/users/[id] ...
+ ✓ Compiled /api/admin/users/[id] in 518ms (1299 modules)
+Error: Route "/api/admin/users/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at createParamsAccessError (webpack://next/dist/src/server/request/params.ts:467:9)
+    at getMessage (webpack://next/dist/src/server/create-deduped-by-callsite-server-error-logger.ts:46:20)
+    at warnForSyncAccess (webpack://next/dist/src/server/request/params.ts:445:4)
+    at syncIODev (webpack://next/dist/src/server/request/params.ts:403:10)
+    at id (app/api/admin/users/[id]/route.ts:75:30)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  465 | ) {
+  466 |   const prefix = route ? `Route "${route}" ` : 'This route '
+> 467 |   return new Error(
+      |         ^
+  468 |     `${prefix}used ${expression}. ` +
+  469 |       `\`params\` should be awaited before using its properties. ` +
+  470 |       `Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`
+prisma:error 
+Invalid `prisma.admin.delete()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for a delete.
+ DELETE /api/admin/users/a24fe321-5cc8-40d7-a2de-cd64c4bd3494 200 in 2060ms
+Error: Route "/api/admin/users/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at createParamsAccessError (webpack://next/dist/src/server/request/params.ts:467:9)
+    at getMessage (webpack://next/dist/src/server/create-deduped-by-callsite-server-error-logger.ts:46:20)
+    at warnForSyncAccess (webpack://next/dist/src/server/request/params.ts:445:4)
+    at syncIODev (webpack://next/dist/src/server/request/params.ts:403:10)
+    at id (app/api/admin/users/[id]/route.ts:75:30)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  465 | ) {
+  466 |   const prefix = route ? `Route "${route}" ` : 'This route '
+> 467 |   return new Error(
+      |         ^
+  468 |     `${prefix}used ${expression}. ` +
+  469 |       `\`params\` should be awaited before using its properties. ` +
+  470 |       `Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`
+ DELETE /api/admin/users/a24fe321-5cc8-40d7-a2de-cd64c4bd3494 404 in 150ms
+ GET /api/admin/users?role=admin 200 in 94ms
+Error: Route "/api/admin/users/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at createParamsAccessError (webpack://next/dist/src/server/request/params.ts:467:9)
+    at getMessage (webpack://next/dist/src/server/create-deduped-by-callsite-server-error-logger.ts:46:20)
+    at warnForSyncAccess (webpack://next/dist/src/server/request/params.ts:445:4)
+    at syncIODev (webpack://next/dist/src/server/request/params.ts:403:10)
+    at id (app/api/admin/users/[id]/route.ts:75:30)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  465 | ) {
+  466 |   const prefix = route ? `Route "${route}" ` : 'This route '
+> 467 |   return new Error(
+      |         ^
+  468 |     `${prefix}used ${expression}. ` +
+  469 |       `\`params\` should be awaited before using its properties. ` +
+  470 |       `Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`
+prisma:error 
+Invalid `prisma.admin.delete()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for a delete.
+ DELETE /api/admin/users/user-admin-1 200 in 262ms
+ GET /api/admin/users?role=admin 200 in 105ms
+Error: Route "/api/admin/users/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at createParamsAccessError (webpack://next/dist/src/server/request/params.ts:467:9)
+    at getMessage (webpack://next/dist/src/server/create-deduped-by-callsite-server-error-logger.ts:46:20)
+    at warnForSyncAccess (webpack://next/dist/src/server/request/params.ts:445:4)
+    at syncIODev (webpack://next/dist/src/server/request/params.ts:403:10)
+    at id (app/api/admin/users/[id]/route.ts:75:30)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  465 | ) {
+  466 |   const prefix = route ? `Route "${route}" ` : 'This route '
+> 467 |   return new Error(
+      |         ^
+  468 |     `${prefix}used ${expression}. ` +
+  469 |       `\`params\` should be awaited before using its properties. ` +
+  470 |       `Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`
+prisma:error 
+Invalid `prisma.admin.delete()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for a delete.
+ DELETE /api/admin/users/555a6fad-1e63-47ef-b4d5-0febc3b9a5c4 200 in 260ms
+ GET /api/admin/users?role=admin 200 in 117ms
+Error: Route "/api/admin/users/[id]" used `params.id`. `params` should be awaited before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+    at createParamsAccessError (webpack://next/dist/src/server/request/params.ts:467:9)
+    at getMessage (webpack://next/dist/src/server/create-deduped-by-callsite-server-error-logger.ts:46:20)
+    at warnForSyncAccess (webpack://next/dist/src/server/request/params.ts:445:4)
+    at syncIODev (webpack://next/dist/src/server/request/params.ts:403:10)
+    at id (app/api/admin/users/[id]/route.ts:75:30)
+    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
+    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
+    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
+    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
+    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
+    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
+    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
+    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
+    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
+    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
+    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
+    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
+    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
+    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
+    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
+    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
+    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
+  465 | ) {
+  466 |   const prefix = route ? `Route "${route}" ` : 'This route '
+> 467 |   return new Error(
+      |         ^
+  468 |     `${prefix}used ${expression}. ` +
+  469 |       `\`params\` should be awaited before using its properties. ` +
+  470 |       `Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`
+prisma:error 
+Invalid `prisma.admin.delete()` invocation:
+
+
+An operation failed because it depends on one or more records that were required but not found. No record was found for a delete.
+ DELETE /api/admin/users/c8a7109f-a593-42d2-b19e-8bf9a4e68176 200 in 231ms
+ GET /api/admin/users?role=admin 200 in 63ms
+ ○ Compiling /api/admin/messages ...
+ ✓ Compiled /api/admin/messages in 1760ms (1490 modules)
+ POST /api/admin/messages 200 in 2500ms
+ GET /api/admin/users? 200 in 76ms
+ GET /api/admin/users? 200 in 16ms
+ ✓ Compiled /api/admin/analytics in 238ms (916 modules)
+ GET /api/admin/analytics?period=daily 200 in 503ms
+ GET /api/admin/analytics?period=daily 200 in 75ms
+ GET /api/admin/users? 200 in 78ms
+ GET /api/admin/users? 200 in 23ms
+ GET /api/admin/analytics?period=daily 200 in 82ms
+ GET /api/admin/analytics?period=daily 200 in 53ms
+ GET / 200 in 199ms
+ ○ Compiling /api/admin/check-exists ...
+ ✓ Compiled /api/admin/check-exists in 915ms (727 modules)
+ GET /api/admin/check-exists 200 in 1272ms
+ GET /api/admin/check-exists 200 in 10ms
  ○ Compiling /login ...
- ✓ Compiled /login in 12.1s (1405 modules)
- GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 12555ms
- GET /api/auth/session 200 in 2655ms
- GET /api/notifications?limit=10 200 in 372ms
- ○ Compiling /register ...
- ✓ Compiled /register in 2.1s (1416 modules)
- GET /register 200 in 3142ms
- GET /api/auth/session 200 in 922ms
- GET /api/auth/session 200 in 150ms
- GET /api/notifications?limit=10 200 in 224ms
- ○ Compiling /api/auth/register ...
- ✓ Compiled /api/auth/register in 5.5s (1493 modules)
-[DEV] Email verification link: http://localhost:3000/verify-email?token=557da3f9fca512a609288252437bcd60c0c7af6d907acf0823050d63ce07485b&email=tourist%40test.com
- POST /api/auth/register 200 in 6716ms
- GET /api/notifications?limit=10 200 in 482ms
- GET /login 200 in 301ms
- GET /api/notifications?limit=10 200 in 310ms
+ ✓ Compiled /login in 3.3s (1472 modules)
+ GET /login 200 in 3527ms
+ GET /api/admin/check-exists 200 in 355ms
+ GET /api/admin/check-exists 200 in 20ms
+ GET /dashboard/admin 200 in 18ms
+ GET /api/admin/analytics?period=daily 200 in 105ms
+ GET /api/admin/analytics?period=daily 200 in 50ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 3s (783 modules)
- GET /api/auth/providers 200 in 3881ms
- GET /api/auth/csrf 200 in 182ms
- POST /api/auth/callback/credentials 200 in 650ms
- GET /api/auth/session 200 in 67ms
+ ✓ Compiled /api/auth/[...nextauth] in 619ms (814 modules)
+ GET /api/auth/csrf 200 in 1052ms
+ POST /api/auth/signout 200 in 21ms
+ GET / 200 in 352ms
+ GET /login 200 in 381ms
+ GET /api/auth/session 200 in 120ms
+ GET /api/auth/providers 200 in 66ms
+ GET /api/auth/csrf 200 in 25ms
+ POST /api/auth/callback/credentials 200 in 191ms
+ GET /api/auth/session 200 in 19ms
  ○ Compiling /dashboard ...
- ✓ Compiled /dashboard in 3.3s (1427 modules)
- GET /dashboard 200 in 4539ms
- GET /api/notifications?limit=10 200 in 166ms
- GET /dashboard 200 in 108ms
- GET /dashboard/tourist 200 in 121ms
- GET /dashboard/tourist 200 in 173ms
- ○ Compiling /api/tourist/bookings ...
- ✓ Compiled /api/tourist/bookings in 979ms (796 modules)
- ✓ Compiled (798 modules)
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
-prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
-    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
-    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
-    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
-    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
-    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
-    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
-    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
-    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
-    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
-    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
-    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
-    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
-    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
-    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
-    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
-    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
-    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
-  meta: [Object],
-  clientVersion: '7.0.1'
-}
- GET /api/tourist/profile 500 in 3102ms
- GET /api/tourist/bookings 200 in 3100ms
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
-prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
-    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
-    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
-    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
-    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
-    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
-    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
-    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
-    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
-    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
-    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
-    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
-    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
-    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
-    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
-    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
-    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
-    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
-  meta: [Object],
-  clientVersion: '7.0.1'
-}
- GET /api/tourist/profile 500 in 305ms
- GET /api/tourist/bookings 200 in 428ms
- GET /api/notifications?limit=10 200 in 130ms
- GET /api/notifications?limit=10 200 in 47ms
- GET /api/notifications?limit=10 200 in 49ms
- GET /api/notifications?limit=10 200 in 201ms
- ✓ Compiled in 5.7s (1428 modules)
- GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 553ms
- GET /dashboard/tourist 200 in 538ms
- GET /dashboard/tourist 200 in 540ms
- GET /dashboard/tourist 200 in 260ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1353ms (783 modules)
- ✓ Compiled in 1ms (787 modules)
- ✓ Compiled in 1ms (787 modules)
- ✓ Compiled in 11ms (787 modules)
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
-prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
-    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
-    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
-    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
-    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
-    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
-    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
-    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
-    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
-    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
-    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
-    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
-    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
-    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
-    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
-    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
-    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
-    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
-  meta: [Object],
-  clientVersion: '7.0.1'
-}
- GET /api/tourist/profile 500 in 7620ms
- GET /api/auth/session 200 in 9541ms
- GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fdashboard%2Ftourist 200 in 8148ms
- GET /dashboard/tourist 200 in 7884ms
- GET /dashboard/tourist 200 in 7879ms
- GET /dashboard/tourist 200 in 110ms
- GET /api/auth/session 200 in 87ms
- GET /api/auth/session 200 in 86ms
- GET /api/tourist/bookings 200 in 9983ms
- GET /api/notifications?limit=10 200 in 144ms
- GET /api/notifications?limit=10 200 in 92ms
- GET /api/notifications?limit=10 200 in 121ms
- GET /api/notifications?limit=10 200 in 105ms
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
-prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
-    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
-    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
-    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
-    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
-    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
-    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
-    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
-    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
-    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
-    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
-    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
-    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
-    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
-    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
-    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
-    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
-    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
-  meta: [Object],
-  clientVersion: '7.0.1'
-}
- GET /api/tourist/profile 500 in 548ms
- GET /dashboard/tourist 200 in 394ms
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
- GET /api/auth/session 200 in 205ms
-prisma:error 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-Error fetching profile: Error [PrismaClientKnownRequestError]: 
-Invalid `prisma.user.findUnique()` invocation:
-
-
-The column `(not available)` does not exist in the current database.
-    at async GET (app/api/tourist/profile/route.ts:18:21)
-    at async AppRouteRouteModule.do (webpack://next/dist/src/server/route-modules/app-route/module.ts:529:14)
-    at async AppRouteRouteModule.handle (webpack://next/dist/src/server/route-modules/app-route/module.ts:658:30)
-    at async doRender (../../node_modules/next/src/server/base-server.ts:2504:29)
-    at async responseGenerator (../../node_modules/next/src/server/base-server.ts:3027:21)
-    at async DevServer.renderToResponseWithComponentsImpl (../../node_modules/next/src/server/base-server.ts:3039:23)
-    at async DevServer.renderPageComponent (../../node_modules/next/src/server/base-server.ts:3597:15)
-    at async DevServer.renderToResponseImpl (../../node_modules/next/src/server/base-server.ts:3659:23)
-    at async DevServer.pipeImpl (../../node_modules/next/src/server/base-server.ts:1698:20)
-    at async NextNodeServer.handleCatchallRenderRequest (../../node_modules/next/src/server/next-server.ts:1034:6)
-    at async DevServer.handleRequestImpl (../../node_modules/next/src/server/base-server.ts:1462:8)
-    at async (../../node_modules/next/src/server/dev/next-dev-server.ts:514:13)
-    at async Span.traceAsyncFn (../../node_modules/next/src/trace/trace.ts:143:13)
-    at async DevServer.handleRequest (../../node_modules/next/src/server/dev/next-dev-server.ts:512:19)
-    at async invokeRender (../../node_modules/next/src/server/lib/router-server.ts:284:10)
-    at async handleRequest (../../node_modules/next/src/server/lib/router-server.ts:530:15)
-    at async requestHandlerImpl (../../node_modules/next/src/server/lib/router-server.ts:576:6)
-    at async Server.requestListener (../../node_modules/next/src/server/lib/start-server.ts:146:6)
-  16 |
-  17 |     try {
-> 18 |         const user = await prisma.user.findUnique({
-     |                     ^
-  19 |             where: { id: userId },
-  20 |             include: { tourist: true },
-  21 |         }); {
-  code: 'P2022',
-  meta: [Object],
-  clientVersion: '7.0.1'
-}
- GET /api/tourist/profile 500 in 694ms
- GET /api/tourist/bookings 200 in 990ms
- GET /api/auth/session 200 in 264ms
- GET /api/auth/session 200 in 441ms
- GET /api/notifications?limit=10 200 in 352ms
- GET /api/auth/session 200 in 133ms
- GET /api/notifications?limit=10 200 in 119ms
- GET /api/notifications?limit=10 200 in 629ms
- GET /api/notifications?limit=10 200 in 924ms
- GET /api/notifications?limit=10 200 in 33ms
- GET /api/notifications?limit=10 200 in 97ms
- GET /api/notifications?limit=10 200 in 68ms
- GET /api/notifications?limit=10 200 in 48ms
- GET /api/notifications?limit=10 200 in 37ms
- GET /api/notifications?limit=10 200 in 68ms
- GET /dashboard/tourist 200 in 403ms
-Profile API: Fetching for userId: 06bb531e-da02-467b-bf35-c8f37d8abb43
- GET /api/auth/session 200 in 380ms
-Profile API: User found: yes Test TouristTourist Test
- GET /api/tourist/profile 200 in 576ms
- GET /api/tourist/bookings 200 in 537ms
- GET /api/auth/session 200 in 170ms
+ ✓ Compiled /dashboard in 893ms (1483 modules)
+ GET /dashboard 200 in 1938ms
+ GET /dashboard 200 in 29ms
+ ○ Compiling /dashboard/provider ...
+ ✓ Compiled /dashboard/provider in 952ms (1514 modules)
+ GET /dashboard/provider 200 in 1081ms
+ GET /dashboard/provider 200 in 32ms
+ ○ Compiling /api/accommodation-provider/accommodations ...
+ ✓ Compiled /api/accommodation-provider/accommodations in 1104ms (1520 modules)
+ GET /api/accommodation-provider/profile 200 in 1481ms
+ GET /api/accommodation-provider/accommodations 200 in 1517ms
+ GET /api/accommodation-provider/bookings 200 in 1543ms
+ GET /api/accommodation-provider/profile 200 in 98ms
+ GET /api/accommodation-provider/accommodations 200 in 70ms
+ GET /api/accommodation-provider/bookings 200 in 91ms
+ ✓ Compiled /api/notifications in 405ms (850 modules)
+ GET /api/notifications?limit=10 200 in 600ms
+ GET /api/notifications?limit=10 200 in 22ms
+ GET /api/notifications?limit=10 200 in 20ms
+ GET / 200 in 49ms
+ GET /api/admin/check-exists 200 in 30ms
+ GET /api/admin/check-exists 200 in 18ms
+ GET /api/auth/csrf 200 in 63ms
+ POST /api/auth/signout 200 in 10ms
+ GET / 200 in 186ms
+ GET /api/admin/check-exists 200 in 78ms
  GET /api/auth/session 200 in 140ms
- GET /api/auth/session 200 in 161ms
- GET /api/auth/session 200 in 72ms
- GET /api/notifications?limit=10 200 in 159ms
- GET /api/notifications?limit=10 200 in 144ms
- GET /api/notifications?limit=10 200 in 179ms
- GET /api/notifications?limit=10 200 in 109ms
- GET /api/notifications?limit=10 200 in 207ms
- GET /api/notifications?limit=10 200 in 31ms
- GET /api/notifications?limit=10 200 in 33ms
- GET /api/notifications?limit=10 200 in 19ms
- GET /api/notifications?limit=10 200 in 21ms
- GET /api/notifications?limit=10 200 in 21ms
- ○ Compiling / ...
- ✓ Compiled / in 3.1s (1435 modules)
- GET / 200 in 3267ms
- GET /api/notifications?limit=10 200 in 276ms
- GET /dashboard/tourist 200 in 215ms
+ GET /login 200 in 35ms
+ GET /api/admin/check-exists 200 in 205ms
+ GET /api/admin/check-exists 200 in 73ms
+ GET /login 200 in 35ms
+ ○ Compiling /register ...
+ ✓ Compiled /register in 713ms (1531 modules)
+ GET /register 200 in 818ms
+ GET /api/auth/providers 200 in 276ms
+ GET /api/auth/csrf 200 in 13ms
+ POST /api/auth/callback/credentials 401 in 82ms
+ GET /api/auth/providers 200 in 57ms
+ GET /api/auth/csrf 200 in 10ms
+ POST /api/auth/callback/credentials 200 in 157ms
+ GET /api/auth/session 200 in 13ms
+ GET /dashboard 200 in 58ms
+ GET /dashboard 200 in 33ms
+ GET /dashboard/admin 200 in 92ms
+ GET /dashboard/admin 200 in 79ms
+ ○ Compiling /api/admin/analytics ...
+ ✓ Compiled /api/admin/analytics in 581ms (841 modules)
+ GET /api/admin/analytics?period=daily 200 in 840ms
+ GET /api/admin/analytics?period=daily 200 in 56ms
+ ✓ Compiled in 3.2s (690 modules)
+ GET /dashboard/admin 200 in 134ms
+ ✓ Compiled in 3.9s (1244 modules)
+ GET /dashboard/admin 200 in 174ms
+ ✓ Compiled in 1205ms (1250 modules)
+ GET /dashboard/admin 200 in 183ms
+ ○ Compiling /api/admin/users ...
+ ✓ Compiled /api/admin/users in 1993ms (829 modules)
+ GET /api/admin/users? 200 in 2512ms
+ GET /api/admin/users? 200 in 44ms
+ ○ Compiling /api/admin/guides ...
+ ✓ Compiled /api/admin/guides in 509ms (1510 modules)
+ GET /api/admin/guides 200 in 893ms
+ GET /api/admin/guides 200 in 28ms
+ GET /api/admin/users? 200 in 44ms
+ GET /api/admin/users? 200 in 18ms
+ ✓ Compiled /api/admin/analytics in 371ms (833 modules)
+ GET /api/admin/analytics?period=daily 200 in 738ms
+ GET /api/admin/analytics?period=daily 200 in 105ms
+ ✓ Compiled in 2s (1526 modules)
+ GET /dashboard/admin 200 in 435ms
+ ✓ Compiled in 616ms (693 modules)
+ GET /dashboard/admin 200 in 35ms
+ ✓ Compiled in 828ms (693 modules)
+ GET /dashboard/admin 200 in 48ms
+ GET /api/admin/users? 200 in 459ms
+ GET /api/admin/users? 200 in 21ms
+ GET /api/admin/users?role=admin 200 in 31ms
+ GET /api/admin/guides 200 in 73ms
+ GET /api/admin/guides 200 in 31ms
+ ✓ Compiled in 1685ms (693 modules)
+ GET /dashboard/admin 200 in 82ms
+ ✓ Compiled in 5s (1443 modules)
+ GET /dashboard/admin 200 in 4615ms
+ GET /dashboard/admin 200 in 17ms
+ ✓ Compiled in 4.6s (1252 modules)
+ GET /dashboard/admin 200 in 200ms
+ ✓ Compiled in 3.1s (1262 modules)
+ GET /dashboard/admin 200 in 267ms
+ ○ Compiling /api/admin/profile ...
+ ✓ Compiled /api/admin/profile in 2.6s (1520 modules)
+ GET /api/admin/profile 200 in 3058ms
+ GET /api/admin/profile 200 in 26ms
+ ✓ Compiled in 3.9s (1262 modules)
+ GET /dashboard/admin 200 in 197ms
+ ✓ Compiled in 2.2s (1262 modules)
+ GET /dashboard/admin 200 in 186ms
+ ✓ Compiled in 874ms (1262 modules)
+ GET /dashboard/admin 200 in 212ms
+ GET /dashboard/admin 200 in 536ms
  ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1063ms (795 modules)
- ✓ Compiled (799 modules)
-Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
- GET /api/auth/session 200 in 2214ms
-Profile API: User found: yes Gihan
- GET /api/tourist/profile 200 in 2330ms
- GET /api/tourist/bookings 200 in 2347ms
- GET /api/notifications?limit=10 200 in 71ms
- GET /api/notifications?limit=10 200 in 32ms
- ○ Compiling /api/tourist/profile-picture ...
- ✓ Compiled /api/tourist/profile-picture in 541ms (1443 modules)
- POST /api/tourist/profile-picture 200 in 858ms
- PUT /api/tourist/profile 200 in 116ms
-Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
-Profile API: User found: yes Gihan
- GET /api/tourist/profile 200 in 47ms
- GET /api/tourist/bookings 200 in 100ms
- GET /api/notifications?limit=10 200 in 35ms
+ ✓ Compiled /api/auth/[...nextauth] in 2.4s (823 modules)
+ GET /api/auth/session 200 in 3027ms
+ ○ Compiling /api/admin/analytics ...
+ ✓ Compiled /api/admin/analytics in 1784ms (837 modules)
+ GET /api/admin/analytics?period=daily 200 in 2356ms
+ GET /api/admin/analytics?period=daily 200 in 133ms
+ ○ Compiling /api/admin/guides ...
+ ✓ Compiled /api/admin/guides in 789ms (839 modules)
+ GET /api/admin/guides 200 in 1078ms
+ GET /api/admin/guides 200 in 45ms
+ ○ Compiling /api/admin/profile ...
+ ✓ Compiled /api/admin/profile in 1025ms (835 modules)
+ GET /api/admin/profile 200 in 1332ms
+ GET /api/admin/profile 200 in 41ms
+ ✓ Compiled in 4.8s (1262 modules)
+ GET /dashboard/admin 200 in 187ms
+ ✓ Compiled /api/admin/users in 397ms (835 modules)
+ GET /api/admin/users? 200 in 895ms
+ GET /api/admin/users? 200 in 29ms
+ ✓ Compiled /api/admin/guides in 296ms (837 modules)
+ GET /api/admin/guides 200 in 658ms
+ GET /api/admin/guides 200 in 85ms
+ GET /api/admin/guides 200 in 77ms
+ GET /api/admin/guides 200 in 16ms
+ GET /api/admin/users? 200 in 75ms
+ GET /api/admin/users? 200 in 17ms
+ ✓ Compiled in 1584ms (699 modules)
+ GET /dashboard/admin 200 in 206ms
+ ✓ Compiled in 2.1s (1262 modules)
+ GET /dashboard/admin 200 in 393ms
+ ✓ Compiled in 401ms (699 modules)
+ GET /dashboard/admin 200 in 61ms
+ ✓ Compiled in 3.4s (1272 modules)
+ GET /dashboard/admin 200 in 105ms
+ ✓ Compiled in 1020ms (1272 modules)
+ GET /dashboard/admin 200 in 136ms
+ ○ Compiling /api/admin/accommodations ...
+ ✓ Compiled /api/admin/accommodations in 4.6s (1530 modules)
+ GET /api/admin/accommodations 200 in 5649ms
+ GET /api/admin/accommodations 200 in 105ms
+ ○ Compiling /api/admin/guides ...
+ ✓ Compiled /api/admin/guides in 1645ms (840 modules)
+ GET /api/admin/guides 200 in 1982ms
+ GET /api/admin/guides 200 in 21ms
+[?25h

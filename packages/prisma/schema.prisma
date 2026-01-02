@@ -164,11 +164,9 @@ model Notification {
 }
 
 model Admin {
-  id            String @id @default(uuid())
-  user_id       String @unique
-  email         String @unique
-  password_hash String
-  user          User   @relation(fields: [user_id], references: [id])
+  id      String @id @default(uuid())
+  user_id String @unique
+  user    User   @relation(fields: [user_id], references: [id])
 
   @@map("admins")
 }
@@ -207,4 +205,5 @@ enum NotificationType {
   BOOKING_UPDATED
   PAYMENT_RECEIVED
   PAYMENT_SENT
+  ADMIN_MESSAGE
 }

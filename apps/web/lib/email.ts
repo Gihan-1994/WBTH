@@ -146,6 +146,7 @@ export function getEmailSubject(type: string): string {
         BOOKING_UPDATED: '🔄 Booking Updated',
         PAYMENT_RECEIVED: '💰 Payment Received',
         PAYMENT_SENT: '💸 Payment Sent',
+        ADMIN_MESSAGE: '📢 Message from Admin',
     };
 
     return subjects[type] || '📬 WBTH Notification';

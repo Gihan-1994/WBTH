@@ -212,5 +212,26 @@
     - [x] Add profile picture display with gradient ring to profile section
     - [x] Implement image validation (type, size)
     - [x] Add Base64 encoding for image storage
+- [x] Implement Admin Profile
+    - [x] Add a separate registration for Admin link with button in Homepage.
+    - [x] Once Admin registers, he will be logged in and redirected to Admin Dashboard.
+    - [x] Once Admin registers admin registration button should dissapear and update it to a Admin Area button with admin icon in right upper corner in Homepage.
+    - [x] Admin Area button should redirect to login page.
+    - [x] Admin should use same user login page.
+    - [x] Admin should have a separate dashboard.
+    - [x] Admin dashboard should display all analitics.
+    - [x] Admin dashboard should display all users.
+    - [x] Admin dashboard should display all guides.
+    - [x] Admin dashboard should display all bookings with their status.
+    - [x] Admin dashboard should display all accommodations catagorized with relevent providers.
+    - [x] Admin should be able to send messages to  all users with emails if email option is enabled otherwise send notification only.
+    - [x] Admin dashboard should display all platform income.
+    - [x] Admin should be able to add, edit, delete  all types of users.
+    - [x] Use Chart.js with react-chartjs-2 to display analytics.
+    - [x] Admin should be able to create, update and delete events as in events model in schema.
+    - [x] Before implement in frontend, breakdown all sections in to reusable components and implement them in components/admin/ directory.
+    - [x] Implement other required reusble services in lib/admin/ directory if needed.
+    
+    
     
     
