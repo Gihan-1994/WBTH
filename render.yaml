@@ -10,10 +10,10 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python api.py
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
       - key: FLASK_PORT
         value: 8080
       - key: DATABASE_URL
         sync: false  # You'll add this manually in Render dashboard
-      - key: PYTHON_VERSION
-        value: 3.11.0
     healthCheckPath: /health
