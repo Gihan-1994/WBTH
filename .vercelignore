@@ -1,0 +1,17 @@
+node_modules
+.turbo
+.git
+.env
+.env.local
+apps/ml
+infra
+docs
+*.md
+!README.md
+tests
+.pytest_cache
+__pycache__
+*.log
+codebase-snapshot.txt
+logs
+migration_location_to_district.sql

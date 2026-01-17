@@ -1,0 +1,14 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.env
+*.log
+tests/
+.git/
+.gitignore
+README.md
+ML_progress.md
+setup.sh
