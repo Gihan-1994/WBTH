@@ -3,9 +3,6 @@ const path = require('path');
 
 const nextConfig = {
   transpilePackages: ["@repo/ui", "@repo/lib"],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
