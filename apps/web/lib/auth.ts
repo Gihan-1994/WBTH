@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 
 const EMAIL_VERIFY_PREFIX = "email-verify:";
 const JWT_SECRET = process.env.JWT_SECRET!;
-const APP_URL = process.env.APP_URL || "http://localhost:3000";
+const APP_URL = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
 if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not set");
