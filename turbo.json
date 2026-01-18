@@ -9,6 +9,14 @@
         "dist/**",
         ".next/**",
         "!.next/cache/**"
+      ],
+      "env": [
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL",
+        "RESEND_API_KEY",
+        "NEXT_PUBLIC_FLASK_API_URL"
       ]
     },
     "dev": {
