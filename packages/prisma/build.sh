@@ -2,7 +2,6 @@
 set -e
 
 echo "Building Prisma package..."
-cd packages/prisma
 tsc && prisma generate
 
 echo "Creating Prisma symlink..."
