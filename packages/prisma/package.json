@@ -11,8 +11,7 @@
     }
   },
   "scripts": {
-    "build": "tsc && prisma generate",
-    "postinstall": "cd ../../node_modules/@prisma && ln -sf ../../.prisma .prisma 2>/dev/null || true",
+    "build": "tsc && prisma generate && cd ../../node_modules/@prisma && ln -sf ../../.prisma .prisma 2>/dev/null || true",
     "migrate": "prisma migrate deploy",
     "seed": "tsx seed/index.ts",
     "dev": "prisma db pull && prisma generate"
