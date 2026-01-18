@@ -9,7 +9,8 @@
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
     "migrate": "yarn -C packages/prisma prisma migrate deploy",
-    "seed": "yarn -C packages/prisma prisma db seed"
+    "seed": "yarn -C packages/prisma prisma db seed",
+    "postinstall": "cd node_modules/@prisma && ln -sf ../../.prisma .prisma 2>/dev/null || true"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
