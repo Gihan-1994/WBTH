@@ -1,0 +1,8 @@
+{
+    "git": {
+        "deploymentEnabled": {
+            "working": true,
+            "main": false
+        }
+    }
+}

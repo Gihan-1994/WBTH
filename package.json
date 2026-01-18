@@ -1,6 +1,7 @@
 {
   "name": "wbth",
   "private": true,
+  "packageManager": "yarn@1.22.19",
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
