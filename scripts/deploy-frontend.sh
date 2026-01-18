@@ -21,8 +21,12 @@ if ! vercel whoami &> /dev/null; then
     vercel login
 fi
 
-# Deploy to production
-echo "🚢 Deploying to Vercel..."
+# Get current branch
+CURRENT_BRANCH=$(git branch --show-current)
+echo "📍 Current branch: $CURRENT_BRANCH"
+
+# Deploy to production from current branch
+echo "🚢 Deploying to Vercel from branch: $CURRENT_BRANCH..."
 vercel --prod
 
 echo ""
