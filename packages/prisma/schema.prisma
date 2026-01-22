@@ -13,8 +13,8 @@ model User {
   password_hash               String
   contact_no                  String?
   role                        UserRole               @default(tourist)
-  email_notifications_enabled Boolean                @default(true)
   created_at                  DateTime               @default(now()) @map("created_at")
+  email_notifications_enabled Boolean                @default(true)
   accommodationProvider       AccommodationProvider?
   admin                       Admin?
   bookings                    Booking[]
@@ -109,8 +109,8 @@ model Booking {
   accommodation    Accommodation? @relation(fields: [accommodation_id], references: [id])
   guide            Guide?         @relation(fields: [guide_id], references: [user_id])
   user             User           @relation(fields: [user_id], references: [id])
-  payments         Payment[]
   notifications    Notification[]
+  payments         Payment[]
 
   @@map("bookings")
 }
@@ -150,14 +150,14 @@ model Payment {
 model Notification {
   id         String           @id @default(uuid())
   user_id    String
-  type       NotificationType
   message    String
+  created_at DateTime         @default(now()) @map("created_at")
   booking_id String?
   is_read    Boolean          @default(false)
   metadata   Json?
-  created_at DateTime         @default(now()) @map("created_at")
-  user       User             @relation(fields: [user_id], references: [id])
+  type       NotificationType
   booking    Booking?         @relation(fields: [booking_id], references: [id])
+  user       User             @relation(fields: [user_id], references: [id])
 
   @@index([user_id, is_read])
   @@map("notifications")

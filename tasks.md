@@ -231,6 +231,15 @@
     - [x] Admin should be able to create, update and delete events as in events model in schema.
     - [x] Before implement in frontend, breakdown all sections in to reusable components and implement them in components/admin/ directory.
     - [x] Implement other required reusble services in lib/admin/ directory if needed.
+- [ ] Implement Admin Event management section in admin dashboard.
+    - [ ] In event management section admin should be able to add new events with images. 
+    - [ ] Update prisma schema to store images for event
+    - [ ] In Home page it should display updated events by admin with simple event calander. Better it created with event card for an event and add properties of event details to event card.
+    - [ ] Spilt sections in to components and import created components to main page. 
+    - [ ] Currently users can only view events. 
+    - [ ] Maintain Consistant simple UI make it more humanize and user friendly.
+     
+
     
     
     

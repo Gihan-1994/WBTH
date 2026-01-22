@@ -23,6 +23,7 @@ class AccommodationRecommender:
     # Default weights: [interests, style, price, amenities, location, group, rating, popularity, db_priority]
     # Increased amenities weight from 0.15 to 0.25, reduced rating from 0.20 to 0.10
     # Added db_priority 0.15 to favor real database accommodations over mock data
+    # 
     DEFAULT_WEIGHTS = [0.20, 0.05, 0.10, 0.20, 0.10, 0.05, 0.10, 0.05, 0.15]
     
     def __init__(self, accommodations: List[Dict], weights: Optional[List[float]] = None):
