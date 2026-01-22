@@ -125,10 +125,12 @@ model Rating {
 
 model Event {
   id          String   @id @default(uuid())
+  title       String   @default("Untitled Event")
   category    String
   date        DateTime
   location    String
   description String[]
+  eventImages String[]
 
   @@map("events")
 }

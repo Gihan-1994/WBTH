@@ -10,6 +10,7 @@ import GuidesSection from "@/components/admin-dashboard/GuidesSection";
 import AccommodationsSection from "@/components/admin-dashboard/AccommodationsSection";
 import MessagesSection from "@/components/admin-dashboard/MessagesSection";
 import AdminProfileSection from "@/components/admin-dashboard/AdminProfileSection";
+import EventsSection from "@/components/admin-dashboard/EventsSection";
 import { BarChart3, Users, MessageSquare, Calendar, Hotel, Compass, UserCog } from "lucide-react";
 
 /**
@@ -52,6 +53,7 @@ export default function AdminDashboardPage() {
         { id: "users", label: "Users", icon: Users },
         { id: "guides", label: "Guides", icon: Compass },
         { id: "accommodations", label: "Accommodations", icon: Hotel },
+        { id: "events", label: "Events", icon: Calendar },
         { id: "messages", label: "Messages", icon: MessageSquare },
         { id: "profile", label: "Profile", icon: UserCog },
     ];
@@ -103,6 +105,12 @@ export default function AdminDashboardPage() {
                             <AccommodationsSection />
                         </div>
                     )}
+                    {activeTab === "events" && (
+                        <div>
+                            <h2 className="text-3xl font-bold text-gray-800 mb-6">📅 Events Management</h2>
+                            <EventsSection />
+                        </div>
+                    )}
                     {activeTab === "messages" && (
                         <div>
                             <h2 className="text-3xl font-bold text-gray-800 mb-6">💬 Send Messages</h2>
@@ -115,20 +123,6 @@ export default function AdminDashboardPage() {
                             <AdminProfileSection />
                         </div>
                     )}
-                </div>
-
-                {/* Coming Soon Sections */}
-                <div className="mt-6">
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200 max-w-md">
-                        <div className="flex items-center gap-3 mb-2">
-                            <Calendar className="text-orange-600" size={24} />
-                            <h3 className="font-bold text-orange-900">Events</h3>
-                        </div>
-                        <p className="text-sm text-orange-700">Create and manage events</p>
-                        <span className="inline-block mt-3 px-3 py-1 text-xs bg-orange-200 text-orange-800 rounded-full font-semibold">
-                            Coming Soon
-                        </span>
-                    </div>
                 </div>
             </div>
         </div>

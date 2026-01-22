@@ -108,7 +108,7 @@ export async function sendNotificationEmail(params: SendEmailParams) {
                             ` : ''}
                             
                             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-                                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard" 
+                                <a href="${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard" 
                                    style="display: inline-block; background-color: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
                                     View Dashboard
                                 </a>

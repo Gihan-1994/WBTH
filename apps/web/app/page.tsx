@@ -17,6 +17,7 @@ import {
   UserCog,
 } from "lucide-react";
 import Chatbot from "@/components/Chatbot";
+import EventCalendar from "@/components/homepage/EventCalendar";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -196,18 +197,23 @@ export default function Home() {
         </Link>
 
         {/* Upcoming Events */}
-        <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group hover:scale-[1.02] border border-orange-100/50">
+        <Link
+          href="/events"
+          className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group hover:scale-[1.02] border border-orange-100/50"
+        >
           <div className="bg-gradient-to-br from-orange-100 to-orange-200 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
             <Calendar className="text-orange-600" size={26} />
           </div>
-          <h2 className="text-xl font-bold mb-2 text-gray-800">Upcoming Events</h2>
+          <h2 className="text-xl font-bold mb-2 text-gray-800 group-hover:text-orange-600 transition-colors">
+            Upcoming Events
+          </h2>
           <p className="text-gray-600 mb-4 leading-relaxed">
-            Discover events happening around you.
+            Discover exciting events happening around you.
           </p>
-          <span className="inline-block px-3 py-1 text-xs text-orange-700 bg-orange-100 rounded-full font-semibold border border-orange-200">
-            Coming Soon
-          </span>
-        </div>
+          <div className="inline-flex items-center gap-2 text-orange-600 font-semibold group-hover:translate-x-1 transition-transform">
+            View Events <ArrowRight size={18} />
+          </div>
+        </Link>
 
         {/* Chat Bot */}
         <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 group hover:scale-[1.02] border border-teal-100/50">
@@ -237,6 +243,7 @@ export default function Home() {
           </p>
         </Link>
       </div>
+
     </main>
   );
 }

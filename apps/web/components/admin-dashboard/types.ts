@@ -127,14 +127,12 @@ export interface ProviderData {
 
 export interface EventData {
     id: string;
-    name: string | null;
+    title: string;
     category: string;
     date: Date;
     location: string;
     description: string[];
-    images: string[];
-    created_at?: Date;
-    updated_at?: Date;
+    eventImages: string[];
 }
 
 export interface MessageData {
