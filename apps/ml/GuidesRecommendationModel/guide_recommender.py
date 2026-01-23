@@ -15,10 +15,12 @@ class GuideRecommender:
     
     Algorithm:
     1. Hard rule filters (language, location, price, availability)
-    2. Point-additive scoring (location, languages, expertise, gender, popularity, rating, price, db_priority)
+    2. Point-additive scoring (location, languages, expertise, gender, popularity, rating, price, experience, db_priority)
     3. Normalization to [0,1] range
     4. Ranking and reason generation
     """
+    
+    import re
     
     def __init__(self, guides: List[Dict]):
         """
@@ -93,7 +95,9 @@ class GuideRecommender:
                 province=province,
                 gender_preference=gender_preference,
                 candidates=candidates,
-                max_points=max_points
+                max_points=max_points,
+                budget_min=budget_min,
+                budget_max=budget_max
             )
             
             scored_candidates.append({
@@ -218,8 +222,11 @@ class GuideRecommender:
         # Rating: max +3
         max_points += 3
         
-        # Price: +2 (already filtered, so always gets this)
-        max_points += 2
+        # Price: max +5 (3 points for range + 2 bonus)
+        max_points += 5
+        
+        # Experience: max +5
+        max_points += 5
         
         # DB Priority: +5
         max_points += 5
@@ -235,7 +242,9 @@ class GuideRecommender:
         province: Optional[str],
         gender_preference: Optional[str],
         candidates: List[Dict],
-        max_points: int
+        max_points: int,
+        budget_min: float,
+        budget_max: float
     ) -> tuple[float, Dict[str, any]]:
         """Calculate point-additive score for a guide."""
         
@@ -290,10 +299,19 @@ class GuideRecommender:
         points += rating_points
         components["rating"] = rating_points
         
-        # Price score (already filtered, so +2)
-        price_points = 2
+        # Price score (up to +5)
+        price_points = self._price_score(
+            guide.get("price", 0),
+            budget_min,
+            budget_max
+        )
         points += price_points
         components["price"] = price_points
+        
+        # Experience score (up to +5)
+        experience_points = self._experience_score(guide.get("experience", []))
+        points += experience_points
+        components["experience"] = experience_points
         
         # DB priority score (+5 for guides in system)
         db_priority_points = 5 if guide.get("in_system", False) else 0
@@ -369,6 +387,58 @@ class GuideRecommender:
         # +3 for first match, +1 for each additional, max +5
         points = 3 + min(matches - 1, 2)
         return points
+
+    def _price_score(self, price: float, budget_min: float, budget_max: float) -> int:
+        """
+        Calculate dynamic price score for a guide.
+        +3 points max based on position in budget (lower is better)
+        +2 points affordability bonus if in lower 25% of budget
+        """
+        if not price or budget_max <= budget_min:
+            return 2  # Default
+            
+        # 1. Base score (out of 3)
+        # 3 if at budget_min, 1 if at budget_max
+        ratio = (price - budget_min) / (budget_max - budget_min)
+        base_score = 3 - (ratio * 2)
+        
+        # 2. Affordability bonus
+        bonus = 0
+        if price <= budget_min + (budget_max - budget_min) * 0.25:
+            bonus = 2
+            
+        return int(base_score + bonus)
+
+    def _experience_score(self, experience_list: List[str]) -> int:
+        """
+        Calculate experience score based on years found in experience string array.
+        Award points based on years: 10+ (5 pts), 5-10 (4 pts), 3-5 (3 pts), <3 (2 pts).
+        Default: 2 points.
+        """
+        import re
+        
+        max_years = 0
+        found = False
+        
+        for item in experience_list:
+            # Look for patterns like "5 years", "12 year", "10+ years"
+            matches = re.findall(r'(\d+)\s*year', item.lower())
+            if matches:
+                found = True
+                years = [int(m) for m in matches]
+                max_years = max(max_years, max(years))
+        
+        if not found:
+            return 2  # Default
+            
+        if max_years >= 10:
+            return 5
+        elif max_years >= 5:
+            return 4
+        elif max_years >= 3:
+            return 3
+        else:
+            return 2
     
     def _popularity_score(self, prior_bookings: int, candidates: List[Dict]) -> int:
         """

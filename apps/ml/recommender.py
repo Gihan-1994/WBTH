@@ -7,7 +7,7 @@ as specified in architecture spec section 4.1
 import json
 import math
 from typing import List, Dict, Optional, Set
-import numpy as np
+
 
 
 class AccommodationRecommender:
@@ -21,10 +21,20 @@ class AccommodationRecommender:
     """
     
     # Default weights: [interests, style, price, amenities, location, group, rating, popularity, db_priority]
-    # Increased amenities weight from 0.15 to 0.25, reduced rating from 0.20 to 0.10
+    # These are base weights that get adjusted dynamically based on travel_style
     # Added db_priority 0.15 to favor real database accommodations over mock data
     # 
     DEFAULT_WEIGHTS = [0.20, 0.05, 0.10, 0.20, 0.10, 0.05, 0.10, 0.05, 0.15]
+    
+    # Travel style weight profiles
+    TRAVEL_STYLE_WEIGHTS = {
+        "luxury": [0.15, 0.10, 0.05, 0.25, 0.10, 0.05, 0.20, 0.05, 0.05],
+        "budget": [0.15, 0.05, 0.30, 0.15, 0.10, 0.05, 0.05, 0.05, 0.10],
+        "family": [0.15, 0.10, 0.10, 0.25, 0.10, 0.15, 0.10, 0.05, 0.00],
+        "adventure": [0.25, 0.15, 0.10, 0.15, 0.15, 0.05, 0.05, 0.05, 0.05],
+        "romantic": [0.20, 0.10, 0.08, 0.20, 0.12, 0.05, 0.15, 0.05, 0.05],
+        "cultural": [0.25, 0.10, 0.10, 0.15, 0.15, 0.05, 0.10, 0.05, 0.05],
+    }
     
     def __init__(self, accommodations: List[Dict], weights: Optional[List[float]] = None):
         """
@@ -42,6 +52,25 @@ class AccommodationRecommender:
             raise ValueError("Weights must have exactly 9 values")
         if not math.isclose(sum(self.weights), 1.0, rel_tol=0.01):
             print(f"Warning: Weights sum to {sum(self.weights):.2f}, not 1.0")
+    
+    def _get_dynamic_weights(self, travel_style: str) -> List[float]:
+        """
+        Get weights adjusted for travel style.
+        
+        Args:
+            travel_style: User's travel style preference
+            
+        Returns:
+            Adjusted weights list
+        """
+        # Use travel style specific weights if available
+        if travel_style and travel_style.lower() in self.TRAVEL_STYLE_WEIGHTS:
+            weights = self.TRAVEL_STYLE_WEIGHTS[travel_style.lower()]
+            print(f"Using {travel_style} travel style weights")
+            return weights
+        
+        # Fall back to default or custom weights
+        return self.weights
     
     def recommend(
         self,
@@ -96,6 +125,9 @@ class AccommodationRecommender:
                 "message": "No accommodations match your criteria"
             }
         
+        # Get dynamic weights based on travel style
+        active_weights = self._get_dynamic_weights(travel_style)
+        
         # Score and rank candidates
         scored_candidates = []
         for acc in candidates:
@@ -109,7 +141,8 @@ class AccommodationRecommender:
                 group_size=group_size,
                 district=district,
                 province=province,
-                candidates=candidates
+                candidates=candidates,
+                weights=active_weights
             )
             
             scored_candidates.append({
@@ -221,9 +254,13 @@ class AccommodationRecommender:
         group_size: int,
         district: Optional[str],
         province: Optional[str],
-        candidates: List[Dict]
+        candidates: List[Dict],
+        weights: Optional[List[float]] = None
     ) -> tuple[float, Dict[str, float]]:
         """Calculate weighted score for an accommodation."""
+        
+        # Use provided weights or fall back to instance weights
+        active_weights = weights if weights is not None else self.weights
         
         # S_interests: Jaccard similarity on interests
         s_interests = self._jaccard_similarity(
@@ -234,11 +271,12 @@ class AccommodationRecommender:
         # S_style: Binary match on travel_style
         s_style = 1.0 if travel_style in accommodation.get("travel_style", []) else 0.0
         
-        # S_price: Price alignment score
+        # S_price: Price alignment score (with affordability bonus for budget travelers)
         s_price = self._price_alignment_score(
             budget_min, budget_max,
             accommodation.get("price_range_min", 0),
-            accommodation.get("price_range_max", 0)
+            accommodation.get("price_range_max", 0),
+            travel_style=travel_style
         )
         
         # S_amenities: Jaccard similarity on all amenities (not just required)
@@ -287,7 +325,7 @@ class AccommodationRecommender:
         
         score = sum(
             w * components[k] 
-            for w, k in zip(self.weights, components.keys())
+            for w, k in zip(active_weights, components.keys())
         )
         
         return score, components
@@ -305,11 +343,13 @@ class AccommodationRecommender:
         return intersection / union if union > 0 else 0.0
     
     def _price_alignment_score(
-        self, user_min: float, user_max: float, acc_min: float, acc_max: float
+        self, user_min: float, user_max: float, acc_min: float, acc_max: float,
+        travel_style: Optional[str] = None
     ) -> float:
         """
-        Calculate price alignment score with distance penalty.
+        Calculate price alignment score with distance penalty and affordability bonus.
         1.0 if ranges overlap well, decreases with distance.
+        Budget travelers get bonus for lower-priced accommodations.
         """
         # Calculate overlap
         overlap_min = max(user_min, acc_min)
@@ -319,7 +359,21 @@ class AccommodationRecommender:
             # Ranges overlap
             overlap = overlap_max - overlap_min
             user_range = user_max - user_min
-            return min(1.0, overlap / user_range) if user_range > 0 else 1.0
+            base_score = min(1.0, overlap / user_range) if user_range > 0 else 1.0
+            
+            # Add affordability bonus for budget-conscious travelers
+            affordability_bonus = 0.0
+            if travel_style and travel_style.lower() == "budget":
+                budget_midpoint = (user_min + user_max) / 2
+                acc_midpoint = (acc_min + acc_max) / 2
+                
+                # Bonus if accommodation is in lower half of budget
+                if acc_midpoint <= budget_midpoint:
+                    # Bonus proportional to how much cheaper it is
+                    savings_ratio = (budget_midpoint - acc_midpoint) / budget_midpoint
+                    affordability_bonus = min(0.2, savings_ratio * 0.3)
+            
+            return min(1.0, base_score + affordability_bonus)
         else:
             # No overlap - apply distance penalty
             if acc_max < user_min:
