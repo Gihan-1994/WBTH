@@ -22,8 +22,8 @@ model User {
   notifications               Notification[]
   paymentsReceived            Payment[]              @relation("ReceiverPayments")
   paymentsSent                Payment[]              @relation("SenderPayments")
-  tourist                     Tourist?
   ratings                     Rating[]
+  tourist                     Tourist?
 
   @@map("users")
 }
@@ -46,12 +46,12 @@ model Guide {
   rating          Float?
   account_no      String?
   price           Float?
-  booking_price   Float? // Price per day for bookings
   availability    Boolean   @default(true)
   profile_picture String?
   city            String?
   province        String?
   gender          String?
+  booking_price   Float?
   bookings        Booking[]
   user            User      @relation(fields: [user_id], references: [id])
 
@@ -82,7 +82,6 @@ model Accommodation {
   district          String
   price_range_min   Float?
   price_range_max   Float?
-  booking_price     Float? // Default booking price
   province          String?
   interests         String[]
   group_size        Int?
@@ -91,6 +90,7 @@ model Accommodation {
   images            String[]
   travel_style      String[]
   location          String?
+  booking_price     Float?
   provider          AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
   bookings          Booking[]
 
@@ -121,11 +121,11 @@ model Booking {
 
 model Rating {
   id         String   @id @default(uuid())
-  booking_id String   @unique
-  user_id    String
   rating     Int
+  booking_id String   @unique
   comment    String?
   created_at DateTime @default(now())
+  user_id    String
   booking    Booking  @relation(fields: [booking_id], references: [id])
   user       User     @relation(fields: [user_id], references: [id])
 
@@ -134,12 +134,12 @@ model Rating {
 
 model Event {
   id          String   @id @default(uuid())
-  title       String   @default("Untitled Event")
   category    String
   date        DateTime
   location    String
   description String[]
   eventImages String[]
+  title       String   @default("Untitled Event")
 
   @@map("events")
 }
@@ -150,8 +150,8 @@ model Payment {
   sender_id                String
   booking_id               String
   amount                   Float
-  status                   PaymentStatus @default(pending)
   stripe_payment_intent_id String?
+  status                   PaymentStatus @default(pending)
   booking                  Booking       @relation(fields: [booking_id], references: [id])
   receiver                 User          @relation("ReceiverPayments", fields: [receiver_id], references: [id])
   sender                   User          @relation("SenderPayments", fields: [sender_id], references: [id])
