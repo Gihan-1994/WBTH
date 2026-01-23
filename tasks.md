@@ -238,11 +238,21 @@
     - [x] Spilt sections in to components and import created components to main page. 
     - [x] Currently users can only view events. 
     - [x] Maintain Consistant simple UI make it more humanize and user friendly.
-- [ ] Implement A payment integration using Stripe for payments.
-    - [ ] When user clicks on book button in accomodation booking or guide booking it should trigger the payment modal.
-    - [ ] 
-    - [ ] Payment form should display payment details and payment form.
-    - [ ] Payment form should display payment details and payment form.
+- [x] Implement A payment integration using Stripe for payments.
+    - [x] When user clicks on book button in accomodation booking or guide booking it should trigger the payment modal.
+    - [x] The payment model opens and it should include booking details and payment form.
+    - [x] Tourist should be able to pay using stripe . Here is the booking flow.
+    1. Tourist clicks on book button in accomodation booking or guide booking.
+    2. Tourist clicks on pay button in payment modal.
+    3. Tourist is redirected to stripe payment page.
+    4. Tourist pays → Card is authorized (funds held, not charged)
+    5. Provider confirms → Capture payment + split (10% to platform, 90% to provider)
+    6. Provider cancels → Release authorization (no charge)
+    7. It should update all dashboards participated in this transaction (platform received fee goes to Admin dashboard platform income, provider fee goes to Guide dashboard, tourist paid fee goes to Tourist dashboard).
+    8.Since this is mock payment integration, it is enough to update amounts only.
+    - [x] Make this implementation very simple and easy to understand.
+    - [x] Before implemnet in codebase give me proposed structure and guide to use stripe account.
+   
     
      
 

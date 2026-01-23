@@ -22,6 +22,8 @@ export interface Accommodation {
     interests: string[];
     price_range_min: number;
     price_range_max: number;
+    booking_price: number | null;
+    rating: number | null;
     province: string | null;
     group_size: number | null;
     account_no: string | null;
@@ -50,4 +52,5 @@ export interface Stats {
     confirmed: number;
     cancelled: number;
     income: number;
+    averageRating?: number;
 }

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import { MapPin, Star, Globe, Award, User, Calendar, X, Briefcase } from "lucide-react";
+import PaymentModal from "@/components/payments/PaymentModal";
 
 interface Guide {
     user_id: string;
@@ -12,6 +13,7 @@ interface Guide {
     expertise: string[];
     rating: number;
     price: number;
+    booking_price: number; // Price per day for bookings
     city: string;
     province: string;
     profile_picture: string;
@@ -30,6 +32,8 @@ export default function GuideDetailsPage() {
     const [guide, setGuide] = useState<Guide | null>(null);
     const [loading, setLoading] = useState(true);
     const [showBookingModal, setShowBookingModal] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [createdBooking, setCreatedBooking] = useState<any>(null);
     const [bookingData, setBookingData] = useState({
         startDate: "",
         endDate: "",
@@ -43,7 +47,8 @@ export default function GuideDetailsPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setGuide(data);
-                    setBookingData(prev => ({ ...prev, price: data.price || 0 }));
+                    // Use booking_price if available, fallback to price
+                    setBookingData(prev => ({ ...prev, price: data.booking_price || data.price || 0 }));
                 }
             } catch (error) {
                 console.error("Failed to fetch guide", error);
@@ -76,9 +81,10 @@ export default function GuideDetailsPage() {
             });
 
             if (res.ok) {
-                alert("Booking request sent successfully!");
+                const booking = await res.json();
+                setCreatedBooking(booking);
                 setShowBookingModal(false);
-                router.push("/dashboard/tourist");
+                setShowPaymentModal(true); // Open payment modal instead of alert
             } else {
                 const error = await res.json();
                 alert(`Booking failed: ${error.error}`);
@@ -125,6 +131,16 @@ export default function GuideDetailsPage() {
                             I am a professional guide with expertise in {guide.expertise.join(", ")}. I speak {guide.languages.join(", ")} and have experience in {guide.experience.join(", ")}.
                         </p>
                     </div>
+                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                        <h2 className="text-2xl font-bold mb-4">Price Information</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {guide.price &&
+                                <div className="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-100">
+                                    $ &nbsp;{guide.price} &nbsp; per day
+                                </div>
+                            }
+                        </div>
+                    </div>
 
                     <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h2 className="text-2xl font-bold mb-4">Expertise</h2>
@@ -168,8 +184,8 @@ export default function GuideDetailsPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
                         <div className="flex justify-between items-end mb-6">
                             <div>
-                                <span className="text-2xl font-bold">${guide.price}</span>
-                                <span className="text-gray-500"> / day</span>
+                                <span className="text-2xl font-bold">${guide.booking_price || guide.price}</span>
+                                <span className="text-gray-500"> / previous booking</span>
                             </div>
                         </div>
 
@@ -236,6 +252,26 @@ export default function GuideDetailsPage() {
                         </form>
                     </div>
                 </div>
+            )}
+
+            {/* Payment Modal */}
+            {showPaymentModal && createdBooking && guide && (
+                <PaymentModal
+                    bookingId={createdBooking.id}
+                    bookingDetails={{
+                        providerName: guide.user.name,
+                        startDate: createdBooking.start_date,
+                        endDate: createdBooking.end_date,
+                        location: guide.city || guide.province,
+                        price: createdBooking.price,
+                        type: "guide",
+                    }}
+                    onClose={() => setShowPaymentModal(false)}
+                    onSuccess={() => {
+                        setShowPaymentModal(false);
+                        router.push("/dashboard/tourist");
+                    }}
+                />
             )}
         </div>
     );

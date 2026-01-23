@@ -1,12 +1,15 @@
 "use client";
 
-import { Eye } from "lucide-react";
+import { useState } from "react";
+import { Eye, Star } from "lucide-react";
 import { Booking } from "./types";
+import RatingModal from "./RatingModal";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
     onViewBooking: (booking: Booking) => void;
     onCancelBooking: (id: string) => void;
+    onRefresh?: () => void;
 }
 
 /**
@@ -15,8 +18,24 @@ interface BookingHistorySectionProps {
 export default function BookingHistorySection({
     bookings,
     onViewBooking,
-    onCancelBooking
+    onCancelBooking,
+    onRefresh
 }: BookingHistorySectionProps) {
+    const [showRatingModal, setShowRatingModal] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+
+    const handleRateClick = (booking: Booking) => {
+        setSelectedBooking(booking);
+        setShowRatingModal(true);
+    };
+
+    const handleRatingSuccess = () => {
+        setShowRatingModal(false);
+        setSelectedBooking(null);
+        if (onRefresh) onRefresh();
+        alert("Rating submitted successfully!");
+    };
+
     return (
         <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 flex-1 h-fit">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">Booking History</h2>
@@ -53,14 +72,30 @@ export default function BookingHistorySection({
                                     </span>
                                 </td>
                                 <td className="py-4">
-                                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${booking.status === 'confirmed'
-                                        ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
-                                        booking.status === 'pending'
-                                            ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-700 border border-yellow-200' :
-                                            'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 border border-red-200'
-                                        }`}>
-                                        {booking.status}
-                                    </span>
+                                    <div className="flex flex-col gap-1">
+                                        {/* Booking Status */}
+                                        <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${booking.status === 'confirmed'
+                                            ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
+                                            booking.status === 'pending'
+                                                ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-700 border border-yellow-200' :
+                                                'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 border border-red-200'
+                                            }`}>
+                                            {booking.status}
+                                        </span>
+                                        {/* Payment Status */}
+                                        {(booking as any).payments?.[0] && (
+                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${(booking as any).payments[0].status === 'captured'
+                                                ? 'bg-green-50 text-green-600 border border-green-200' :
+                                                (booking as any).payments[0].status === 'authorized'
+                                                    ? 'bg-blue-50 text-blue-600 border border-blue-200' :
+                                                    (booking as any).payments[0].status === 'cancelled'
+                                                        ? 'bg-red-50 text-red-600 border border-red-200' :
+                                                        'bg-gray-50 text-gray-600 border border-gray-200'
+                                                }`}>
+                                                💳 {(booking as any).payments[0].status}
+                                            </span>
+                                        )}
+                                    </div>
                                 </td>
                                 <td className="py-4">
                                     <div className="flex gap-2">
@@ -79,6 +114,15 @@ export default function BookingHistorySection({
                                                 Cancel
                                             </button>
                                         )}
+                                        {booking.status === 'confirmed' && (
+                                            <button
+                                                onClick={() => handleRateClick(booking)}
+                                                className="text-yellow-600 hover:text-yellow-700 font-semibold flex items-center gap-1 hover:underline"
+                                            >
+                                                <Star size={16} className={(booking as any).rating ? "fill-yellow-400" : ""} />
+                                                {(booking as any).rating ? 'Update Rating' : 'Rate'}
+                                            </button>
+                                        )}
                                     </div>
                                 </td>
                             </tr>
@@ -95,6 +139,22 @@ export default function BookingHistorySection({
                     </tbody>
                 </table>
             </div>
+
+            {/* Rating Modal */}
+            {showRatingModal && selectedBooking && (
+                <RatingModal
+                    bookingId={selectedBooking.id}
+                    providerName={
+                        selectedBooking.type === 'guide'
+                            ? (selectedBooking.guide?.user?.name || "Guide")
+                            : (selectedBooking.accommodation?.name || "Accommodation")
+                    }
+                    currentRating={(selectedBooking as any).rating?.rating || 0}
+                    currentComment={(selectedBooking as any).rating?.comment || ""}
+                    onClose={() => setShowRatingModal(false)}
+                    onSuccess={handleRatingSuccess}
+                />
+            )}
         </div>
     );
 }

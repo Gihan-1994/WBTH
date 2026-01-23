@@ -39,14 +39,41 @@ export async function GET(req: NextRequest) {
             },
         });
 
+        // Calculate income from captured payments (provider receives 90% after platform fee)
+        const capturedPayments = await prisma.payment.findMany({
+            where: {
+                receiver_id: userId,
+                status: "captured",
+            },
+        });
+
+        const totalIncome = capturedPayments.reduce((sum, payment) => sum + payment.amount, 0);
+
+        // Calculate average rating (excluding 0 ratings)
+        const ratings = await prisma.rating.findMany({
+            where: {
+                booking: {
+                    accommodation: {
+                        provider: {
+                            user_id: userId,
+                        },
+                    },
+                },
+                rating: { gt: 0 },
+            },
+        });
+
+        const averageRating = ratings.length > 0
+            ? ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length
+            : 0;
+
         const stats = {
             total: bookings.length,
             pending: bookings.filter((b) => b.status === "pending").length,
             confirmed: bookings.filter((b) => b.status === "confirmed").length,
             cancelled: bookings.filter((b) => b.status === "cancelled").length,
-            income: bookings
-                .filter((b) => b.status === "confirmed")
-                .reduce((sum, b) => sum + b.price, 0),
+            income: totalIncome, // Actual income from captured payments (90% of booking price)
+            averageRating: Math.round(averageRating * 10) / 10, // Round to 1 decimal
         };
 
         return NextResponse.json({ bookings, stats });

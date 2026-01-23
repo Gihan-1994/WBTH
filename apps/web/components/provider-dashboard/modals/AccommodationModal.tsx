@@ -158,6 +158,17 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                                     className="w-full border border-gray-300 p-2.5 rounded-lg focus:border-blue-500 outline-none"
                                 />
                             </div>
+                            <div className="md:col-span-3">
+                                <label className="block text-xs font-semibold text-gray-600 mb-1">Booking Price ($)</label>
+                                <input
+                                    type="number"
+                                    value={formData.booking_price || 0}
+                                    onChange={e => setFormData({ ...formData, booking_price: Number(e.target.value) })}
+                                    className="w-full border border-gray-300 p-2.5 rounded-lg focus:border-blue-500 outline-none"
+                                    placeholder="Leave empty to use Min Price"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">This will be used for bookings. If empty, Min Price will be used.</p>
+                            </div>
                         </div>
                     </div>
 

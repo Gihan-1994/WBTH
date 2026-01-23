@@ -265,6 +265,18 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                 className="w-full border-2 border-gray-200 p-3 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
                             />
                         </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">Booking Price (LKR)</label>
+                            <input
+                                type="number"
+                                value={formData.booking_price || 0}
+                                onChange={e => setFormData({ ...formData, booking_price: parseFloat(e.target.value) })}
+                                className="w-full border-2 border-gray-200 p-3 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none"
+                                placeholder="Leave empty to use Price per Day"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">This will be used for bookings. If empty, Price per Day will be used.</p>
+                        </div>
                     </div>
 
                     {/* Account Number */}

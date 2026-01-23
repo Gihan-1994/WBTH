@@ -135,6 +135,22 @@ export async function GET(req: NextRequest) {
 
         const activeProviders = await prisma.accommodationProvider.count();
 
+        // Calculate platform income from captured payments (10% platform fee)
+        const adminUser = await prisma.admin.findFirst({
+            select: { user_id: true },
+        });
+
+        let platformIncome = 0;
+        if (adminUser) {
+            const platformPayments = await prisma.payment.findMany({
+                where: {
+                    receiver_id: adminUser.user_id,
+                    status: "captured",
+                },
+            });
+            platformIncome = platformPayments.reduce((sum, payment) => sum + payment.amount, 0);
+        }
+
         return NextResponse.json({
             userStats: {
                 total: totalUsers,
@@ -169,7 +185,8 @@ export async function GET(req: NextRequest) {
                 count: item._count
             })),
             activeGuides,
-            activeProviders
+            activeProviders,
+            platformIncome
         });
 
     } catch (error: any) {

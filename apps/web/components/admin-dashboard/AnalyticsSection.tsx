@@ -186,8 +186,8 @@ export default function AnalyticsSection({ initialPeriod = "daily" }: AnalyticsS
                             key={timePeriod.value}
                             onClick={() => setPeriod(timePeriod.value as "daily" | "weekly")}
                             className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${period === timePeriod.value
-                                    ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
+                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                                 }`}
                         >
                             {timePeriod.label}
@@ -232,9 +232,11 @@ export default function AnalyticsSection({ initialPeriod = "daily" }: AnalyticsS
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-orange-600 font-semibold mb-1">Platform Income</p>
-                            <p className="text-lg font-bold text-orange-900">Not Implemented</p>
+                            <p className="text-3xl font-bold text-orange-900">
+                                ${analytics.platformIncome?.toFixed(2) || "0.00"}
+                            </p>
                             <p className="text-sm text-orange-600 mt-2">
-                                Fee structure pending
+                                10% fee from confirmed bookings
                             </p>
                         </div>
                         <DollarSign className="text-orange-600" size={40} />

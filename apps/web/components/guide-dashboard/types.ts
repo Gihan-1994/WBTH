@@ -8,6 +8,7 @@ export interface GuideProfile {
     languages: string[];
     expertise: string[];
     price: number;
+    booking_price: number | null;
     availability: boolean;
     city: string | null;
     province: string | null;
@@ -37,4 +38,5 @@ export interface Stats {
     confirmed: number;
     cancelled: number;
     income: number;
+    averageRating?: number;
 }

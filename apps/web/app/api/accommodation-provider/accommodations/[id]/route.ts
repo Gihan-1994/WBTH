@@ -42,6 +42,12 @@ export async function PUT(
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
         }
 
+        // Parse booking_price safely
+        let bookingPrice = null;
+        if (data.booking_price !== null && data.booking_price !== undefined && data.booking_price !== '' && data.booking_price !== 0) {
+            bookingPrice = parseFloat(data.booking_price);
+        }
+
         const updatedAccommodation = await prisma.accommodation.update({
             where: { id: accommodationId },
             data: {
@@ -55,6 +61,7 @@ export async function PUT(
                 travel_style: data.travel_style,
                 price_range_min: parseFloat(data.price_range_min),
                 price_range_max: parseFloat(data.price_range_max),
+                booking_price: bookingPrice,
                 province: data.province,
                 group_size: parseInt(data.group_size),
                 account_no: data.account_no,
@@ -65,8 +72,10 @@ export async function PUT(
             message: "Accommodation updated successfully",
             accommodation: updatedAccommodation,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating accommodation:", error);
+        console.error("Error details:", error.message);
+        console.error("Data received:", data);
         return NextResponse.json(
             { error: "Failed to update accommodation" },
             { status: 500 }

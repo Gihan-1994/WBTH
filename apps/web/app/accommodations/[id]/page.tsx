@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import { MapPin, Star, Check, User, Calendar, X } from "lucide-react";
+import PaymentModal from "@/components/payments/PaymentModal";
 
 interface Accommodation {
     id: string;
@@ -11,6 +12,7 @@ interface Accommodation {
     location: string;
     price_range_min: number;
     price_range_max: number;
+    booking_price: number; // Default booking price
     images: string[];
     rating: number;
     type: string[];
@@ -35,6 +37,8 @@ export default function AccommodationDetailsPage() {
     const [accommodation, setAccommodation] = useState<Accommodation | null>(null);
     const [loading, setLoading] = useState(true);
     const [showBookingModal, setShowBookingModal] = useState(false);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [createdBooking, setCreatedBooking] = useState<any>(null);
     const [bookingData, setBookingData] = useState({
         startDate: "",
         endDate: "",
@@ -48,7 +52,8 @@ export default function AccommodationDetailsPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setAccommodation(data);
-                    setBookingData(prev => ({ ...prev, price: data.price_range_min || 0 }));
+                    // Use booking_price if available, fallback to price_range_min
+                    setBookingData(prev => ({ ...prev, price: data.booking_price || data.price_range_min || 0 }));
                 }
             } catch (error) {
                 console.error("Failed to fetch accommodation", error);
@@ -81,9 +86,10 @@ export default function AccommodationDetailsPage() {
             });
 
             if (res.ok) {
-                alert("Booking request sent successfully!");
+                const booking = await res.json();
+                setCreatedBooking(booking);
                 setShowBookingModal(false);
-                router.push("/dashboard/tourist");
+                setShowPaymentModal(true); // Open payment modal instead of alert
             } else {
                 const error = await res.json();
                 alert(`Booking failed: ${error.error}`);
@@ -130,6 +136,14 @@ export default function AccommodationDetailsPage() {
                         <p className="text-gray-600">
                             Experience a wonderful stay at {accommodation.name}. Located in {accommodation.location}, we offer the best amenities for your comfort.
                         </p>
+                    </div>
+                    <div className="bg-white p-6 rounded-xl shadow-sm">
+                        <h2 className="text-2xl font-bold mb-4">Pricing Information</h2>
+                        {accommodation.price_range_max && accommodation.price_range_min && (
+                            <p className="text-gray-600">
+                                Price range: <span className="font-semibold text-gray-900">${accommodation.price_range_min} - ${accommodation.price_range_max} </span>&nbsp;per full day
+                            </p>
+                        )}
                     </div>
 
                     <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -185,14 +199,10 @@ export default function AccommodationDetailsPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
                         <div className="flex justify-between items-end mb-6">
                             <div>
-                                <span className="text-2xl font-bold">${accommodation.price_range_min}</span>
-                                <span className="text-gray-500"> / night</span>
+                                <span className="text-2xl font-bold">${accommodation.booking_price}</span>
+                                <span className="text-gray-500">&nbsp; per previous booking</span>
                             </div>
-                            {accommodation.price_range_max && (
-                                <div className="text-gray-400 text-sm">
-                                    up to ${accommodation.price_range_max}
-                                </div>
-                            )}
+
                         </div>
 
                         <button
@@ -258,6 +268,26 @@ export default function AccommodationDetailsPage() {
                         </form>
                     </div>
                 </div>
+            )}
+
+            {/* Payment Modal */}
+            {showPaymentModal && createdBooking && accommodation && (
+                <PaymentModal
+                    bookingId={createdBooking.id}
+                    bookingDetails={{
+                        providerName: accommodation.name,
+                        startDate: createdBooking.start_date,
+                        endDate: createdBooking.end_date,
+                        location: accommodation.location,
+                        price: createdBooking.price,
+                        type: "accommodation",
+                    }}
+                    onClose={() => setShowPaymentModal(false)}
+                    onSuccess={() => {
+                        setShowPaymentModal(false);
+                        router.push("/dashboard/tourist");
+                    }}
+                />
             )}
         </div>
     );

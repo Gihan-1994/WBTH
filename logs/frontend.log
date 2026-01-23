@@ -7,499 +7,475 @@ $ next dev
 
 ✓ Starting...
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 3.3s
-○ Compiling /dashboard/admin ...
+✓ Ready in 1613ms
+ GET /dashboard/provider 200 in 1123ms (compile: 602ms, proxy.ts: 182ms, render: 339ms)
+ GET /api/accommodation-provider/profile 200 in 2.5s (compile: 1284ms, render: 1257ms)
+ GET /api/accommodation-provider/accommodations 200 in 2.5s (compile: 1621ms, render: 914ms)
+ GET /api/accommodation-provider/bookings 200 in 2.7s (compile: 1536ms, render: 1165ms)
+ GET /api/auth/session 200 in 3.6s (compile: 3.6s, render: 43ms)
+ GET /api/notifications?limit=10 200 in 239ms (compile: 129ms, render: 110ms)
+ GET /api/notifications?limit=10 200 in 150ms (compile: 11ms, render: 138ms)
+ PUT /api/accommodation-provider/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 1125ms (compile: 1002ms, render: 123ms)
+ GET /api/accommodation-provider/profile 200 in 88ms (compile: 16ms, render: 72ms)
+ GET /api/accommodation-provider/accommodations 200 in 147ms (compile: 17ms, render: 129ms)
+ GET /api/accommodation-provider/bookings 200 in 252ms (compile: 7ms, render: 245ms)
+ GET / 200 in 118ms (compile: 92ms, render: 26ms)
+ GET /api/admin/check-exists 200 in 232ms (compile: 138ms, render: 93ms)
+ GET /api/admin/check-exists 200 in 44ms (compile: 7ms, render: 37ms)
+ GET /api/auth/csrf 200 in 48ms (compile: 36ms, render: 12ms)
+ POST /api/auth/signout 200 in 15ms (compile: 3ms, render: 12ms)
+ GET / 200 in 229ms (compile: 5ms, render: 224ms)
+ GET /api/auth/session 200 in 149ms (compile: 116ms, render: 33ms)
+ GET /api/admin/check-exists 200 in 302ms (compile: 8ms, render: 294ms)
+ GET /login 200 in 550ms (compile: 409ms, render: 141ms)
+ GET /api/auth/providers 200 in 53ms (compile: 41ms, render: 11ms)
+ GET /api/auth/csrf 200 in 12ms (compile: 3ms, render: 9ms)
+ POST /api/auth/callback/credentials 200 in 253ms (compile: 3ms, render: 250ms)
+ GET /api/auth/session 200 in 126ms (compile: 19ms, render: 107ms)
+ GET /dashboard 200 in 1184ms (compile: 360ms, proxy.ts: 89ms, render: 736ms)
+ GET /dashboard 200 in 127ms (compile: 9ms, proxy.ts: 13ms, render: 105ms)
+ GET /dashboard/guide 200 in 554ms (compile: 373ms, proxy.ts: 36ms, render: 146ms)
+ GET /dashboard/guide 200 in 104ms (compile: 6ms, proxy.ts: 13ms, render: 86ms)
+ GET /api/guide/profile 200 in 347ms (compile: 215ms, render: 133ms)
+ GET /api/guide/profile 200 in 34ms (compile: 7ms, render: 27ms)
+ GET /api/guide/bookings 200 in 424ms (compile: 275ms, render: 149ms)
+ GET /api/guide/bookings 200 in 61ms (compile: 5ms, render: 56ms)
+ GET /api/notifications?limit=10 200 in 86ms (compile: 7ms, render: 79ms)
+ GET /api/notifications?limit=10 200 in 100ms (compile: 8ms, render: 93ms)
+ GET /api/notifications?limit=10 200 in 45ms (compile: 3ms, render: 42ms)
+ PUT /api/guide/profile 200 in 88ms (compile: 4ms, render: 84ms)
+ GET /api/guide/profile 200 in 64ms (compile: 4ms, render: 60ms)
+ GET /api/guide/bookings 200 in 163ms (compile: 13ms, render: 149ms)
+ GET / 200 in 22ms (compile: 3ms, render: 19ms)
+ GET /api/admin/check-exists 200 in 240ms (compile: 43ms, render: 197ms)
+ GET /api/admin/check-exists 200 in 75ms (compile: 24ms, render: 51ms)
+ GET /accommodations 200 in 1207ms (compile: 1177ms, render: 30ms)
+ GET /api/accommodations? 200 in 611ms (compile: 459ms, render: 151ms)
+ GET /api/accommodations? 200 in 179ms (compile: 4ms, render: 175ms)
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 611ms (compile: 580ms, render: 31ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 1493ms (compile: 1453ms, render: 40ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 154ms (compile: 101ms, render: 53ms)
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 227ms (compile: 81ms, render: 146ms)
+ GET /api/auth/session 200 in 143ms (compile: 93ms, render: 50ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 303ms (compile: 73ms, render: 230ms)
 [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
 
 warn - Your `content` configuration includes a pattern which looks like it's accidentally matching all of `node_modules` and can cause serious performance issues.
 warn - Pattern: `../../packages/ui/**/*.js`
 warn - See our documentation for recommendations:
 warn - https://tailwindcss.com/docs/content-configuration#pattern-recommendations
- GET /dashboard/admin 200 in 9.8s (compile: 9.2s, proxy.ts: 126ms, render: 418ms)
-○ Compiling /api/auth/[...nextauth] ...
- GET /api/auth/session 200 in 6.3s (compile: 6.2s, render: 55ms)
- GET /api/admin/analytics?period=daily 200 in 5.0s (compile: 1115ms, render: 3.9s)
- GET /api/admin/analytics?period=daily 200 in 69ms (compile: 4ms, render: 65ms)
-✓ Finished writing to filesystem cache in 15.4s
- GET /api/admin/profile 200 in 676ms (compile: 591ms, render: 85ms)
- GET /api/admin/profile 200 in 63ms (compile: 8ms, render: 54ms)
- GET /api/admin/events 200 in 481ms (compile: 455ms, render: 26ms)
- GET /api/admin/events 200 in 40ms (compile: 5ms, render: 35ms)
-Error: Route "/api/admin/events/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at PUT (app/api/admin/events/[id]/route.ts:56:32)
-  54 |     try {
-  55 |         await requireAdmin();
-> 56 |         const eventId = params.id;
-     |                                ^
-  57 |
-  58 |         const body = await req.json();
-  59 |         const { title, category, date, location, description, eventImages } = body;
-prisma:error 
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update()` invocation in
-/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__26db9964._.js:405:203
-
-  402         }
-  403     }
-  404 }
-→ 405 const event = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update({
-        where: {
-          id: undefined,
-      ?   AND?: EventWhereInput | EventWhereInput[],
-      ?   OR?: EventWhereInput[],
-      ?   NOT?: EventWhereInput | EventWhereInput[],
-      ?   title?: StringFilter | String,
-      ?   category?: StringFilter | String,
-      ?   date?: DateTimeFilter | DateTime,
-      ?   location?: StringFilter | String,
-      ?   description?: StringNullableListFilter,
-      ?   eventImages?: StringNullableListFilter
-        },
-        data: {
-          title: "Untitled Event",
-          category: "Cultural",
-          date: new Date("2026-01-30T18:30:00.000Z"),
-          location: "Kandy",
-          description: [
-            "Annual Perahera Festival",
-            "Traditional dance performances",
-            "Elephant parade",
-            "Cultural procession"
-          ],
-          eventImages: []
-        }
-      })
-
-Argument `where` of type EventWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
-Error updating event: Error [PrismaClientValidationError]: 
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update()` invocation in
-/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__26db9964._.js:405:203
-
-  402         }
-  403     }
-  404 }
-→ 405 const event = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update({
-        where: {
-          id: undefined,
-      ?   AND?: EventWhereInput | EventWhereInput[],
-      ?   OR?: EventWhereInput[],
-      ?   NOT?: EventWhereInput | EventWhereInput[],
-      ?   title?: StringFilter | String,
-      ?   category?: StringFilter | String,
-      ?   date?: DateTimeFilter | DateTime,
-      ?   location?: StringFilter | String,
-      ?   description?: StringNullableListFilter,
-      ?   eventImages?: StringNullableListFilter
-        },
-        data: {
-          title: "Untitled Event",
-          category: "Cultural",
-          date: new Date("2026-01-30T18:30:00.000Z"),
-          location: "Kandy",
-          description: [
-            "Annual Perahera Festival",
-            "Traditional dance performances",
-            "Elephant parade",
-            "Cultural procession"
-          ],
-          eventImages: []
-        }
-      })
-
-Argument `where` of type EventWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
-    at <unknown> (app/api/admin/events/[id]/route.ts:104:42)
-    at async PUT (app/api/admin/events/[id]/route.ts:104:23)
-  102 |         }
-  103 |
-> 104 |         const event = await prisma.event.update({
-      |                                          ^
-  105 |             where: { id: eventId },
-  106 |             data: {
-  107 |                 title, {
-  clientVersion: '7.2.0'
-}
- PUT /api/admin/events/event-1 500 in 2.2s (compile: 1717ms, render: 527ms)
- GET /api/admin/profile 200 in 57ms (compile: 5ms, render: 52ms)
- GET /api/admin/profile 200 in 24ms (compile: 5ms, render: 20ms)
- PUT /api/admin/profile 200 in 122ms (compile: 3ms, render: 119ms)
- GET /api/admin/profile 200 in 32ms (compile: 5ms, render: 27ms)
- GET /api/admin/events 200 in 31ms (compile: 4ms, render: 28ms)
- GET /api/admin/events 200 in 22ms (compile: 4ms, render: 18ms)
- POST /api/admin/events 200 in 39ms (compile: 3ms, render: 36ms)
- GET /api/admin/events 200 in 36ms (compile: 5ms, render: 31ms)
-Error: Route "/api/admin/events/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
-    at PUT (app/api/admin/events/[id]/route.ts:56:32)
-  54 |     try {
-  55 |         await requireAdmin();
-> 56 |         const eventId = params.id;
-     |                                ^
-  57 |
-  58 |         const body = await req.json();
-  59 |         const { title, category, date, location, description, eventImages } = body;
-prisma:error 
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update()` invocation in
-/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__26db9964._.js:405:203
-
-  402         }
-  403     }
-  404 }
-→ 405 const event = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update({
-        where: {
-          id: undefined,
-      ?   AND?: EventWhereInput | EventWhereInput[],
-      ?   OR?: EventWhereInput[],
-      ?   NOT?: EventWhereInput | EventWhereInput[],
-      ?   title?: StringFilter | String,
-      ?   category?: StringFilter | String,
-      ?   date?: DateTimeFilter | DateTime,
-      ?   location?: StringFilter | String,
-      ?   description?: StringNullableListFilter,
-      ?   eventImages?: StringNullableListFilter
-        },
-        data: {
-          title: "Music Show",
-          category: "Festival",
-          date: new Date("2026-01-28T05:55:00.000Z"),
-          location: "Matara",
-          description: [
-            "Flashbag musical"
-          ],
-          eventImages: []
-        }
-      })
-
-Argument `where` of type EventWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
-Error updating event: Error [PrismaClientValidationError]: 
-Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update()` invocation in
-/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__26db9964._.js:405:203
-
-  402         }
-  403     }
-  404 }
-→ 405 const event = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].event.update({
-        where: {
-          id: undefined,
-      ?   AND?: EventWhereInput | EventWhereInput[],
-      ?   OR?: EventWhereInput[],
-      ?   NOT?: EventWhereInput | EventWhereInput[],
-      ?   title?: StringFilter | String,
-      ?   category?: StringFilter | String,
-      ?   date?: DateTimeFilter | DateTime,
-      ?   location?: StringFilter | String,
-      ?   description?: StringNullableListFilter,
-      ?   eventImages?: StringNullableListFilter
-        },
-        data: {
-          title: "Music Show",
-          category: "Festival",
-          date: new Date("2026-01-28T05:55:00.000Z"),
-          location: "Matara",
-          description: [
-            "Flashbag musical"
-          ],
-          eventImages: []
-        }
-      })
-
-Argument `where` of type EventWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
-    at <unknown> (app/api/admin/events/[id]/route.ts:104:42)
-    at async PUT (app/api/admin/events/[id]/route.ts:104:23)
-  102 |         }
-  103 |
-> 104 |         const event = await prisma.event.update({
-      |                                          ^
-  105 |             where: { id: eventId },
-  106 |             data: {
-  107 |                 title, {
-  clientVersion: '7.2.0'
-}
- PUT /api/admin/events/fd6b59f1-4740-4058-8d77-936a6f3379b8 500 in 869ms (compile: 54ms, render: 815ms)
- PUT /api/admin/events/fd6b59f1-4740-4058-8d77-936a6f3379b8 200 in 260ms (compile: 150ms, render: 110ms)
- GET /api/admin/events 200 in 47ms (compile: 10ms, render: 37ms)
- GET /api/admin/accommodations 200 in 429ms (compile: 269ms, render: 159ms)
- GET /api/admin/accommodations 200 in 102ms (compile: 4ms, render: 98ms)
- GET /api/admin/events 200 in 56ms (compile: 13ms, render: 43ms)
- GET /api/admin/events 200 in 19ms (compile: 4ms, render: 15ms)
- GET /dashboard 307 in 699ms (compile: 449ms, proxy.ts: 27ms, render: 223ms)
- GET /dashboard/admin 200 in 90ms (compile: 4ms, proxy.ts: 6ms, render: 80ms)
- GET /api/auth/session 200 in 168ms (compile: 140ms, render: 29ms)
- GET /api/auth/session 200 in 38ms (compile: 8ms, render: 30ms)
- GET /api/admin/analytics?period=daily 200 in 311ms (compile: 12ms, render: 299ms)
- GET /api/admin/analytics?period=daily 200 in 91ms (compile: 4ms, render: 87ms)
- GET /api/auth/session 200 in 152ms (compile: 129ms, render: 22ms)
- GET / 200 in 1010ms (compile: 974ms, render: 35ms)
- GET /api/admin/check-exists 200 in 640ms (compile: 567ms, render: 74ms)
- GET /api/admin/check-exists 200 in 24ms (compile: 4ms, render: 21ms)
- GET /api/events/upcoming 200 in 177ms (compile: 167ms, render: 10ms)
- GET /api/events/upcoming 200 in 16ms (compile: 4ms, render: 13ms)
-✓ Finished filesystem cache database compaction in 25.7s
- GET /recommendations 200 in 733ms (compile: 705ms, render: 28ms)
- GET /api/admin/check-exists 200 in 43ms (compile: 3ms, render: 39ms)
- GET /api/admin/check-exists 200 in 14ms (compile: 4ms, render: 10ms)
- GET / 200 in 919ms (compile: 555ms, render: 364ms)
- GET / 200 in 394ms (compile: 7ms, render: 387ms)
- GET / 200 in 317ms (compile: 17ms, render: 299ms)
- GET / 200 in 199ms (compile: 8ms, render: 191ms)
- GET / 200 in 181ms (compile: 15ms, render: 166ms)
- GET / 200 in 131ms (compile: 8ms, render: 123ms)
- GET / 200 in 177ms (compile: 5ms, render: 172ms)
- GET / 200 in 170ms (compile: 4ms, render: 166ms)
- GET / 200 in 166ms (compile: 7ms, render: 160ms)
- GET / 200 in 124ms (compile: 4ms, render: 120ms)
- GET / 200 in 78ms (compile: 4ms, render: 74ms)
- GET / 200 in 116ms (compile: 6ms, render: 110ms)
- GET / 200 in 88ms (compile: 9ms, render: 79ms)
- GET / 200 in 99ms (compile: 6ms, render: 93ms)
- GET / 200 in 135ms (compile: 10ms, render: 125ms)
- GET / 200 in 129ms (compile: 5ms, render: 124ms)
- GET / 200 in 210ms (compile: 5ms, render: 205ms)
- GET / 200 in 203ms (compile: 6ms, render: 197ms)
- GET / 200 in 166ms (compile: 9ms, render: 157ms)
- GET / 200 in 145ms (compile: 9ms, render: 137ms)
- GET / 200 in 89ms (compile: 4ms, render: 85ms)
- GET / 200 in 76ms (compile: 5ms, render: 71ms)
- GET / 200 in 117ms (compile: 3ms, render: 114ms)
- GET / 200 in 133ms (compile: 4ms, render: 129ms)
- GET / 200 in 136ms (compile: 4ms, render: 132ms)
- GET / 200 in 161ms (compile: 10ms, render: 151ms)
- GET / 200 in 116ms (compile: 4ms, render: 112ms)
- GET / 200 in 168ms (compile: 5ms, render: 164ms)
- GET / 200 in 227ms (compile: 4ms, render: 223ms)
- GET / 200 in 433ms (compile: 6ms, render: 428ms)
- GET / 200 in 560ms (compile: 4ms, render: 555ms)
- GET / 200 in 807ms (compile: 5ms, render: 801ms)
- GET / 200 in 853ms (compile: 34ms, render: 819ms)
- GET / 200 in 748ms (compile: 49ms, render: 699ms)
- GET / 200 in 654ms (compile: 39ms, render: 614ms)
- GET / 200 in 412ms (compile: 15ms, render: 397ms)
- GET / 200 in 300ms (compile: 24ms, render: 277ms)
- GET / 200 in 227ms (compile: 10ms, render: 218ms)
- GET / 200 in 210ms (compile: 7ms, render: 203ms)
- GET / 200 in 207ms (compile: 8ms, render: 199ms)
- GET / 200 in 223ms (compile: 8ms, render: 215ms)
- GET / 200 in 210ms (compile: 7ms, render: 203ms)
- GET / 200 in 163ms (compile: 3ms, render: 159ms)
- GET / 200 in 122ms (compile: 7ms, render: 116ms)
- GET / 200 in 115ms (compile: 8ms, render: 107ms)
- GET / 200 in 152ms (compile: 4ms, render: 148ms)
- GET / 200 in 200ms (compile: 6ms, render: 193ms)
- GET / 200 in 190ms (compile: 5ms, render: 185ms)
- GET / 200 in 144ms (compile: 16ms, render: 128ms)
- GET / 200 in 128ms (compile: 5ms, render: 123ms)
- GET / 200 in 130ms (compile: 5ms, render: 125ms)
- GET / 200 in 141ms (compile: 9ms, render: 132ms)
- GET / 200 in 140ms (compile: 7ms, render: 133ms)
- GET / 200 in 133ms (compile: 4ms, render: 130ms)
- GET / 200 in 129ms (compile: 4ms, render: 125ms)
- GET / 200 in 132ms (compile: 4ms, render: 129ms)
- GET / 200 in 138ms (compile: 6ms, render: 132ms)
- GET / 200 in 186ms (compile: 5ms, render: 181ms)
- GET / 200 in 214ms (compile: 4ms, render: 211ms)
- GET / 200 in 253ms (compile: 5ms, render: 248ms)
- GET / 200 in 261ms (compile: 9ms, render: 252ms)
- GET / 200 in 219ms (compile: 6ms, render: 213ms)
- GET / 200 in 216ms (compile: 4ms, render: 212ms)
- GET / 200 in 195ms (compile: 4ms, render: 191ms)
- GET / 200 in 168ms (compile: 11ms, render: 157ms)
- GET / 200 in 200ms (compile: 9ms, render: 191ms)
- GET / 200 in 261ms (compile: 16ms, render: 245ms)
- GET / 200 in 238ms (compile: 8ms, render: 230ms)
- GET / 200 in 199ms (compile: 6ms, render: 192ms)
- GET / 200 in 188ms (compile: 10ms, render: 178ms)
- GET / 200 in 150ms (compile: 4ms, render: 146ms)
- GET / 200 in 122ms (compile: 5ms, render: 118ms)
- GET / 200 in 134ms (compile: 7ms, render: 127ms)
- GET / 200 in 126ms (compile: 9ms, render: 117ms)
- GET / 200 in 133ms (compile: 7ms, render: 126ms)
- GET / 200 in 112ms (compile: 6ms, render: 106ms)
- GET / 200 in 102ms (compile: 4ms, render: 98ms)
- GET / 200 in 81ms (compile: 3ms, render: 78ms)
- GET / 200 in 103ms (compile: 3ms, render: 100ms)
- GET / 200 in 117ms (compile: 5ms, render: 112ms)
- GET / 200 in 115ms (compile: 5ms, render: 111ms)
- GET / 200 in 115ms (compile: 3ms, render: 111ms)
- GET / 200 in 114ms (compile: 3ms, render: 111ms)
- GET / 200 in 118ms (compile: 4ms, render: 114ms)
- GET / 200 in 132ms (compile: 4ms, render: 128ms)
- GET / 200 in 137ms (compile: 3ms, render: 133ms)
- GET / 200 in 138ms (compile: 5ms, render: 134ms)
- GET / 200 in 129ms (compile: 9ms, render: 119ms)
- GET / 200 in 127ms (compile: 3ms, render: 123ms)
- GET / 200 in 123ms (compile: 4ms, render: 119ms)
- GET / 200 in 121ms (compile: 6ms, render: 115ms)
- GET / 200 in 109ms (compile: 5ms, render: 105ms)
- GET / 200 in 101ms (compile: 3ms, render: 99ms)
- GET / 200 in 80ms (compile: 3ms, render: 76ms)
- GET / 200 in 102ms (compile: 4ms, render: 98ms)
- GET / 200 in 101ms (compile: 4ms, render: 97ms)
- GET / 200 in 99ms (compile: 6ms, render: 93ms)
- GET / 200 in 98ms (compile: 3ms, render: 96ms)
- GET / 200 in 98ms (compile: 3ms, render: 95ms)
- GET / 200 in 122ms (compile: 3ms, render: 119ms)
- GET / 200 in 124ms (compile: 4ms, render: 120ms)
- GET / 200 in 121ms (compile: 3ms, render: 118ms)
- GET / 200 in 122ms (compile: 4ms, render: 118ms)
- GET / 200 in 95ms (compile: 5ms, render: 89ms)
- GET / 200 in 89ms (compile: 3ms, render: 87ms)
- GET / 200 in 90ms (compile: 3ms, render: 87ms)
- GET / 200 in 90ms (compile: 3ms, render: 88ms)
- GET / 200 in 91ms (compile: 3ms, render: 88ms)
- GET / 200 in 93ms (compile: 4ms, render: 89ms)
- GET / 200 in 93ms (compile: 3ms, render: 90ms)
- GET / 200 in 75ms (compile: 4ms, render: 71ms)
- GET / 200 in 92ms (compile: 3ms, render: 89ms)
- GET / 200 in 91ms (compile: 4ms, render: 87ms)
- GET / 200 in 89ms (compile: 4ms, render: 85ms)
- GET / 200 in 89ms (compile: 2ms, render: 86ms)
- GET / 200 in 91ms (compile: 3ms, render: 88ms)
- GET / 200 in 91ms (compile: 3ms, render: 88ms)
- GET / 200 in 89ms (compile: 3ms, render: 86ms)
- GET / 200 in 88ms (compile: 6ms, render: 81ms)
- GET / 200 in 84ms (compile: 3ms, render: 81ms)
- GET / 200 in 115ms (compile: 3ms, render: 111ms)
- GET / 200 in 125ms (compile: 3ms, render: 122ms)
- GET / 200 in 127ms (compile: 3ms, render: 125ms)
- GET / 200 in 130ms (compile: 30ms, render: 100ms)
- GET / 200 in 97ms (compile: 5ms, render: 92ms)
- GET / 200 in 72ms (compile: 4ms, render: 68ms)
- GET / 200 in 51ms (compile: 3ms, render: 48ms)
- GET / 200 in 29ms (compile: 3ms, render: 25ms)
-✓ Compiled in 260ms
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-⨯ ReferenceError: session is not defined
-    at Home (app/page.tsx:92:12)
-  90 |             Your one-stop destination for all tourism needs
-  91 |           </p>
-> 92 |           {session ? (
-     |            ^
-  93 |             <div className="flex flex-col items-center gap-4">
-  94 |               <p className="text-lg md:text-xl backdrop-blur-sm bg-white/10 px-6 py-2 rounded-full border border-white/20">
-  95 |                 Welcome back, <span className="font-semibold">{session.user?.name}</span>! {
-  digest: '1244855617'
-}
- GET / 500 in 592ms (compile: 147ms, render: 445ms)
-⚠ Fast Refresh had to perform a full reload due to a runtime error.
-✓ Compiled in 204ms
- GET / 200 in 295ms (compile: 85ms, render: 209ms)
- GET /api/auth/session 200 in 319ms (compile: 241ms, render: 78ms)
- GET /api/admin/check-exists 200 in 562ms (compile: 150ms, render: 413ms)
-✓ Compiled in 209ms
-✓ Compiled in 123ms
- GET / 200 in 98ms (compile: 7ms, render: 92ms)
- GET /api/auth/session 200 in 213ms (compile: 174ms, render: 39ms)
- GET /api/admin/check-exists 200 in 406ms (compile: 17ms, render: 389ms)
- GET / 200 in 145ms (compile: 10ms, render: 136ms)
- GET /api/auth/session 200 in 187ms (compile: 160ms, render: 28ms)
- GET /api/admin/check-exists 200 in 451ms (compile: 26ms, render: 425ms)
- GET /events 200 in 786ms (compile: 750ms, render: 37ms)
- GET /api/events/upcoming 200 in 161ms (compile: 91ms, render: 71ms)
- GET /api/events/upcoming 200 in 19ms (compile: 3ms, render: 16ms)
- GET / 200 in 22ms (compile: 3ms, render: 18ms)
- GET /api/admin/check-exists 200 in 32ms (compile: 3ms, render: 29ms)
- GET /api/admin/check-exists 200 in 15ms (compile: 3ms, render: 12ms)
- GET /events 200 in 21ms (compile: 3ms, render: 18ms)
- GET /api/events/upcoming 200 in 16ms (compile: 3ms, render: 13ms)
- GET /api/events/upcoming 200 in 13ms (compile: 3ms, render: 10ms)
- GET / 200 in 19ms (compile: 3ms, render: 16ms)
- GET /api/admin/check-exists 200 in 34ms (compile: 3ms, render: 31ms)
- GET /api/admin/check-exists 200 in 11ms (compile: 3ms, render: 8ms)
- GET /dashboard/admin 200 in 105ms (compile: 17ms, proxy.ts: 66ms, render: 22ms)
- GET /api/admin/analytics?period=daily 200 in 204ms (compile: 133ms, render: 71ms)
- GET /api/admin/analytics?period=daily 200 in 56ms (compile: 3ms, render: 53ms)
- GET /api/admin/events 200 in 100ms (compile: 83ms, render: 17ms)
- GET /api/admin/events 200 in 38ms (compile: 4ms, render: 34ms)
- POST /api/admin/events 200 in 44ms (compile: 5ms, render: 39ms)
- GET /api/admin/events 200 in 68ms (compile: 18ms, render: 50ms)
- GET / 200 in 23ms (compile: 3ms, render: 20ms)
- GET /api/admin/check-exists 200 in 23ms (compile: 6ms, render: 17ms)
- GET /api/admin/check-exists 200 in 17ms (compile: 4ms, render: 13ms)
- GET /events 200 in 37ms (compile: 4ms, render: 33ms)
- GET /api/events/upcoming 200 in 25ms (compile: 6ms, render: 19ms)
- GET /api/events/upcoming 200 in 13ms (compile: 3ms, render: 10ms)
- GET / 200 in 19ms (compile: 3ms, render: 16ms)
- GET /api/admin/check-exists 200 in 39ms (compile: 9ms, render: 30ms)
- GET /api/admin/check-exists 200 in 10ms (compile: 2ms, render: 7ms)
- GET /events 200 in 34ms (compile: 4ms, render: 30ms)
- GET /api/events/upcoming 200 in 76ms (compile: 5ms, render: 71ms)
- GET /api/events/upcoming 200 in 14ms (compile: 3ms, render: 11ms)
- GET / 200 in 19ms (compile: 3ms, render: 16ms)
- GET /api/admin/check-exists 200 in 122ms (compile: 14ms, render: 108ms)
- GET /api/admin/check-exists 200 in 26ms (compile: 6ms, render: 20ms)
- GET /events 200 in 49ms (compile: 8ms, render: 42ms)
- GET /api/events/upcoming 200 in 158ms (compile: 16ms, render: 142ms)
- GET /api/events/upcoming 200 in 30ms (compile: 8ms, render: 23ms)
- GET / 200 in 19ms (compile: 3ms, render: 16ms)
- GET /api/admin/check-exists 200 in 140ms (compile: 12ms, render: 128ms)
- GET /api/admin/check-exists 200 in 64ms (compile: 17ms, render: 47ms)
- GET /dashboard/admin 200 in 54ms (compile: 8ms, proxy.ts: 8ms, render: 38ms)
- GET /api/admin/analytics?period=daily 200 in 169ms (compile: 16ms, render: 153ms)
- GET /api/admin/analytics?period=daily 200 in 60ms (compile: 5ms, render: 56ms)
- GET /api/admin/check-exists 200 in 18ms (compile: 6ms, render: 12ms)
- GET /api/admin/check-exists 200 in 16ms (compile: 3ms, render: 13ms)
- GET /dashboard/tourist 200 in 921ms (compile: 844ms, proxy.ts: 7ms, render: 70ms)
-Profile API: Fetching for userId: a37c5bcd-bf72-4642-8838-9b1fc72c90eb
+✓ Compiled in 3s
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 1082ms (compile: 801ms, render: 281ms)
+ GET /api/auth/session 200 in 120ms (compile: 94ms, render: 26ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 396ms (compile: 64ms, render: 333ms)
+✓ Compiled in 133ms
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 440ms (compile: 210ms, render: 230ms)
+ GET /api/auth/session 200 in 226ms (compile: 175ms, render: 51ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 425ms (compile: 77ms, render: 347ms)
+✓ Compiled in 112ms
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 447ms (compile: 175ms, render: 272ms)
+ GET /api/auth/session 200 in 178ms (compile: 142ms, render: 36ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 267ms (compile: 69ms, render: 199ms)
+✓ Compiled in 197ms
+✓ Compiled in 232ms
+✓ Compiled in 141ms
+ GET /accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 381ms (compile: 198ms, render: 183ms)
+ GET /api/auth/session 200 in 112ms (compile: 79ms, render: 33ms)
+ GET /api/accommodations/ec4f3f66-1939-4733-8306-eaaf8fa5ab1f 200 in 330ms (compile: 77ms, render: 253ms)
+✓ Compiled in 297ms
+✓ Compiled in 600ms
+✓ Compiled in 225ms
+✓ Compiled in 145ms
+✓ Compiled in 108ms
+✓ Compiled in 177ms
+ GET /accommodations 200 in 115ms (compile: 39ms, render: 77ms)
+ GET /api/accommodations? 200 in 373ms (compile: 17ms, render: 356ms)
+ GET /api/accommodations? 200 in 172ms (compile: 7ms, render: 165ms)
+ GET / 200 in 40ms (compile: 12ms, render: 29ms)
+ GET /api/admin/check-exists 200 in 22ms (compile: 6ms, render: 16ms)
+ GET /api/admin/check-exists 200 in 12ms (compile: 3ms, render: 9ms)
+ GET /api/auth/csrf 200 in 54ms (compile: 44ms, render: 10ms)
+ POST /api/auth/signout 200 in 16ms (compile: 4ms, render: 13ms)
+ GET / 200 in 181ms (compile: 17ms, render: 164ms)
+ GET /api/admin/check-exists 200 in 46ms (compile: 20ms, render: 26ms)
+ GET /api/auth/session 200 in 164ms (compile: 143ms, render: 21ms)
+ GET /register 200 in 1985ms (compile: 1896ms, render: 88ms)
+ GET /api/admin/check-exists 200 in 23ms (compile: 7ms, render: 17ms)
+ GET /api/admin/check-exists 200 in 19ms (compile: 7ms, render: 13ms)
+ GET /login 200 in 47ms (compile: 8ms, render: 39ms)
+ GET /api/auth/providers 200 in 91ms (compile: 71ms, render: 20ms)
+ GET /api/auth/csrf 200 in 13ms (compile: 3ms, render: 10ms)
+ POST /api/auth/callback/credentials 200 in 185ms (compile: 3ms, render: 182ms)
+ GET /api/auth/session 200 in 28ms (compile: 4ms, render: 23ms)
+ GET /dashboard 200 in 116ms (compile: 19ms, proxy.ts: 33ms, render: 64ms)
+ GET /dashboard 200 in 89ms (compile: 4ms, proxy.ts: 8ms, render: 77ms)
+ GET /dashboard/tourist 200 in 241ms (compile: 152ms, proxy.ts: 14ms, render: 75ms)
+ GET /dashboard/tourist 200 in 66ms (compile: 8ms, proxy.ts: 9ms, render: 49ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
 Profile API: User found: yes Gihan
- GET /api/tourist/profile 200 in 753ms (compile: 684ms, render: 70ms)
-Profile API: Fetching for userId: a37c5bcd-bf72-4642-8838-9b1fc72c90eb
+ GET /api/tourist/profile 200 in 188ms (compile: 97ms, render: 91ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 46ms (compile: 9ms, render: 37ms)
+ GET /api/tourist/bookings 200 in 392ms (compile: 151ms, render: 240ms)
+ GET /api/tourist/bookings 200 in 44ms (compile: 4ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 48ms (compile: 7ms, render: 41ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 4ms, render: 33ms)
+✓ Finished filesystem cache database compaction in 14.5s
+ POST /api/ratings/submit 200 in 549ms (compile: 484ms, render: 65ms)
+ GET / 200 in 26ms (compile: 3ms, render: 23ms)
+ GET /api/admin/check-exists 200 in 78ms (compile: 5ms, render: 74ms)
+ GET /api/admin/check-exists 200 in 32ms (compile: 8ms, render: 24ms)
+ GET /guides 200 in 606ms (compile: 570ms, render: 36ms)
+ GET /api/guides? 200 in 209ms (compile: 182ms, render: 27ms)
+ GET /api/guides? 200 in 18ms (compile: 4ms, render: 14ms)
+ GET /guides/1c860bb5-59a5-410b-a865-6d0e77c1f74f 200 in 626ms (compile: 597ms, render: 29ms)
+ GET /api/guides/1c860bb5-59a5-410b-a865-6d0e77c1f74f 200 in 1068ms (compile: 1055ms, render: 12ms)
+ GET /api/guides/1c860bb5-59a5-410b-a865-6d0e77c1f74f 200 in 77ms (compile: 60ms, render: 17ms)
+✓ Compiled in 136ms
+✓ Compiled in 115ms
+✓ Compiled in 113ms
+✓ Compiled in 126ms
+✓ Compiled in 93ms
+🔕 User 8fbf87da-4f50-4a8d-aabf-1853a19dbc48 (nggp1994@gmail.com) has disabled email notifications
+🔕 User 1c860bb5-59a5-410b-a865-6d0e77c1f74f (saman@gmail.com) has disabled email notifications
+ POST /api/bookings 200 in 223ms (compile: 129ms, render: 94ms)
+ POST /api/payments/create-payment-intent 200 in 1070ms (compile: 202ms, render: 868ms)
+ POST /api/payments/create-payment-intent 200 in 508ms (compile: 3ms, render: 505ms)
+ POST /api/payments/update-status 200 in 91ms (compile: 77ms, render: 14ms)
+ GET /dashboard/tourist 200 in 70ms (compile: 5ms, proxy.ts: 7ms, render: 58ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 77ms (compile: 9ms, render: 68ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 82ms (compile: 19ms, render: 63ms)
+ GET /api/tourist/bookings 200 in 197ms (compile: 6ms, render: 190ms)
+ GET /api/tourist/bookings 200 in 65ms (compile: 6ms, render: 58ms)
+ GET /api/notifications?limit=10 200 in 106ms (compile: 7ms, render: 99ms)
+ GET /api/notifications?limit=10 200 in 46ms (compile: 6ms, render: 41ms)
+ POST /api/ratings/submit 200 in 94ms (compile: 3ms, render: 90ms)
+ POST /api/ratings/submit 200 in 148ms (compile: 8ms, render: 140ms)
+ GET /api/notifications?limit=10 200 in 61ms (compile: 2ms, render: 59ms)
+ GET /dashboard/tourist 200 in 186ms (compile: 11ms, proxy.ts: 30ms, render: 144ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+ GET /api/auth/session 200 in 129ms (compile: 86ms, render: 43ms)
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 179ms (compile: 8ms, render: 170ms)
+ GET /api/tourist/bookings 200 in 317ms (compile: 9ms, render: 308ms)
+ GET /api/notifications?limit=10 200 in 105ms (compile: 9ms, render: 96ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 4ms, render: 35ms)
+ GET / 200 in 29ms (compile: 4ms, render: 25ms)
+ GET /api/admin/check-exists 200 in 52ms (compile: 7ms, render: 45ms)
+ GET /api/admin/check-exists 200 in 14ms (compile: 3ms, render: 11ms)
+ GET /api/auth/csrf 200 in 70ms (compile: 61ms, render: 9ms)
+ POST /api/auth/signout 200 in 12ms (compile: 2ms, render: 9ms)
+ GET / 200 in 101ms (compile: 4ms, render: 97ms)
+ GET /api/admin/check-exists 200 in 69ms (compile: 19ms, render: 50ms)
+ GET /api/auth/session 200 in 204ms (compile: 184ms, render: 20ms)
+ GET /login 200 in 34ms (compile: 5ms, render: 29ms)
+ GET /api/auth/providers 200 in 122ms (compile: 99ms, render: 23ms)
+ GET /api/auth/csrf 200 in 44ms (compile: 12ms, render: 32ms)
+ POST /api/auth/callback/credentials 200 in 271ms (compile: 4ms, render: 267ms)
+ GET /api/auth/session 200 in 18ms (compile: 3ms, render: 14ms)
+ GET /dashboard 200 in 102ms (compile: 10ms, proxy.ts: 15ms, render: 78ms)
+ GET /dashboard 200 in 77ms (compile: 6ms, proxy.ts: 10ms, render: 61ms)
+ GET /dashboard/guide 200 in 152ms (compile: 18ms, proxy.ts: 10ms, render: 124ms)
+ GET /dashboard/guide 200 in 90ms (compile: 7ms, proxy.ts: 21ms, render: 63ms)
+ GET /api/guide/profile 200 in 61ms (compile: 6ms, render: 55ms)
+ GET /api/guide/profile 200 in 57ms (compile: 4ms, render: 53ms)
+ GET /api/guide/bookings 200 in 213ms (compile: 3ms, render: 210ms)
+ GET /api/guide/bookings 200 in 47ms (compile: 4ms, render: 43ms)
+ GET /api/notifications?limit=10 200 in 62ms (compile: 16ms, render: 46ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 4ms, render: 35ms)
+Looking for payment with booking_id: 4d7e2525-103c-4bd5-b2f5-ced3ba78ac72
+Found payment: ID: 605d0462-53fd-4f4a-8314-a1ff37fe8bc4, Status: pending
+ GET /api/payments/by-booking/4d7e2525-103c-4bd5-b2f5-ced3ba78ac72 200 in 981ms (compile: 951ms, render: 31ms)
+ POST /api/payments/capture 200 in 2.1s (compile: 96ms, render: 1979ms)
+ GET /api/guide/profile 200 in 70ms (compile: 5ms, render: 65ms)
+ GET /api/guide/bookings 200 in 116ms (compile: 9ms, render: 108ms)
+ GET / 200 in 33ms (compile: 3ms, render: 29ms)
+ GET /api/admin/check-exists 200 in 118ms (compile: 7ms, render: 111ms)
+ GET /api/admin/check-exists 200 in 25ms (compile: 10ms, render: 15ms)
+ GET /dashboard/guide 200 in 29ms (compile: 3ms, proxy.ts: 5ms, render: 21ms)
+ GET /api/guide/profile 200 in 42ms (compile: 4ms, render: 38ms)
+ GET /api/guide/profile 200 in 21ms (compile: 3ms, render: 18ms)
+ GET /api/guide/bookings 200 in 104ms (compile: 8ms, render: 96ms)
+ GET /api/guide/bookings 200 in 36ms (compile: 3ms, render: 33ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 34ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 5ms, render: 35ms)
+ GET /dashboard/guide 200 in 106ms (compile: 12ms, proxy.ts: 8ms, render: 86ms)
+ GET /api/auth/session 200 in 123ms (compile: 88ms, render: 34ms)
+ GET /api/guide/profile 200 in 292ms (compile: 11ms, render: 280ms)
+ GET /api/guide/bookings 200 in 317ms (compile: 8ms, render: 309ms)
+ GET /api/notifications?limit=10 200 in 73ms (compile: 15ms, render: 58ms)
+ GET /api/notifications?limit=10 200 in 59ms (compile: 11ms, render: 49ms)
+ GET / 200 in 20ms (compile: 3ms, render: 18ms)
+ GET /api/admin/check-exists 200 in 25ms (compile: 5ms, render: 20ms)
+ GET /api/admin/check-exists 200 in 14ms (compile: 4ms, render: 10ms)
+ GET /api/auth/csrf 200 in 69ms (compile: 58ms, render: 10ms)
+ POST /api/auth/signout 200 in 12ms (compile: 2ms, render: 9ms)
+ GET / 200 in 117ms (compile: 4ms, render: 112ms)
+ GET /api/admin/check-exists 200 in 64ms (compile: 21ms, render: 43ms)
+ GET /api/auth/session 200 in 151ms (compile: 127ms, render: 23ms)
+ GET /login 200 in 212ms (compile: 16ms, render: 196ms)
+ GET /login 200 in 88ms (compile: 28ms, render: 60ms)
+ GET /api/auth/providers 200 in 83ms (compile: 65ms, render: 18ms)
+ GET /api/auth/csrf 200 in 12ms (compile: 5ms, render: 7ms)
+ POST /api/auth/callback/credentials 200 in 265ms (compile: 2ms, render: 263ms)
+ GET /api/auth/session 200 in 26ms (compile: 6ms, render: 21ms)
+ GET /dashboard 200 in 90ms (compile: 14ms, proxy.ts: 10ms, render: 66ms)
+ GET /dashboard 200 in 112ms (compile: 8ms, proxy.ts: 11ms, render: 93ms)
+ GET /dashboard/provider 200 in 116ms (compile: 19ms, proxy.ts: 9ms, render: 88ms)
+ GET /dashboard/provider 200 in 59ms (compile: 9ms, proxy.ts: 10ms, render: 40ms)
+ GET /api/accommodation-provider/profile 200 in 84ms (compile: 9ms, render: 75ms)
+ GET /api/accommodation-provider/profile 200 in 41ms (compile: 7ms, render: 33ms)
+ GET /api/accommodation-provider/accommodations 200 in 168ms (compile: 25ms, render: 143ms)
+ GET /api/accommodation-provider/accommodations 200 in 34ms (compile: 3ms, render: 31ms)
+ GET /api/accommodation-provider/bookings 200 in 218ms (compile: 15ms, render: 203ms)
+ GET /api/accommodation-provider/bookings 200 in 71ms (compile: 7ms, render: 64ms)
+ GET /api/notifications?limit=10 200 in 98ms (compile: 5ms, render: 93ms)
+ GET /api/notifications?limit=10 200 in 57ms (compile: 4ms, render: 53ms)
+ PUT /api/accommodation-provider/accommodations/9782ef3c-53da-4af1-b698-e1aaa012bf4d 200 in 146ms (compile: 56ms, render: 89ms)
+ GET /api/accommodation-provider/profile 200 in 107ms (compile: 6ms, render: 101ms)
+ GET /api/accommodation-provider/accommodations 200 in 172ms (compile: 42ms, render: 131ms)
+ GET /api/accommodation-provider/bookings 200 in 204ms (compile: 26ms, render: 178ms)
+ GET /api/notifications?limit=10 200 in 125ms (compile: 4ms, render: 121ms)
+ PUT /api/accommodation-provider/accommodations/d4c15d12-d743-4281-bcb8-42c383e0d2e1 200 in 91ms (compile: 62ms, render: 29ms)
+ GET /api/accommodation-provider/profile 200 in 57ms (compile: 7ms, render: 50ms)
+ GET /api/accommodation-provider/accommodations 200 in 109ms (compile: 15ms, render: 94ms)
+ GET /api/accommodation-provider/bookings 200 in 138ms (compile: 11ms, render: 126ms)
+ GET / 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /api/admin/check-exists 200 in 68ms (compile: 3ms, render: 65ms)
+ GET /api/admin/check-exists 200 in 30ms (compile: 13ms, render: 17ms)
+ GET /api/auth/csrf 200 in 67ms (compile: 55ms, render: 12ms)
+ POST /api/auth/signout 200 in 11ms (compile: 3ms, render: 8ms)
+ GET / 200 in 159ms (compile: 15ms, render: 144ms)
+ GET /api/auth/session 200 in 34ms (compile: 9ms, render: 26ms)
+ GET /api/admin/check-exists 200 in 115ms (compile: 8ms, render: 107ms)
+ GET /login 200 in 30ms (compile: 3ms, render: 27ms)
+ GET /api/auth/providers 200 in 81ms (compile: 70ms, render: 11ms)
+ GET /api/auth/csrf 200 in 13ms (compile: 3ms, render: 9ms)
+ POST /api/auth/callback/credentials 200 in 194ms (compile: 2ms, render: 191ms)
+ GET /api/auth/session 200 in 17ms (compile: 3ms, render: 13ms)
+ GET /dashboard 200 in 70ms (compile: 8ms, proxy.ts: 11ms, render: 50ms)
+ GET /dashboard 200 in 97ms (compile: 6ms, proxy.ts: 12ms, render: 79ms)
+ GET /dashboard/tourist 200 in 128ms (compile: 7ms, proxy.ts: 17ms, render: 103ms)
+ GET /dashboard/tourist 200 in 67ms (compile: 11ms, proxy.ts: 8ms, render: 48ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 88ms (compile: 7ms, render: 81ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 49ms (compile: 7ms, render: 42ms)
+ GET /api/tourist/bookings 200 in 205ms (compile: 13ms, render: 192ms)
+ GET /api/tourist/bookings 200 in 54ms (compile: 4ms, render: 50ms)
+ GET /api/notifications?limit=10 200 in 63ms (compile: 4ms, render: 58ms)
+ GET /api/notifications?limit=10 200 in 76ms (compile: 5ms, render: 71ms)
+ POST /api/ratings/submit 200 in 89ms (compile: 3ms, render: 86ms)
+ GET /dashboard/tourist 200 in 112ms (compile: 6ms, proxy.ts: 14ms, render: 91ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+ GET /api/auth/session 200 in 147ms (compile: 105ms, render: 42ms)
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 401ms (compile: 14ms, render: 387ms)
+ GET /api/tourist/bookings 200 in 440ms (compile: 12ms, render: 427ms)
+ GET /api/notifications?limit=10 200 in 157ms (compile: 8ms, render: 149ms)
+ GET /api/notifications?limit=10 200 in 105ms (compile: 6ms, render: 99ms)
+ GET / 200 in 25ms (compile: 3ms, render: 22ms)
+ GET /api/admin/check-exists 200 in 22ms (compile: 5ms, render: 18ms)
+ GET /api/admin/check-exists 200 in 16ms (compile: 5ms, render: 12ms)
+ GET /api/auth/csrf 200 in 61ms (compile: 53ms, render: 8ms)
+ POST /api/auth/signout 200 in 13ms (compile: 2ms, render: 11ms)
+ GET / 200 in 77ms (compile: 3ms, render: 74ms)
+ GET /api/admin/check-exists 200 in 143ms (compile: 22ms, render: 120ms)
+ GET /api/auth/session 200 in 100ms (compile: 79ms, render: 21ms)
+ GET /login 200 in 211ms (compile: 22ms, render: 190ms)
+ GET /api/auth/providers 200 in 154ms (compile: 144ms, render: 10ms)
+ GET /api/auth/csrf 200 in 22ms (compile: 8ms, render: 14ms)
+ POST /api/auth/callback/credentials 200 in 194ms (compile: 3ms, render: 191ms)
+ GET /api/auth/session 200 in 15ms (compile: 3ms, render: 12ms)
+ GET /dashboard 200 in 95ms (compile: 10ms, proxy.ts: 23ms, render: 63ms)
+ GET /dashboard 200 in 119ms (compile: 6ms, proxy.ts: 14ms, render: 99ms)
+ GET /dashboard/guide 200 in 100ms (compile: 5ms, proxy.ts: 8ms, render: 86ms)
+ GET /dashboard/guide 200 in 60ms (compile: 10ms, proxy.ts: 7ms, render: 43ms)
+ GET /api/guide/profile 200 in 153ms (compile: 18ms, render: 136ms)
+ GET /api/guide/profile 200 in 42ms (compile: 3ms, render: 38ms)
+ GET /api/guide/bookings 200 in 257ms (compile: 49ms, render: 208ms)
+ GET /api/guide/bookings 200 in 84ms (compile: 6ms, render: 78ms)
+ GET /api/notifications?limit=10 200 in 66ms (compile: 10ms, render: 56ms)
+ GET /api/notifications?limit=10 200 in 56ms (compile: 5ms, render: 51ms)
+ GET /dashboard/guide 200 in 112ms (compile: 13ms, proxy.ts: 14ms, render: 85ms)
+ GET /api/auth/session 200 in 207ms (compile: 188ms, render: 18ms)
+ GET /api/guide/profile 200 in 413ms (compile: 11ms, render: 403ms)
+ GET /api/guide/bookings 200 in 390ms (compile: 70ms, render: 321ms)
+ GET /api/notifications?limit=10 200 in 48ms (compile: 5ms, render: 43ms)
+ GET /api/notifications?limit=10 200 in 44ms (compile: 5ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 2ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 2ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 36ms (compile: 2ms, render: 34ms)
+ GET /dashboard/guide 200 in 154ms (compile: 5ms, proxy.ts: 11ms, render: 138ms)
+ GET /api/auth/session 200 in 136ms (compile: 108ms, render: 28ms)
+ GET /api/guide/profile 200 in 213ms (compile: 4ms, render: 209ms)
+ GET /api/guide/bookings 200 in 227ms (compile: 7ms, render: 221ms)
+ GET /api/notifications?limit=10 200 in 74ms (compile: 6ms, render: 68ms)
+ GET /api/notifications?limit=10 200 in 53ms (compile: 13ms, render: 40ms)
+ GET / 200 in 20ms (compile: 3ms, render: 17ms)
+ GET /api/admin/check-exists 200 in 54ms (compile: 9ms, render: 45ms)
+ GET /api/admin/check-exists 200 in 17ms (compile: 3ms, render: 13ms)
+ GET /api/auth/csrf 200 in 67ms (compile: 57ms, render: 10ms)
+ POST /api/auth/signout 200 in 13ms (compile: 3ms, render: 11ms)
+ GET / 200 in 73ms (compile: 4ms, render: 68ms)
+ GET /api/admin/check-exists 200 in 188ms (compile: 4ms, render: 184ms)
+ GET /api/auth/session 200 in 198ms (compile: 152ms, render: 46ms)
+ GET /login 200 in 279ms (compile: 5ms, render: 274ms)
+ GET /api/auth/providers 200 in 78ms (compile: 63ms, render: 15ms)
+ GET /api/auth/csrf 200 in 13ms (compile: 3ms, render: 10ms)
+ POST /api/auth/callback/credentials 200 in 156ms (compile: 4ms, render: 151ms)
+ GET /api/auth/session 200 in 12ms (compile: 2ms, render: 10ms)
+ GET /dashboard 200 in 70ms (compile: 8ms, proxy.ts: 9ms, render: 53ms)
+ GET /dashboard 200 in 77ms (compile: 6ms, proxy.ts: 11ms, render: 60ms)
+ GET /dashboard/tourist 200 in 80ms (compile: 6ms, proxy.ts: 7ms, render: 66ms)
+ GET /dashboard/tourist 200 in 58ms (compile: 8ms, proxy.ts: 8ms, render: 42ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 38ms (compile: 4ms, render: 33ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 39ms (compile: 7ms, render: 33ms)
+ GET /api/tourist/bookings 200 in 122ms (compile: 10ms, render: 112ms)
+ GET /api/tourist/bookings 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 60ms (compile: 3ms, render: 57ms)
+ GET /api/notifications?limit=10 200 in 43ms (compile: 3ms, render: 40ms)
+ POST /api/ratings/submit 200 in 320ms (compile: 124ms, render: 196ms)
+ POST /api/ratings/submit 200 in 84ms (compile: 3ms, render: 80ms)
+ GET / 200 in 25ms (compile: 4ms, render: 21ms)
+ GET /api/admin/check-exists 200 in 30ms (compile: 11ms, render: 19ms)
+ GET /api/admin/check-exists 200 in 23ms (compile: 9ms, render: 14ms)
+ GET /api/auth/csrf 200 in 61ms (compile: 55ms, render: 6ms)
+ POST /api/auth/signout 200 in 11ms (compile: 4ms, render: 7ms)
+ GET / 200 in 89ms (compile: 6ms, render: 83ms)
+ GET /api/admin/check-exists 200 in 15ms (compile: 4ms, render: 11ms)
+ GET /api/auth/session 200 in 88ms (compile: 79ms, render: 9ms)
+ GET /login 200 in 48ms (compile: 5ms, render: 43ms)
+ GET /api/auth/providers 200 in 73ms (compile: 64ms, render: 9ms)
+ GET /api/auth/csrf 200 in 12ms (compile: 3ms, render: 9ms)
+ POST /api/auth/callback/credentials 200 in 155ms (compile: 4ms, render: 151ms)
+ GET /api/auth/session 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /dashboard 200 in 80ms (compile: 7ms, proxy.ts: 10ms, render: 64ms)
+ GET /dashboard 200 in 68ms (compile: 6ms, proxy.ts: 7ms, render: 55ms)
+ GET /dashboard/guide 200 in 78ms (compile: 6ms, proxy.ts: 7ms, render: 65ms)
+ GET /dashboard/guide 200 in 44ms (compile: 10ms, proxy.ts: 9ms, render: 25ms)
+ GET /api/guide/profile 200 in 67ms (compile: 10ms, render: 57ms)
+ GET /api/guide/profile 200 in 24ms (compile: 4ms, render: 20ms)
+ GET /api/guide/bookings 200 in 116ms (compile: 6ms, render: 111ms)
+ GET /api/guide/bookings 200 in 41ms (compile: 4ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 64ms (compile: 8ms, render: 56ms)
+ GET /api/notifications?limit=10 200 in 47ms (compile: 5ms, render: 42ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 2ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 2ms, render: 35ms)
+ GET / 200 in 50ms (compile: 12ms, render: 38ms)
+ GET /api/admin/check-exists 200 in 156ms (compile: 10ms, render: 145ms)
+ GET /api/admin/check-exists 200 in 38ms (compile: 10ms, render: 29ms)
+ GET /api/auth/csrf 200 in 71ms (compile: 54ms, render: 17ms)
+ POST /api/auth/signout 200 in 13ms (compile: 3ms, render: 10ms)
+ GET / 200 in 129ms (compile: 5ms, render: 124ms)
+ GET /api/admin/check-exists 200 in 25ms (compile: 12ms, render: 13ms)
+ GET /api/auth/session 200 in 99ms (compile: 85ms, render: 15ms)
+ GET /login 200 in 44ms (compile: 10ms, render: 34ms)
+ GET /api/auth/providers 200 in 78ms (compile: 68ms, render: 11ms)
+ GET /api/auth/csrf 200 in 10ms (compile: 3ms, render: 8ms)
+ POST /api/auth/callback/credentials 200 in 161ms (compile: 3ms, render: 158ms)
+ GET /api/auth/session 200 in 14ms (compile: 3ms, render: 12ms)
+ GET /dashboard 200 in 63ms (compile: 6ms, proxy.ts: 10ms, render: 46ms)
+ GET /dashboard 200 in 80ms (compile: 6ms, proxy.ts: 6ms, render: 68ms)
+ GET /dashboard/tourist 200 in 82ms (compile: 4ms, proxy.ts: 8ms, render: 69ms)
+ GET /dashboard/tourist 200 in 42ms (compile: 7ms, proxy.ts: 6ms, render: 29ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
+Profile API: User found: yes Gihan
+ GET /api/tourist/profile 200 in 48ms (compile: 7ms, render: 41ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
 Profile API: User found: yes Gihan
  GET /api/tourist/profile 200 in 29ms (compile: 5ms, render: 24ms)
- GET /api/tourist/bookings 200 in 800ms (compile: 638ms, render: 162ms)
- GET /api/tourist/bookings 200 in 30ms (compile: 4ms, render: 26ms)
- GET /api/notifications?limit=10 200 in 277ms (compile: 257ms, render: 20ms)
- GET /api/notifications?limit=10 200 in 25ms (compile: 3ms, render: 22ms)
-✓ Finished writing to filesystem cache in 12.8s
+ GET /api/tourist/bookings 200 in 133ms (compile: 10ms, render: 122ms)
+ GET /api/tourist/bookings 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 59ms (compile: 6ms, render: 53ms)
+ GET /api/notifications?limit=10 200 in 46ms (compile: 4ms, render: 42ms)
+ POST /api/ratings/submit 200 in 98ms (compile: 3ms, render: 96ms)
  GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 36ms)
- GET / 200 in 47ms (compile: 3ms, render: 44ms)
- GET /api/admin/check-exists 200 in 68ms (compile: 19ms, render: 50ms)
- GET /api/admin/check-exists 200 in 42ms (compile: 13ms, render: 28ms)
-✓ Compiled in 651ms
-✓ Finished filesystem cache database compaction in 19.0s
- GET /dashboard/tourist 200 in 233ms (compile: 144ms, proxy.ts: 16ms, render: 72ms)
-Profile API: Fetching for userId: a37c5bcd-bf72-4642-8838-9b1fc72c90eb
+ GET /api/notifications?limit=10 200 in 39ms (compile: 2ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 50ms (compile: 3ms, render: 48ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 2ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 35ms (compile: 2ms, render: 33ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 2ms, render: 34ms)
+ GET /api/notifications?limit=10 200 in 35ms (compile: 1925µs, render: 33ms)
+ POST /api/ratings/submit 200 in 98ms (compile: 2ms, render: 96ms)
+ POST /api/ratings/submit 200 in 79ms (compile: 3ms, render: 76ms)
+ POST /api/ratings/submit 200 in 78ms (compile: 1851µs, render: 76ms)
+ GET /dashboard/tourist 200 in 141ms (compile: 18ms, proxy.ts: 16ms, render: 107ms)
+Profile API: Fetching for userId: 8fbf87da-4f50-4a8d-aabf-1853a19dbc48
 Profile API: User found: yes Gihan
- GET /api/tourist/profile 200 in 264ms (compile: 35ms, render: 229ms)
-Profile API: Fetching for userId: a37c5bcd-bf72-4642-8838-9b1fc72c90eb
-Profile API: User found: yes Gihan
- GET /api/tourist/profile 200 in 86ms (compile: 8ms, render: 79ms)
- GET /api/tourist/bookings 200 in 462ms (compile: 41ms, render: 420ms)
- GET /api/tourist/bookings 200 in 103ms (compile: 12ms, render: 90ms)
- GET /api/notifications?limit=10 200 in 52ms (compile: 13ms, render: 40ms)
- GET /api/notifications?limit=10 200 in 45ms (compile: 3ms, render: 41ms)
- GET /api/admin/check-exists 200 in 53ms (compile: 4ms, render: 49ms)
- GET /api/admin/check-exists 200 in 19ms (compile: 7ms, render: 12ms)
- GET /api/auth/csrf 200 in 93ms (compile: 79ms, render: 14ms)
- POST /api/auth/signout 200 in 14ms (compile: 3ms, render: 11ms)
- GET / 200 in 262ms (compile: 28ms, render: 234ms)
- GET /api/auth/session 200 in 109ms (compile: 98ms, render: 11ms)
- GET /api/admin/check-exists 200 in 151ms (compile: 4ms, render: 148ms)
- GET /login 200 in 2.2s (compile: 2.2s, render: 37ms)
- GET /api/auth/providers 200 in 102ms (compile: 92ms, render: 11ms)
- GET /api/auth/csrf 200 in 11ms (compile: 2ms, render: 8ms)
- POST /api/auth/callback/credentials 401 in 56ms (compile: 4ms, render: 52ms)
- GET /api/auth/providers 200 in 104ms (compile: 94ms, render: 10ms)
- GET /api/auth/csrf 200 in 10ms (compile: 3ms, render: 7ms)
- POST /api/auth/callback/credentials 401 in 14ms (compile: 3ms, render: 12ms)
- GET /api/auth/providers 200 in 228ms (compile: 215ms, render: 13ms)
- GET /api/auth/csrf 200 in 12ms (compile: 3ms, render: 9ms)
- POST /api/auth/callback/credentials 200 in 201ms (compile: 3ms, render: 198ms)
- GET /api/auth/session 200 in 15ms (compile: 3ms, render: 13ms)
- GET /dashboard 200 in 355ms (compile: 118ms, proxy.ts: 11ms, render: 227ms)
- GET /dashboard 200 in 74ms (compile: 8ms, proxy.ts: 10ms, render: 56ms)
- GET /dashboard/provider 200 in 1799ms (compile: 1678ms, proxy.ts: 33ms, render: 89ms)
- GET /dashboard/provider 200 in 60ms (compile: 10ms, proxy.ts: 9ms, render: 41ms)
- GET /api/accommodation-provider/bookings 200 in 652ms (compile: 477ms, render: 175ms)
- GET /api/accommodation-provider/profile 200 in 667ms (compile: 583ms, render: 85ms)
- GET /api/accommodation-provider/accommodations 200 in 733ms (compile: 531ms, render: 202ms)
- GET /api/accommodation-provider/bookings 200 in 95ms (compile: 7ms, render: 88ms)
- GET /api/accommodation-provider/profile 200 in 44ms (compile: 6ms, render: 38ms)
- GET /api/accommodation-provider/accommodations 200 in 112ms (compile: 13ms, render: 100ms)
- GET /api/notifications?limit=10 200 in 25ms (compile: 3ms, render: 22ms)
- GET /api/notifications?limit=10 200 in 22ms (compile: 4ms, render: 18ms)
-✓ Finished filesystem cache database compaction in 18.9s
- GET / 200 in 69ms (compile: 10ms, render: 59ms)
- GET /api/admin/check-exists 200 in 88ms (compile: 7ms, render: 81ms)
- GET /api/admin/check-exists 200 in 40ms (compile: 13ms, render: 27ms)
- GET /api/auth/csrf 200 in 102ms (compile: 91ms, render: 11ms)
- POST /api/auth/signout 200 in 10ms (compile: 3ms, render: 8ms)
- GET / 200 in 96ms (compile: 8ms, render: 88ms)
- GET /api/admin/check-exists 200 in 195ms (compile: 10ms, render: 185ms)
- GET /api/auth/session 200 in 180ms (compile: 153ms, render: 27ms)
+ GET /api/tourist/profile 200 in 226ms (compile: 17ms, render: 209ms)
+ GET /api/auth/session 200 in 178ms (compile: 82ms, render: 95ms)
+ GET /api/tourist/bookings 200 in 433ms (compile: 30ms, render: 404ms)
+ GET /api/notifications?limit=10 200 in 78ms (compile: 6ms, render: 72ms)
+ GET /api/notifications?limit=10 200 in 52ms (compile: 12ms, render: 40ms)
+ GET / 200 in 26ms (compile: 5ms, render: 21ms)
+ GET /api/admin/check-exists 200 in 22ms (compile: 8ms, render: 15ms)
+ GET /api/admin/check-exists 200 in 22ms (compile: 10ms, render: 12ms)
+ GET /api/auth/csrf 200 in 76ms (compile: 60ms, render: 16ms)
+ POST /api/auth/signout 200 in 12ms (compile: 3ms, render: 9ms)
+ GET / 200 in 91ms (compile: 4ms, render: 87ms)
+ GET /api/admin/check-exists 200 in 30ms (compile: 9ms, render: 22ms)
+ GET /api/auth/session 200 in 123ms (compile: 106ms, render: 17ms)
+ GET /login 200 in 49ms (compile: 10ms, render: 39ms)
+ GET /api/auth/providers 200 in 78ms (compile: 66ms, render: 12ms)
+ GET /api/auth/csrf 200 in 12ms (compile: 3ms, render: 8ms)
+ POST /api/auth/callback/credentials 200 in 153ms (compile: 3ms, render: 151ms)
+ GET /api/auth/session 200 in 13ms (compile: 2ms, render: 11ms)
+ GET /dashboard 200 in 54ms (compile: 4ms, proxy.ts: 10ms, render: 40ms)
+ GET /dashboard 200 in 75ms (compile: 5ms, proxy.ts: 7ms, render: 62ms)
+ GET /dashboard/guide 200 in 163ms (compile: 5ms, proxy.ts: 18ms, render: 139ms)
+ GET /dashboard/guide 200 in 122ms (compile: 27ms, proxy.ts: 12ms, render: 83ms)
+ GET /api/guide/profile 200 in 92ms (compile: 12ms, render: 80ms)
+ GET /api/guide/profile 200 in 59ms (compile: 10ms, render: 49ms)
+ GET /api/guide/bookings 200 in 196ms (compile: 15ms, render: 181ms)
+ GET /api/guide/bookings 200 in 48ms (compile: 6ms, render: 42ms)
+ GET /api/notifications?limit=10 200 in 47ms (compile: 12ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 47ms (compile: 3ms, render: 44ms)
+ GET /dashboard/guide 200 in 139ms (compile: 13ms, proxy.ts: 18ms, render: 108ms)
+ GET /api/auth/session 200 in 107ms (compile: 90ms, render: 17ms)
+ GET /api/guide/profile 200 in 203ms (compile: 3ms, render: 199ms)
+ GET /api/guide/bookings 200 in 253ms (compile: 10ms, render: 243ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 4ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 35ms (compile: 4ms, render: 31ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 2ms, render: 35ms)
+ GET / 200 in 37ms (compile: 5ms, render: 33ms)
+ GET /api/admin/check-exists 200 in 81ms (compile: 7ms, render: 74ms)
+ GET /api/admin/check-exists 200 in 40ms (compile: 5ms, render: 35ms)
+ GET /api/auth/csrf 200 in 64ms (compile: 57ms, render: 8ms)
+ POST /api/auth/signout 200 in 11ms (compile: 3ms, render: 8ms)
+ GET / 200 in 84ms (compile: 4ms, render: 80ms)
+ GET /api/admin/check-exists 200 in 14ms (compile: 5ms, render: 9ms)
+ GET /api/auth/session 200 in 105ms (compile: 83ms, render: 22ms)
+ GET /login 200 in 75ms (compile: 7ms, render: 68ms)
+ GET /api/auth/providers 200 in 91ms (compile: 80ms, render: 11ms)
+ GET /api/auth/csrf 200 in 13ms (compile: 4ms, render: 9ms)
+ POST /api/auth/callback/credentials 200 in 238ms (compile: 3ms, render: 235ms)
+ GET /api/auth/session 200 in 25ms (compile: 3ms, render: 22ms)
+ GET /dashboard 200 in 129ms (compile: 20ms, proxy.ts: 25ms, render: 84ms)
+ GET /dashboard 200 in 72ms (compile: 5ms, proxy.ts: 8ms, render: 59ms)
+ GET /dashboard/provider 200 in 298ms (compile: 181ms, proxy.ts: 8ms, render: 109ms)
+ GET /dashboard/provider 200 in 77ms (compile: 7ms, proxy.ts: 11ms, render: 59ms)
+ GET /api/accommodation-provider/profile 200 in 78ms (compile: 7ms, render: 71ms)
+ GET /api/accommodation-provider/profile 200 in 50ms (compile: 15ms, render: 34ms)
+ GET /api/accommodation-provider/accommodations 200 in 180ms (compile: 20ms, render: 161ms)
+ GET /api/accommodation-provider/accommodations 200 in 42ms (compile: 13ms, render: 29ms)
+ GET /api/accommodation-provider/bookings 200 in 232ms (compile: 13ms, render: 219ms)
+ GET /api/accommodation-provider/bookings 200 in 125ms (compile: 6ms, render: 119ms)
+ GET /api/notifications?limit=10 200 in 77ms (compile: 42ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 29ms (compile: 6ms, render: 23ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 2ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 35ms (compile: 2ms, render: 33ms)
+ GET /api/notifications?limit=10 200 in 35ms (compile: 2ms, render: 33ms)

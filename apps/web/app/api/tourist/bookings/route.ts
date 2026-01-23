@@ -28,6 +28,16 @@ export async function GET(req: NextRequest) {
                         },
                     },
                 },
+                payments: {
+                    where: {
+                        sender_id: userId,
+                    },
+                    orderBy: {
+                        id: "desc",
+                    },
+                    take: 1,
+                },
+                rating: true, // Include rating data
             },
         });
 

@@ -77,6 +77,12 @@ export async function POST(req: NextRequest) {
             });
         }
 
+        // Parse booking_price safely
+        let bookingPrice = null;
+        if (data.booking_price !== null && data.booking_price !== undefined && data.booking_price !== '' && data.booking_price !== 0) {
+            bookingPrice = parseFloat(data.booking_price);
+        }
+
         const accommodation = await prisma.accommodation.create({
             data: {
                 provider_id: provider.provider_id,
@@ -90,6 +96,7 @@ export async function POST(req: NextRequest) {
                 travel_style: data.travel_style || [],
                 price_range_min: parseFloat(data.price_range_min) || 0,
                 price_range_max: parseFloat(data.price_range_max) || 0,
+                booking_price: bookingPrice,
                 province: data.province,
                 group_size: parseInt(data.group_size) || 0,
                 account_no: data.account_no,

@@ -69,7 +69,15 @@ export default function GuideProfileCard({
                 </div>
                 <div className="flex items-start gap-2">
                     <span className="text-gray-500 min-w-[100px] font-medium">💰 Price/Day:</span>
-                    <span className="text-green-600 font-bold">LKR {profile.price}</span>
+                    <span className="text-gray-700 font-bold">LKR {profile.price}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                    <span className="text-gray-500 min-w-[100px] font-medium">💵 Booking Price:</span>
+                    {profile.booking_price ? (
+                        <span className="text-green-600 font-bold">LKR {profile.booking_price}</span>
+                    ) : (
+                        <span className="text-orange-500 text-xs">⚠️ Not set</span>
+                    )}
                 </div>
                 <div className="flex items-start gap-2">
                     <span className="text-gray-500 min-w-[100px] font-medium">🏦 Account:</span>

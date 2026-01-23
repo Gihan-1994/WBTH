@@ -31,6 +31,7 @@ export async function GET(req: NextRequest) {
             languages: user.guide?.languages || [],
             expertise: user.guide?.expertise || [],
             price: user.guide?.price || 0,
+            booking_price: user.guide?.booking_price || null,
             availability: user.guide?.availability || false,
             city: user.guide?.city || null,
             province: user.guide?.province || null,
@@ -70,6 +71,12 @@ export async function PUT(req: NextRequest) {
             },
         });
 
+        // Parse booking_price safely
+        let bookingPrice = null;
+        if (data.booking_price !== null && data.booking_price !== undefined && data.booking_price !== '' && data.booking_price !== 0) {
+            bookingPrice = parseFloat(data.booking_price);
+        }
+
         // Update or Create Guide model
         await prisma.guide.upsert({
             where: { user_id: userId },
@@ -78,6 +85,7 @@ export async function PUT(req: NextRequest) {
                 languages: data.languages,
                 expertise: data.expertise,
                 price: parseFloat(data.price),
+                booking_price: bookingPrice,
                 availability: data.availability,
                 city: data.city || null,
                 province: data.province || null,
@@ -90,6 +98,7 @@ export async function PUT(req: NextRequest) {
                 languages: data.languages,
                 expertise: data.expertise,
                 price: parseFloat(data.price),
+                booking_price: bookingPrice,
                 availability: data.availability,
                 city: data.city || null,
                 province: data.province || null,
@@ -99,8 +108,10 @@ export async function PUT(req: NextRequest) {
         });
 
         return NextResponse.json({ message: "Profile updated successfully" });
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating profile:", error);
+        console.error("Error details:", error.message);
+        console.error("Data received:", data);
         return NextResponse.json(
             { error: "Failed to update profile" },
             { status: 500 }

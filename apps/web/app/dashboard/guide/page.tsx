@@ -57,39 +57,68 @@ export default function GuideDashboard() {
 
     // Handlers
     const handleConfirmBooking = useCallback(async (id: string) => {
-        if (!confirm("Confirm this booking?")) return;
+        if (!confirm("Confirm this booking and capture payment?")) return;
 
         try {
-            const res = await fetch(`/api/guide/bookings/${id}/confirm`, {
-                method: "PUT",
+            // First, get the payment for this booking
+            const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
+            if (!paymentRes.ok) {
+                alert("Payment not found for this booking");
+                return;
+            }
+
+            const { payment } = await paymentRes.json();
+
+            // Capture the payment
+            const res = await fetch("/api/payments/capture", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: payment.id }),
             });
+
             if (res.ok) {
-                alert("Booking confirmed successfully");
+                const data = await res.json();
+                alert(`Payment captured! You received $${data.providerAmount}`);
                 fetchData();
             } else {
                 const data = await res.json();
-                alert(data.error || "Failed to confirm booking");
+                alert(data.error || "Failed to capture payment");
             }
         } catch (error) {
+            console.error("Error confirming booking:", error);
             alert("Error confirming booking");
         }
     }, [fetchData]);
 
     const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to reject this booking?")) return;
+        if (!confirm("Are you sure you want to reject this booking and release payment authorization?")) return;
 
         try {
-            const res = await fetch(`/api/guide/bookings/${id}/cancel`, {
-                method: "PUT",
+            // First, get the payment for this booking
+            const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
+            if (!paymentRes.ok) {
+                alert("Payment not found for this booking");
+                return;
+            }
+
+            const { payment } = await paymentRes.json();
+
+            // Cancel the payment
+            const res = await fetch("/api/payments/cancel", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentId: payment.id }),
             });
+
             if (res.ok) {
-                alert("Booking rejected successfully");
+                alert("Booking rejected and payment authorization released");
                 fetchData();
             } else {
                 const data = await res.json();
-                alert(data.error || "Failed to reject booking");
+                alert(data.error || "Failed to cancel payment");
             }
         } catch (error) {
+            console.error("Error rejecting booking:", error);
             alert("Error rejecting booking");
         }
     }, [fetchData]);

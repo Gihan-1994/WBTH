@@ -23,6 +23,7 @@ model User {
   paymentsReceived            Payment[]              @relation("ReceiverPayments")
   paymentsSent                Payment[]              @relation("SenderPayments")
   tourist                     Tourist?
+  ratings                     Rating[]
 
   @@map("users")
 }
@@ -45,6 +46,7 @@ model Guide {
   rating          Float?
   account_no      String?
   price           Float?
+  booking_price   Float? // Price per day for bookings
   availability    Boolean   @default(true)
   profile_picture String?
   city            String?
@@ -80,6 +82,7 @@ model Accommodation {
   district          String
   price_range_min   Float?
   price_range_max   Float?
+  booking_price     Float? // Default booking price
   province          String?
   interests         String[]
   group_size        Int?
@@ -111,14 +114,20 @@ model Booking {
   user             User           @relation(fields: [user_id], references: [id])
   notifications    Notification[]
   payments         Payment[]
+  rating           Rating?
 
   @@map("bookings")
 }
 
 model Rating {
-  id          String @id @default(uuid())
-  provider_id String
-  rating      Int
+  id         String   @id @default(uuid())
+  booking_id String   @unique
+  user_id    String
+  rating     Int
+  comment    String?
+  created_at DateTime @default(now())
+  booking    Booking  @relation(fields: [booking_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 
   @@map("ratings")
 }
@@ -136,15 +145,16 @@ model Event {
 }
 
 model Payment {
-  id          String  @id @default(uuid())
-  receiver_id String
-  sender_id   String
-  booking_id  String
-  amount      Float
-  status      String
-  booking     Booking @relation(fields: [booking_id], references: [id])
-  receiver    User    @relation("ReceiverPayments", fields: [receiver_id], references: [id])
-  sender      User    @relation("SenderPayments", fields: [sender_id], references: [id])
+  id                       String        @id @default(uuid())
+  receiver_id              String
+  sender_id                String
+  booking_id               String
+  amount                   Float
+  status                   PaymentStatus @default(pending)
+  stripe_payment_intent_id String?
+  booking                  Booking       @relation(fields: [booking_id], references: [id])
+  receiver                 User          @relation("ReceiverPayments", fields: [receiver_id], references: [id])
+  sender                   User          @relation("SenderPayments", fields: [sender_id], references: [id])
 
   @@map("payments")
 }
@@ -208,4 +218,12 @@ enum NotificationType {
   PAYMENT_RECEIVED
   PAYMENT_SENT
   ADMIN_MESSAGE
+}
+
+enum PaymentStatus {
+  pending
+  authorized
+  captured
+  cancelled
+  failed
 }

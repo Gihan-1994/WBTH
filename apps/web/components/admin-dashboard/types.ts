@@ -32,6 +32,7 @@ export interface AnalyticsData {
     popularDestinations: { location: string; count: number }[];
     activeGuides: number;
     activeProviders: number;
+    platformIncome: number;
 }
 
 export interface UserData {
