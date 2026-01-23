@@ -531,3 +531,6 @@ Profile API: User found: yes Gihan
  GET /api/notifications?limit=10 200 in 50ms (compile: 2ms, render: 48ms)
  GET /api/notifications?limit=10 200 in 50ms (compile: 2ms, render: 48ms)
  GET /api/notifications?limit=10 200 in 45ms (compile: 1910µs, render: 43ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 1925µs, render: 35ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 2ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 3ms, render: 38ms)
