@@ -14,3 +14,4 @@ __pycache__/
 logs
 venv/
 .turbo
+.agent/workflows
