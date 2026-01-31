@@ -1,5 +1,7 @@
 # WBTH - Welcome Back To Home
 
+## You can view the live demo at: https://wbth.vercel.app/
+
 A comprehensive tourism platform for Sri Lanka connecting tourists with guides and accommodations. Built with Next.js, Flask, and PostgreSQL.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
