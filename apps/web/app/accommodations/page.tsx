@@ -224,7 +224,7 @@ export default function AccommodationsPage() {
                                                 <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                                                     <div>
                                                         <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                                            ${acc.price_range_min} - ${acc.price_range_max}
+                                                            Rs {acc.price_range_min.toLocaleString()} - Rs {acc.price_range_max.toLocaleString()}
                                                         </div>
                                                         <span className="text-gray-500 text-sm">per night</span>
                                                     </div>

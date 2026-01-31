@@ -68,7 +68,7 @@ export default function BookingHistorySection({
                                 </td>
                                 <td className="py-4">
                                     <span className="font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                        ${booking.price}
+                                        Rs {booking.price.toLocaleString()}
                                     </span>
                                 </td>
                                 <td className="py-4">

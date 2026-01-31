@@ -1026,8 +1026,3 @@ Typically m ≈ 0.1-0.3 × n (filters eliminate 70-90%)
 
 ---
 
-**Related Documentation**:
-- [ML_data_generation.md](ML_data_generation.md) - How mock data is created
-- [ML_progress.md](../apps/ml/ML_progress.md) - Implementation overview
-- [recommender.py](../apps/ml/recommender.py) - Source code
-- [evaluation.py](../apps/ml/evaluation.py) - How system is evaluated

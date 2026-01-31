@@ -44,15 +44,15 @@ export default function BookingHistorySection({
                                 </td>
                                 <td className="py-3">
                                     <span className="font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                                        ${booking.price}
+                                        Rs {booking.price.toLocaleString()}
                                     </span>
                                 </td>
                                 <td className="py-3">
                                     <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${booking.status === 'confirmed'
-                                            ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
-                                            booking.status === 'pending'
-                                                ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-700 border border-yellow-200' :
-                                                'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 border border-red-200'
+                                        ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
+                                        booking.status === 'pending'
+                                            ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-700 border border-yellow-200' :
+                                            'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 border border-red-200'
                                         }`}>
                                         {booking.status}
                                     </span>

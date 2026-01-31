@@ -40,7 +40,7 @@ export default function ViewBookingModal({ booking, onClose }: ViewBookingModalP
                     <div className="p-3 bg-gray-50 rounded-xl">
                         <div className="text-xs text-gray-500 mb-1">Price</div>
                         <div className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            ${booking.price}
+                            Rs {booking.price.toLocaleString()}
                         </div>
                     </div>
                     <div className="p-3 bg-gray-50 rounded-xl">

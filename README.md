@@ -15,7 +15,6 @@ A comprehensive tourism platform for Sri Lanka connecting tourists with guides a
 - [Project Structure](#-project-structure)
 - [Development](#-development)
 - [Deployment](#-deployment)
-- [Documentation](#-documentation)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -100,7 +99,8 @@ Before you begin, ensure you have the following installed:
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/WBTH.git
+git clone https://github.com/Gihan-1994/WBTH.git
+git checkout -b main
 cd WBTH
 ```
 
@@ -110,11 +110,26 @@ cd WBTH
 # Install Node.js dependencies
 yarn install
 
-# Install Python dependencies for ML service
+# Install Python dependencies for ML service in a virtual environment
 cd apps/ml
-pip3 install -r requirements.txt
+
+# Create a virtual environment (recommended for Python 3.11+)
+python3 -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate  # On Linux/Mac
+# OR on Windows: venv\Scripts\activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Deactivate when done (optional)
+# deactivate
+
 cd ../..
 ```
+
+> **Note for Python 3.11+ users**: Modern Linux systems require virtual environments to prevent conflicts with system Python packages. The virtual environment keeps ML service dependencies isolated.
 
 #### 3. Set Up Environment Variables
 
@@ -170,13 +185,13 @@ environment:
 
 Wait for the message: `✅ Database is ready`
 
-#### 6. Generate Prisma Client and Run Migrations
+#### 6. Build Prisma Package and Run Migrations
 
 ```bash
 cd packages/prisma
 
-# Generate Prisma client (REQUIRED - creates type-safe database client)
-npx prisma generate
+# Build the Prisma package (compiles TypeScript + generates Prisma client)
+yarn build
 
 # Run migrations (creates database tables)
 npx prisma migrate deploy
@@ -187,7 +202,22 @@ yarn seed
 cd ../..
 ```
 
-> **Important**: `npx prisma generate` must be run before starting the application. This generates the Prisma Client that your app uses to interact with the database. You'll need to run this again whenever you modify `schema.prisma`.
+> **Why use `yarn build`?**
+> 
+> While Prisma 7 can load `prisma.config.ts` directly without compilation, using `yarn build` is recommended because it:
+> 1. Compiles the Prisma client wrapper (`src/client.ts`) to JavaScript
+> 2. Generates the Prisma Client (`npx prisma generate`)
+> 3. Ensures all TypeScript code in the package is compiled
+> 
+> **Alternative (if you prefer):**
+> ```bash
+> cd packages/prisma
+> npx prisma generate        # Generate Prisma client
+> npx prisma migrate deploy  # Run migrations
+> yarn seed                  # Seed database
+> ```
+> 
+> Both approaches work. `yarn build` is simpler and ensures everything is compiled.
 
 #### 7. Start All Services
 
@@ -266,6 +296,7 @@ WBTH/
 For detailed documentation on each component:
 - [Web Application](apps/web/README.md)
 - [Prisma Package](packages/prisma/README.md)
+- [ML Service](apps/ml/README.md)
 - [Architecture](docs/ARCHITECTURE.md)
 
 ## 💻 Development
@@ -377,37 +408,60 @@ vercel --prod
 **ML Service (Render):**
 - Connect your GitHub repository to Render
 - Render will auto-deploy on push to main branch
-- See [Render Deployment Guide](docs/RENDER_DEPLOYMENT.md)
 
 **Database (Neon):**
 - Create a Neon database at https://neon.tech
 - Update `DATABASE_URL` in production environment variables
 - Run migrations: `npx prisma migrate deploy`
 
-For detailed deployment instructions, see [DEPLOYMENT.md](docs/DEPLOYMENT.md).
-
-## 📚 Documentation
-
-### Getting Started
-- [Architecture Overview](docs/ARCHITECTURE.md) - System design and infrastructure
-- [Account Setup](docs/ACCOUNT_SETUP.md) - Set up required accounts (Vercel, Render, Neon, Stripe)
-- [Quick Start with Render](docs/QUICK_START_RENDER.md) - Deploy in 30 minutes
-
-### Deployment
-- [Deployment Guide](docs/DEPLOYMENT.md) - Complete deployment instructions
-- [Render Deployment](docs/RENDER_DEPLOYMENT.md) - Detailed Render setup
-- [Deployment Comparison](docs/DEPLOYMENT_COMPARISON.md) - Compare deployment options
-- [Quick Reference](docs/DEPLOYMENT_QUICK_REFERENCE.md) - Commands and checklists
-
-### Component Documentation
-- [Web Application](apps/web/README.md) - Frontend documentation
-- [Prisma Package](packages/prisma/README.md) - Database schema and usage
 
 ## 🐛 Troubleshooting
 
+### Python Installation Issues
+
+**Error: "externally-managed-environment"**
+
+This occurs on Python 3.11+ systems. Use a virtual environment:
+
+```bash
+cd apps/ml
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate it
+source venv/bin/activate  # Linux/Mac
+# OR: venv\Scripts\activate  # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+**Error: "python3-venv not found"**
+```bash
+# Install venv package (Ubuntu/Debian)
+sudo apt install python3-venv python3-full
+
+# Then create virtual environment
+python3 -m venv venv
+```
+
 ### Database Connection Issues
 
-**Error: "password authentication failed"**
+**Error: "password authentication failed" during migrations**
+
+This can happen for two reasons:
+
+1. **Prisma Client not generated** (most common during first setup):
+```bash
+cd packages/prisma
+npx prisma generate       # Generate Prisma client FIRST
+npx prisma migrate deploy # Then run migrations
+```
+
+> **Why this happens:** The `npx prisma migrate deploy` command needs the Prisma Client to connect to the database. If you skip `npx prisma generate`, you'll get a misleading "authentication failed" error.
+
+2. **Incorrect password**:
 ```bash
 # Check if database is running
 docker ps | grep wbth-db
@@ -461,9 +515,15 @@ Contributions are welcome! Please follow these steps:
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+**What this means:**
+- ✅ Free to use, modify, and distribute
+- ✅ Can be used in commercial projects
+- ✅ No warranty or liability
+- ✅ Must include the original license and copyright notice
+
+## 🧭 Acknowledgments
 
 - Built with [Next.js](https://nextjs.org/)
 - ML powered by [scikit-learn](https://scikit-learn.org/)
@@ -472,6 +532,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ for Sri Lankan Tourism**
+**Made by Gihan [nggp1994@gmail.com](nggp1994@gmail.com) for Sri Lankan Tourism**
 
 For questions or support, please open an issue on GitHub.

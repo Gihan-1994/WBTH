@@ -234,7 +234,7 @@ export default function GuidesPage() {
                                             <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-green-50/30 border-t border-gray-200 flex justify-between items-center">
                                                 <div>
                                                     <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                                                        ${guide.price}
+                                                        Rs {guide.price.toLocaleString()}
                                                     </div>
                                                     <span className="text-gray-500 text-sm">per day</span>
                                                 </div>

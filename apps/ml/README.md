@@ -98,4 +98,3 @@ Typical performance metrics with a catalog of 1000 items:
 *   **NDCG@10**: ~0.68
 *   **Mean Average Precision**: ~0.03 (catalog-wide)
 
-For a deep dive into the algorithm design and future architecture, refer to [ML_progress.md](ML_progress.md).

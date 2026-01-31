@@ -87,7 +87,7 @@ export default function ViewBookingModal({ booking, onClose }: ViewBookingModalP
                             <div className="flex justify-between items-center pt-2 border-t border-purple-200">
                                 <span className="text-sm text-gray-600">Total Price:</span>
                                 <span className="text-lg font-bold text-green-600">
-                                    ${booking.price}
+                                    Rs {booking.price.toLocaleString()}
                                 </span>
                             </div>
                         </div>

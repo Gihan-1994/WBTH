@@ -166,16 +166,3 @@ Generate accommodation recommendations based on user preferences.
 2. **Tune ML Weights**: Adjust weights in `recommender.py` based on user feedback
 3. **Implement Guide Recommendations**: Add guide matching algorithm
 4. **Add User Preferences**: Store user preferences for personalized defaults
-
-## Files Modified
-
-Backend:
-- [`apps/ml/api.py`](file:///home/gihan/WBTH/apps/ml/api.py)
-- [`apps/ml/requirements.txt`](file:///home/gihan/WBTH/apps/ml/requirements.txt)
-
-Frontend:
-- [`apps/web/app/page.tsx`](file:///home/gihan/WBTH/apps/web/app/page.tsx)
-- [`apps/web/app/recommendations/page.tsx`](file:///home/gihan/WBTH/apps/web/app/recommendations/page.tsx)
-
-Documentation:
-- [`tasks.md`](file:///home/gihan/WBTH/tasks.md)

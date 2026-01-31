@@ -4,6 +4,8 @@
 
 ### First-Time Setup (Admin Registration)
 
+**Note:** This is only for the first time setup. After the first time setup, you can login using the login page. (use Admin email as : **GihanAdmin@gmail.com** and password as : **111111**)
+
 1. **Visit the Homepage**
    - Navigate to the application homepage
    - Look for the "Admin Registration" button (red/pink gradient)
@@ -268,68 +270,7 @@ Send messages to users via in-app notifications and email.
    - Track the impact of changes
    - Monitor user growth and engagement
 
----
 
-## Troubleshooting
-
-### Cannot Access Admin Dashboard
-
-**Problem:** Redirected to login page or homepage
-
-**Solutions:**
-1. Ensure you're logged in with admin credentials
-2. Check that your account has admin role
-3. Clear browser cache and cookies
-4. Try logging out and logging back in
-
-### Charts Not Loading
-
-**Problem:** Analytics charts show loading spinner indefinitely
-
-**Solutions:**
-1. Check browser console for errors
-2. Ensure you have a stable internet connection
-3. Try refreshing the page
-4. Check if the API endpoint is accessible
-
-### Cannot Delete User
-
-**Problem:** Error when trying to delete a user
-
-**Solutions:**
-1. Ensure you're not trying to delete your own account
-2. Check that the user exists
-3. Verify you have admin privileges
-4. Check browser console for specific error messages
-
-### Messages Not Sending
-
-**Problem:** Broadcast messages fail to send
-
-**Solutions:**
-1. Ensure message field is not empty
-2. Check your internet connection
-3. Verify API endpoint is accessible
-4. Check browser console for errors
-
----
-
-## Support
-
-For technical issues or questions:
-1. Check the browser console for error messages
-2. Review the implementation documentation
-3. Contact the development team
-
----
-
-## Keyboard Shortcuts
-
-- **Search Users:** Click search box, type, press Enter
-- **Navigate Tabs:** Click tab buttons or use Tab key
-- **Send Message:** Ctrl/Cmd + Enter in message textarea (coming soon)
-
----
 
 ## Tips & Tricks
 

@@ -47,14 +47,14 @@ export default function AccommodationsSection({
                                 <td className="py-3">{acc.district}</td>
                                 <td className="py-3">
                                     <span className="font-bold text-gray-700">
-                                        ${acc.price_range_min} - ${acc.price_range_max}
+                                        Rs {acc.price_range_min.toLocaleString()} - Rs {acc.price_range_max.toLocaleString()}
                                     </span>
                                 </td>
                                 <td className="py-3">
                                     {acc.booking_price ? (
                                         <div>
                                             <span className="font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                                                ${acc.booking_price}
+                                                Rs {acc.booking_price.toLocaleString()}
                                             </span>
 
                                         </div>

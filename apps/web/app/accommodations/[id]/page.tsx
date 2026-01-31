@@ -141,7 +141,7 @@ export default function AccommodationDetailsPage() {
                         <h2 className="text-2xl font-bold mb-4">Pricing Information</h2>
                         {accommodation.price_range_max && accommodation.price_range_min && (
                             <p className="text-gray-600">
-                                Price range: <span className="font-semibold text-gray-900">${accommodation.price_range_min} - ${accommodation.price_range_max} </span>&nbsp;per full day
+                                Price range: <span className="font-semibold text-gray-900">Rs {accommodation.price_range_min.toLocaleString()} - Rs {accommodation.price_range_max.toLocaleString()} </span>&nbsp;per full day
                             </p>
                         )}
                     </div>
@@ -199,7 +199,7 @@ export default function AccommodationDetailsPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
                         <div className="flex justify-between items-end mb-6">
                             <div>
-                                <span className="text-2xl font-bold">${accommodation.booking_price}</span>
+                                <span className="text-2xl font-bold">Rs {accommodation.booking_price.toLocaleString()}</span>
                                 <span className="text-gray-500">&nbsp; per previous booking</span>
                             </div>
 

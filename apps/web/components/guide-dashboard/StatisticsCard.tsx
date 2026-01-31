@@ -43,7 +43,7 @@ export default function StatisticsCard({ stats }: StatisticsCardProps) {
 
                 <div className="col-span-2 md:col-span-4 bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
                     <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-1">
-                        ${stats.income}
+                        Rs {stats.income.toLocaleString()}
                     </div>
                     <div className="text-xs font-semibold text-gray-600">💰 Total Income</div>
                 </div>

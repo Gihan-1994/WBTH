@@ -55,7 +55,7 @@ const ViewBookingModal = function ViewBookingModal({ booking, onClose }: ViewBoo
                     <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100">
                         <div>
                             <div className="text-xs text-green-700 uppercase font-semibold mb-1">Total Price</div>
-                            <div className="text-2xl font-bold text-green-700">${booking.price}</div>
+                            <div className="text-2xl font-bold text-green-700">Rs {booking.price.toLocaleString()}</div>
                         </div>
                         <div className="text-right">
                             <div className="text-xs text-gray-500 uppercase font-semibold mb-1">Status</div>

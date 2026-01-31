@@ -141,7 +141,7 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
                         <div>
                             <p className="text-gray-500 text-xs">Total Amount</p>
                             <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                                ${bookingDetails.price}
+                                Rs {bookingDetails.price.toLocaleString()}
                             </p>
                         </div>
                     </div>
@@ -206,7 +206,7 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
                     disabled={!stripe || loading}
                     className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {loading ? "Processing..." : `Pay $${bookingDetails.price}`}
+                    {loading ? "Processing..." : `Pay Rs ${bookingDetails.price.toLocaleString()}`}
                 </button>
             </div>
         </form>

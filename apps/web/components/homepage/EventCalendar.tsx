@@ -37,13 +37,13 @@ export default function EventCalendar() {
             const response = await fetch("/api/events/upcoming");
             if (response.ok) {
                 const data = await response.json();
-                // Filter to next 30 days
-                const thirtyDaysFromNow = new Date();
-                thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
+                // Filter to next 1 year
+                const oneYearFromNow = new Date();
+                oneYearFromNow.setDate(oneYearFromNow.getDate() + 365);
 
                 const filteredEvents = data.events.filter((event: Event) => {
                     const eventDate = new Date(event.date);
-                    return eventDate <= thirtyDaysFromNow;
+                    return eventDate <= oneYearFromNow;
                 });
 
                 setEvents(filteredEvents);

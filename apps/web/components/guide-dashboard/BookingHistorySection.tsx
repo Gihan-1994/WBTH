@@ -97,7 +97,7 @@ export default function BookingHistorySection({
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">
-                                            ${booking.price}
+                                            Rs {booking.price.toLocaleString()}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full ${getStatusColor(booking.status)}`}>

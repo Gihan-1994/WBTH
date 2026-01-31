@@ -136,7 +136,7 @@ export default function GuideDetailsPage() {
                         <div className="flex flex-wrap gap-2">
                             {guide.price &&
                                 <div className="flex items-center bg-green-50 text-green-700 px-3 py-1 rounded-full border border-green-100">
-                                    $ &nbsp;{guide.price} &nbsp; per day
+                                    Rs &nbsp;{guide.price.toLocaleString()} &nbsp; per day
                                 </div>
                             }
                         </div>
@@ -184,7 +184,7 @@ export default function GuideDetailsPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
                         <div className="flex justify-between items-end mb-6">
                             <div>
-                                <span className="text-2xl font-bold">${guide.booking_price || guide.price}</span>
+                                <span className="text-2xl font-bold">Rs {(guide.booking_price || guide.price).toLocaleString()}</span>
                                 <span className="text-gray-500"> / previous booking</span>
                             </div>
                         </div>
