@@ -73,7 +73,10 @@ export async function consumeEmailVerificationToken(
 ) {
   const record = await prisma.verificationToken.findFirst({
     where: {
-      identifier: EMAIL_VERIFY_PREFIX + email,
+      identifier: {
+        equals: EMAIL_VERIFY_PREFIX + email,
+        mode: 'insensitive'
+      },
       token,
     },
   });
@@ -90,7 +93,12 @@ export async function consumeEmailVerificationToken(
 
 export async function isEmailVerified(email: string) {
   const pending = await prisma.verificationToken.findFirst({
-    where: { identifier: EMAIL_VERIFY_PREFIX + email },
+    where: {
+      identifier: {
+        equals: EMAIL_VERIFY_PREFIX + email,
+        mode: 'insensitive'
+      }
+    },
   });
   // If there is a pending token, treat as NOT verified
   return !pending;

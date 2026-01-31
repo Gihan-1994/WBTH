@@ -28,8 +28,13 @@ export async function GET(req: NextRequest) {
   // (Your `isEmailVerified` helper already uses this logic.)
 
   // Optional: update some flag if you later add a column
-  await prisma.user.update({
-    where: { email },
+  await prisma.user.updateMany({
+    where: {
+      email: {
+        equals: email,
+        mode: 'insensitive'
+      }
+    },
     data: {}, // nothing for now
   });
 

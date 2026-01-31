@@ -92,9 +92,9 @@ fi
 # Step 2: Start ML Service
 print_header "🤖 Step 2/3: Starting ML Service"
 
-print_info "Generating Prisma client..."
-yarn -C packages/prisma prisma generate > /dev/null 2>&1 || {
-    print_warning "Prisma generate failed, continuing anyway..."
+print_info "Building Prisma package..."
+yarn -C packages/prisma build > /dev/null 2>&1 || {
+    print_warning "Prisma build failed, continuing anyway..."
 }
 
 print_info "Starting Python ML API..."

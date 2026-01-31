@@ -22,7 +22,14 @@ export async function POST(req: NextRequest) {
     }
 
     console.log('[REGISTER] Checking for existing user...');
-    const existing = await prisma.user.findUnique({ where: { email } });
+    const existing = await prisma.user.findFirst({
+      where: {
+        email: {
+          equals: email,
+          mode: 'insensitive'
+        }
+      }
+    });
     if (existing) {
       console.log('[REGISTER] Email already exists:', email);
       return NextResponse.json(

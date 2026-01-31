@@ -10,5 +10,3 @@ Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 691-928-690
-127.0.0.1 - - [31/Jan/2026 18:13:28] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
-127.0.0.1 - - [31/Jan/2026 18:13:28] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
