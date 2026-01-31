@@ -240,6 +240,26 @@ This will start:
 > - **Development**: Only Prisma client generation is needed
 > - **Production**: Run `yarn build` from project root (builds Prisma + Next.js automatically)
 
+### 📊 Monitoring & Logs
+
+The application uses local file-based logging for background services. You can monitor these logs in real-time while the processes are running.
+
+**Logs Location:**
+- **ML Service**: `logs/ml-service.log`
+- **Frontend**: `logs/frontend.log`
+
+**Live Tail Monitoring:**
+```bash
+# Monitor ML service logs
+tail -f logs/ml-service.log
+
+# Monitor Frontend logs
+tail -f logs/frontend.log
+```
+
+> [!NOTE]
+> Logs are ignored by Git (via `.gitignore`) to keep the repository clean and secure.
+
 ### 🎉 Access the Application
 
 Open your browser and navigate to:
