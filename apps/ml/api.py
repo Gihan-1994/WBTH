@@ -137,7 +137,7 @@ def get_hybrid_accommodations(
     required_amenities: List[str],
     district: Optional[str] = None,
     province: Optional[str] = None,
-    min_real_data: int = 5
+    min_total: int = 10
 ) -> List[Dict]:
     """
     Get accommodations with hybrid approach: real DB data + mock data fallback.
@@ -148,7 +148,7 @@ def get_hybrid_accommodations(
         required_amenities: List of required amenities
         district: Preferred district
         province: Preferred province
-        min_real_data: Minimum number of real accommodations before using mock data
+        min_total: Minimum number of total accommodations before using mock data
     
     Returns:
         List of accommodations (real + mock if needed)
@@ -164,9 +164,9 @@ def get_hybrid_accommodations(
     
     print(f"Found {len(real_accommodations)} real accommodations from database")
     
-    # If insufficient real data, supplement with mock data
-    if len(real_accommodations) < min_real_data:
-        print(f"Insufficient real data ({len(real_accommodations)} < {min_real_data}), adding mock data")
+    # If insufficient real data to satisfy top_k, supplement with mock data
+    if len(real_accommodations) < min_total:
+        print(f"Insufficient data to meet target of {min_total} (found {len(real_accommodations)}), adding mock data")
         
         # Load mock accommodations
         mock_accommodations = load_accommodations('data/mock_accommodations.json')
@@ -232,7 +232,8 @@ def recommend_accommodations():
             budget_max=budget_max,
             required_amenities=required_amenities,
             district=district,
-            province=province
+            province=province,
+            min_total=top_k
         )
         
         if not accommodations:
@@ -357,7 +358,7 @@ def get_hybrid_guides(
     languages: List[str],
     city: Optional[str] = None,
     province: Optional[str] = None,
-    min_real_data: int = 5
+    min_total: int = 10
 ) -> List[Dict]:
     """Get guides with hybrid approach: real DB data + mock data fallback."""
     real_guides = fetch_guides_from_db(
@@ -370,8 +371,8 @@ def get_hybrid_guides(
     
     print(f"Found {len(real_guides)} real guides from database")
     
-    if len(real_guides) < min_real_data:
-        print(f"Insufficient real data ({len(real_guides)} < {min_real_data}), adding mock data")
+    if len(real_guides) < min_total:
+        print(f"Insufficient guides to meet target of {min_total} (found {len(real_guides)}), adding mock data")
         
         with open('data/mock_guides.json', 'r', encoding='utf-8') as f:
             mock_guides = json.load(f)
@@ -413,7 +414,8 @@ def recommend_guides():
             budget_max=budget_max,
             languages=languages,
             city=city,
-            province=province
+            province=province,
+            min_total=top_k
         )
         
         if not guides:

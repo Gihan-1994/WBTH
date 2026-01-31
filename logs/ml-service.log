@@ -10,3 +10,241 @@ Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 691-928-690
+ * Detected change in '/home/gihan/WBTH/apps/ml/api.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+ * Detected change in '/home/gihan/WBTH/apps/ml/api.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+ * Detected change in '/home/gihan/WBTH/apps/ml/api.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+ * Detected change in '/home/gihan/WBTH/apps/ml/api.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+127.0.0.1 - - [31/Jan/2026 19:28:57] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:28:57] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:29:21] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:29:21] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:29:52] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:29:52] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:04] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:04] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:24] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:25] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:54] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:30:54] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:31:22] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:31:22] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:32:24] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:32:24] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:32:56] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:32:56] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:33:13] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:33:13] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:33:33] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:33:33] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:35:14] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/gihan/WBTH/apps/ml/api.py", line 412, in recommend_guides
+    guides = get_hybrid_guides(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/api.py", line 374, in get_hybrid_guides
+    if len(real_guides) < min_real_data:
+                          ^^^^^^^^^^^^^
+NameError: name 'min_real_data' is not defined
+127.0.0.1 - - [31/Jan/2026 19:35:14] "[35m[1mPOST /api/recommendations/guides HTTP/1.1[0m" 500 -
+127.0.0.1 - - [31/Jan/2026 19:35:25] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/gihan/WBTH/apps/ml/api.py", line 412, in recommend_guides
+    guides = get_hybrid_guides(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/api.py", line 374, in get_hybrid_guides
+    if len(real_guides) < min_real_data:
+                          ^^^^^^^^^^^^^
+NameError: name 'min_real_data' is not defined
+127.0.0.1 - - [31/Jan/2026 19:35:25] "[35m[1mPOST /api/recommendations/guides HTTP/1.1[0m" 500 -
+127.0.0.1 - - [31/Jan/2026 19:35:31] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:35:31] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:35:41] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/gihan/WBTH/apps/ml/api.py", line 412, in recommend_guides
+    guides = get_hybrid_guides(
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/api.py", line 374, in get_hybrid_guides
+    if len(real_guides) < min_real_data:
+                          ^^^^^^^^^^^^^
+NameError: name 'min_real_data' is not defined
+127.0.0.1 - - [31/Jan/2026 19:35:41] "[35m[1mPOST /api/recommendations/guides HTTP/1.1[0m" 500 -
+ * Detected change in '/home/gihan/WBTH/apps/ml/api.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+Found 8 real accommodations from database
+Insufficient data to meet target of 10 (found 8), adding mock data
+Using budget travel style weights
+Found 4 real accommodations from database
+Insufficient data to meet target of 10 (found 4), adding mock data
+Using budget travel style weights
+Found 4 real accommodations from database
+Insufficient data to meet target of 10 (found 4), adding mock data
+Using budget travel style weights
+Found 4 real accommodations from database
+Insufficient data to meet target of 10 (found 4), adding mock data
+Using budget travel style weights
+Found 1 real accommodations from database
+Insufficient data to meet target of 10 (found 1), adding mock data
+Using budget travel style weights
+Found 0 real accommodations from database
+Insufficient data to meet target of 10 (found 0), adding mock data
+Using budget travel style weights
+Found 4 real accommodations from database
+Insufficient data to meet target of 10 (found 4), adding mock data
+Using budget travel style weights
+Found 4 real accommodations from database
+Insufficient data to meet target of 10 (found 4), adding mock data
+Using budget travel style weights
+Found 6 real accommodations from database
+Insufficient data to meet target of 10 (found 6), adding mock data
+Using budget travel style weights
+Found 6 real accommodations from database
+Insufficient data to meet target of 10 (found 6), adding mock data
+Using budget travel style weights
+Found 6 real accommodations from database
+Insufficient data to meet target of 10 (found 6), adding mock data
+Using budget travel style weights
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Error in recommend_guides: name 'min_real_data' is not defined
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Error in recommend_guides: name 'min_real_data' is not defined
+Found 10 real accommodations from database
+Using budget travel style weights
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Error in recommend_guides: name 'min_real_data' is not defined
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+127.0.0.1 - - [31/Jan/2026 19:38:42] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:38:42] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:38:50] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:38:50] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:38:59] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:38:59] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:39:33] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:39:33] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:17] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:18] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:39] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:39] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:57] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:40:57] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:11] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:11] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:29] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/gihan/WBTH/apps/ml/api.py", line 430, in recommend_guides
+    results = recommender.recommend(
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/GuidesRecommendationModel/guide_recommender.py", line 66, in recommend
+    candidates = self._apply_hard_filters(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/GuidesRecommendationModel/guide_recommender.py", line 189, in _apply_hard_filters
+    if guide_gender.lower() != gender_preference.lower():
+       ^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'lower'
+127.0.0.1 - - [31/Jan/2026 19:41:29] "[35m[1mPOST /api/recommendations/guides HTTP/1.1[0m" 500 -
+127.0.0.1 - - [31/Jan/2026 19:41:46] "OPTIONS /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:46] "POST /api/recommendations/accommodations HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:49] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:41:50] "POST /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:42:14] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+Traceback (most recent call last):
+  File "/home/gihan/WBTH/apps/ml/api.py", line 430, in recommend_guides
+    results = recommender.recommend(
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/gihan/WBTH/apps/ml/GuidesRecommendationModel/guide_recommender.py", line 110, in recommend
+    scored_candidates.sort(
+TypeError: '<' not supported between instances of 'NoneType' and 'float'
+127.0.0.1 - - [31/Jan/2026 19:42:15] "[35m[1mPOST /api/recommendations/guides HTTP/1.1[0m" 500 -
+ * Detected change in '/home/gihan/WBTH/apps/ml/GuidesRecommendationModel/guide_recommender.py', reloading
+Starting Flask API on port 5000
+Database URL: postgresql://user:NGPrabuddhaE2240024@localhost:5432/wbth
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Insufficient guides to meet target of 10 (found 2), adding mock data
+Found 10 real accommodations from database
+Using budget travel style weights
+DEBUG: Total guides fetched from DB: 0
+Found 0 real guides from database
+Insufficient guides to meet target of 10 (found 0), adding mock data
+DEBUG: Total guides fetched from DB: 0
+Found 0 real guides from database
+Insufficient guides to meet target of 10 (found 0), adding mock data
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 1
+Found 1 real guides from database
+Insufficient guides to meet target of 10 (found 1), adding mock data
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 1
+Found 1 real guides from database
+Insufficient guides to meet target of 10 (found 1), adding mock data
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Fetched guide Pasan with price 80.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Insufficient guides to meet target of 10 (found 2), adding mock data
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Fetched guide Pasan with price 80.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Insufficient guides to meet target of 10 (found 2), adding mock data
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Fetched guide Pasan with price 80.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 4
+Found 4 real guides from database
+Insufficient guides to meet target of 10 (found 4), adding mock data
+Error in recommend_guides: 'NoneType' object has no attribute 'lower'
+Found 10 real accommodations from database
+Using budget travel style weights
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 2
+Found 2 real guides from database
+Insufficient guides to meet target of 10 (found 2), adding mock data
+DEBUG: Fetched guide Nimal Perera with price 5000.0 (type: <class 'float'>)
+DEBUG: Fetched guide Sunil Fernando with price 7500.0 (type: <class 'float'>)
+DEBUG: Fetched guide saman with price 100.0 (type: <class 'float'>)
+DEBUG: Fetched guide Pasan with price 80.0 (type: <class 'float'>)
+DEBUG: Total guides fetched from DB: 4
+Found 4 real guides from database
+Insufficient guides to meet target of 10 (found 4), adding mock data
+Error in recommend_guides: '<' not supported between instances of 'NoneType' and 'float'
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 691-928-690
+127.0.0.1 - - [31/Jan/2026 19:47:12] "OPTIONS /api/recommendations/guides HTTP/1.1" 200 -
+127.0.0.1 - - [31/Jan/2026 19:47:12] "POST /api/recommendations/guides HTTP/1.1" 200 -

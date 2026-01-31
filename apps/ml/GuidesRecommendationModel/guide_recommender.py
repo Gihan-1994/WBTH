@@ -109,9 +109,9 @@ class GuideRecommender:
         # Sort by score (descending), then rating, then prior_bookings
         scored_candidates.sort(
             key=lambda x: (
-                x["score"],
-                x["guide"].get("rating", 0),
-                x["guide"].get("prior_bookings", 0)
+                x.get("score") or 0.0,
+                x["guide"].get("rating") or 0.0,
+                x["guide"].get("prior_bookings") or 0
             ),
             reverse=True
         )
