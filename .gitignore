@@ -15,3 +15,6 @@ logs
 venv/
 .turbo
 .agent/workflows
+wbth_6_week_build_plan_architecture_spec.md
+wbth_monorepo_structure.md
+tasks.md
