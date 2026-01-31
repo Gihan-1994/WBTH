@@ -196,7 +196,7 @@ cd packages/prisma
 yarn build
 
 # Run migrations (creates database tables)
-npx prisma migrate deploy
+yarn migrate
 
 # Seed the database with sample data
 yarn seed
@@ -215,7 +215,7 @@ cd ../..
 > ```bash
 > cd packages/prisma
 > npx prisma generate        # Generate Prisma client
-> npx prisma migrate deploy  # Run migrations
+> yarn migrate               # Run migrations
 > yarn seed                  # Seed database
 > ```
 > 
@@ -434,7 +434,7 @@ vercel --prod
 **Database (Neon):**
 - Create a Neon database at https://neon.tech
 - Update `DATABASE_URL` in production environment variables
-- Run migrations: `npx prisma migrate deploy`
+- Run migrations: `yarn migrate` (from `packages/prisma/`)
 
 
 ## 🐛 Troubleshooting
@@ -474,16 +474,23 @@ python3 -m venv venv
 
 This can happen for two reasons:
 
-1. **Prisma Client not generated** (most common during first setup):
+1. **Environment variables not loaded** (most common):
+```bash
+cd packages/prisma
+# Use yarn migrate instead of npx prisma migrate deploy
+yarn migrate
+```
+
+> **Why this happens:** The `yarn migrate` script ensures your `.env` file is loaded before running migrations. Running `npx prisma migrate deploy` directly may not load environment variables correctly.
+
+2. **Prisma Client not generated** (during first setup):
 ```bash
 cd packages/prisma
 npx prisma generate       # Generate Prisma client FIRST
-npx prisma migrate deploy # Then run migrations
+yarn migrate              # Then run migrations
 ```
 
-> **Why this happens:** The `npx prisma migrate deploy` command needs the Prisma Client to connect to the database. If you skip `npx prisma generate`, you'll get a misleading "authentication failed" error.
-
-2. **Incorrect password**:
+3. **Incorrect password**:
 ```bash
 # Check if database is running
 docker ps | grep wbth-db
@@ -496,7 +503,7 @@ docker ps | grep wbth-db
 ```bash
 # Run migrations
 cd packages/prisma
-npx prisma migrate deploy
+yarn migrate
 ```
 
 ### Prisma Client Issues

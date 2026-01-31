@@ -121,13 +121,17 @@ This will:
 
 ### Apply Migrations (Production)
 
-Deploy pending migrations to production:
+Deploy pending migrations to production or apply existing migrations:
 
 ```bash
+# Recommended - ensures .env is loaded
 yarn migrate
-# or
-npx prisma migrate deploy
+
+# Alternative - npm
+npm run migrate
 ```
+
+> **Note:** The `yarn migrate` script uses `node -r dotenv/config` to ensure your `.env` file is loaded before running Prisma commands. This prevents "authentication failed" errors that can occur when running `npx prisma migrate deploy` directly.
 
 ### Seed the Database
 
@@ -392,6 +396,19 @@ npx prisma generate
 # In VSCode: Cmd+Shift+P -> "TypeScript: Restart TS Server"
 ```
 
+### Authentication Failed During Migrations
+
+If you get "password authentication failed" when running migrations:
+
+```bash
+# Use the migration script which loads .env properly
+yarn migrate
+
+# NOT: npx prisma migrate deploy (may not load .env)
+```
+
+The `yarn migrate` script ensures environment variables from `.env` are loaded before running Prisma commands.
+
 ## 📊 Database Hosting
 
 **Production**: Neon (Serverless PostgreSQL)
@@ -445,4 +462,4 @@ import prisma from '@repo/prisma';
 
 ---
 
-**Last Updated**: January 31, 2026
+**Last Updated**: January 30, 2026

@@ -199,7 +199,7 @@ export default function AccommodationDetailsPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
                         <div className="flex justify-between items-end mb-6">
                             <div>
-                                <span className="text-2xl font-bold">Rs {accommodation.booking_price.toLocaleString()}</span>
+                                <span className="text-2xl font-bold">Rs {(accommodation.booking_price || accommodation.price_range_min || 0).toLocaleString()}</span>
                                 <span className="text-gray-500">&nbsp; per previous booking</span>
                             </div>
 
