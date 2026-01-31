@@ -18,3 +18,5 @@ venv/
 wbth_6_week_build_plan_architecture_spec.md
 wbth_monorepo_structure.md
 tasks.md
+frontend-logs.log
+ml-service.log
