@@ -2,7 +2,7 @@
 const path = require('path');
 
 const nextConfig = {
-  transpilePackages: ["@repo/ui", "@repo/lib"],
+  transpilePackages: [],
   typescript: {
     ignoreBuildErrors: true,
   },

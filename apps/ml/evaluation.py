@@ -194,8 +194,8 @@ def create_test_scenarios() -> List[Dict]:
                 "interests": ["coastal", "luxury", "romantic"],
                 "travel_style": "luxury",
                 "group_size": 2,
-                "location_city": "Galle",
-                "location_province": "Southern",
+                "district": "Galle",
+                "province": "Southern",
                 "top_k": 10
             },
             "expected_tags": {"coastal", "luxury", "romantic"},
@@ -210,8 +210,8 @@ def create_test_scenarios() -> List[Dict]:
                 "interests": ["cultural", "budget_friendly", "photography"],
                 "travel_style": "budget",
                 "group_size": 1,
-                "location_city": "Kandy",
-                "location_province": "Central",
+                "district": "Kandy",
+                "province": "Central",
                 "top_k": 10
             },
             "expected_tags": {"cultural", "budget_friendly"},
@@ -226,8 +226,8 @@ def create_test_scenarios() -> List[Dict]:
                 "interests": ["family_friendly", "adventure", "hiking"],
                 "travel_style": "family",
                 "group_size": 4,
-                "location_city": "Ella",
-                "location_province": "Uva",
+                "district": "Ella",
+                "province": "Uva",
                 "top_k": 10
             },
             "expected_tags": {"family_friendly", "adventure", "hiking"},
@@ -242,7 +242,7 @@ def create_test_scenarios() -> List[Dict]:
                 "interests": ["wildlife", "eco_friendly", "photography"],
                 "travel_style": "eco_tourism",
                 "group_size": 3,
-                "location_province": "Eastern",
+                "province": "Eastern",
                 "top_k": 10
             },
             "expected_tags": {"wildlife", "eco_friendly"},
@@ -257,8 +257,8 @@ def create_test_scenarios() -> List[Dict]:
                 "interests": ["coastal", "romantic", "relaxation"],
                 "travel_style": "romantic",
                 "group_size": 2,
-                "location_city": "Mirissa",
-                "location_province": "Southern",
+                "district": "Mirissa",
+                "province": "Southern",
                 "top_k": 10
             },
             "expected_tags": {"coastal", "romantic"},

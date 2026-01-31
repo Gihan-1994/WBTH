@@ -15,9 +15,9 @@ class AccommodationRecommender:
     Hybrid recommendation system for accommodations.
     
     Algorithm:
-    1. Hard rule filters (availability, budget, amenities, location, group size)
-    2. Weighted scoring (interests, style, price, amenities, location, group, rating, popularity)
-    3. Ranking and reason generation
+    Hard rule filters (availability, budget, amenities, location, group size)
+    Weighted scoring (interests, style, price, amenities, location, group, rating, popularity)
+     Ranking and reason generation
     """
     
     # Default weights: [interests, style, price, amenities, location, group, rating, popularity, db_priority]

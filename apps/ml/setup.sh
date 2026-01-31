@@ -44,12 +44,12 @@ echo ""
 
 # Generate mock data
 echo "Generating mock accommodation data..."
-./venv/bin/python data_generator.py
+./venv/bin/python data/data_generator.py
 echo ""
 
 # Run unit tests
 echo "Running unit tests..."
-./venv/bin/python -m pytest test_recommender.py -v
+./venv/bin/python -m pytest tests/test_recommender.py -v
 echo ""
 
 # Run recommendation engine demo

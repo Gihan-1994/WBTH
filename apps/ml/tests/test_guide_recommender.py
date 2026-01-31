@@ -241,8 +241,13 @@ def test_full_pipeline():
     """Test complete recommendation pipeline with realistic scenario."""
     # Load actual mock data
     from GuidesRecommendationModel.guide_recommender import load_guides
+    import os
     
-    guides = load_guides("../data/mock_guides.json")
+    # Resolve path dynamically
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    mock_data_path = os.path.join(current_dir, "..", "data", "mock_guides.json")
+    
+    guides = load_guides(mock_data_path)
     recommender = GuideRecommender(guides)
     
     # Wildlife safari scenario

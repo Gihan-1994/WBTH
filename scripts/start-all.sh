@@ -71,7 +71,7 @@ cd "$PROJECT_ROOT"
 # Step 1: Start Database
 print_header "📊 Step 1/3: Starting PostgreSQL Database"
 
-if docker ps -q -f name="^/${DB_CONTAINER_NAME}$" > /dev/null 2>&1; then
+if [ -n "$(docker ps -q -f name="^/${DB_CONTAINER_NAME}$")" ]; then
     print_success "Database is already running"
 else
     print_info "Starting database..."
@@ -82,7 +82,7 @@ else
 fi
 
 # Verify database is running
-if docker ps -q -f name="^/${DB_CONTAINER_NAME}$" > /dev/null 2>&1; then
+if [ -n "$(docker ps -q -f name="^/${DB_CONTAINER_NAME}$")" ]; then
     print_success "Database is ready"
 else
     print_error "Failed to start database"

@@ -6,6 +6,14 @@ Instructions:
 2. Define your search query in the USER_QUERY section
 3. Run: ./venv/bin/python test_custom_data.py
 """
+import os
+import sys
+
+# Add parent directory to sys.path to find recommender.py
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if base_dir not in sys.path:
+    sys.path.append(base_dir)
+
 from recommender import AccommodationRecommender
 import json
 
@@ -13,7 +21,8 @@ import json
 # STEP 1: LOAD DATA
 # ============================================================================
 # Option A: Load 1000 mock accommodations (CURRENT)
-with open('../data/mock_accommodations.json', 'r') as f:
+data_path = os.path.join(base_dir, 'data/mock_accommodations.json')
+with open(data_path, 'r') as f:
     CUSTOM_ACCOMMODATIONS = json.load(f)
 
 # Option B: Use custom accommodations (COMMENTED OUT)
@@ -79,8 +88,8 @@ USER_QUERY = {
     "interests": ["coastal", "romantic"],    # Your interests
     "travel_style": "",              # Your travel style
     "group_size": 2,                         # Number of people
-    "location_city": "Galle",                # Preferred city (optional)
-    "location_province": "Southern",         # Preferred province (optional)
+    "district": "Galle",                # Preferred city (optional)
+    "province": "Southern",         # Preferred province (optional)
     "city_only": False,          # True = only show city, False = province OK
     "top_k": 5                   # Number of recommendations
 }
@@ -114,8 +123,8 @@ def main():
     print(f"   Required Amenities: {', '.join(USER_QUERY['required_amenities'])}")
     print(f"   Interests: {', '.join(USER_QUERY['interests'])}")
     print(f"   Travel Style: {USER_QUERY['travel_style']}")
-    if USER_QUERY.get('location_city'):
-        print(f"   Preferred Location: {USER_QUERY['location_city']}, {USER_QUERY['location_province']}")
+    if USER_QUERY.get('district'):
+        print(f"   Preferred Location: {USER_QUERY['district']}, {USER_QUERY['province']}")
     print()
 
     # Create recommender
@@ -134,7 +143,7 @@ def main():
 
         for i, rec in enumerate(results["recommendations"], 1):
             print(f"{i}. {rec['name']}")
-            print(f"   📍 {rec['location']}, {rec['province']}")
+            print(f"   📍 {rec['district']}, {rec['province']}")
             print(f"   💰 {rec['price_range_min']:.0f}-{rec['price_range_max']:.0f} LKR")
             print(f"   ⭐ Rating: {rec['rating']}/5.0")
             print(f"   📊 Score: {rec['score']:.3f}")

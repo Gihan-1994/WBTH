@@ -2,14 +2,7 @@
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@repo/ui/*": [
-        "packages/ui/src/*"
-      ],
-      "@repo/lib/*": [
-        "packages/lib/src/*"
-      ]
-    },
+    "paths": {},
     "skipLibCheck": true,
     "skipDefaultLibCheck": true
   },

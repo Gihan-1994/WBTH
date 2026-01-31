@@ -573,8 +573,15 @@ class GuideRecommender:
         return filters
 
 
-def load_guides(filename: str = "../data/mock_guides.json") -> List[Dict]:
+def load_guides(filename: str = None) -> List[Dict]:
     """Load guides from JSON file."""
+    if filename is None:
+        import os
+        # Get the directory where this script is located
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        # Resolve to data/mock_guides.json relative to the script location
+        filename = os.path.join(base_dir, "..", "data", "mock_guides.json")
+        
     with open(filename, 'r', encoding='utf-8') as f:
         return json.load(f)
 
