@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "./build.sh",
-    "migrate": "prisma migrate deploy",
+    "migrate": "node -r dotenv/config $(which prisma) migrate deploy",
     "seed": "tsx seed/index.ts",
     "dev": "prisma db pull && prisma generate"
   },
