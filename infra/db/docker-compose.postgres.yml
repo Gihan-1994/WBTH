@@ -4,7 +4,7 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: NGPrabuddhaE2240024
       POSTGRES_USER: user
       POSTGRES_DB: wbth
     ports:

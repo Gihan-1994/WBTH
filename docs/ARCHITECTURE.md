@@ -26,15 +26,14 @@ This document provides a visual overview of the WBTH deployment architecture.
                 │                       │
                 │                       │
     ┌───────────▼──────────┐   ┌───────▼────────────────┐
-    │  Google Cloud Run    │   │  Managed PostgreSQL    │
-    │                      │   │  (Neon/Supabase/       │
-    │  Flask ML Service    │   │   Cloud SQL)           │
-    │  (apps/ml)           │   │                        │
-    │  • Recommendations   │   │  • User data           │
-    │  • ML algorithms     │───┤  • Bookings            │
-    │  • Auto-scaling      │   │  • Accommodations      │
-    └──────────────────────┘   │  • Guides              │
-                               └────────────────────────┘
+    │  Render              │   │  Neon PostgreSQL       │
+    │                      │   │  (Serverless)          │
+    │  Flask ML Service    │   │                        │
+    │  (apps/ml)           │   │  • User data           │
+    │  • Recommendations   │   │  • Bookings            │
+    │  • ML algorithms     │───┤  • Accommodations      │
+    │  • Auto-scaling      │   │  • Guides              │
+    └──────────────────────┘   └────────────────────────┘
 ```
 
 ## Component Details
@@ -49,27 +48,26 @@ This document provides a visual overview of the WBTH deployment architecture.
   - Automatic HTTPS
   - Global CDN distribution
 
-### ML Service (Google Cloud Run)
+### ML Service (Render)
 - **Technology**: Flask, scikit-learn, pandas
-- **Hosting**: Google Cloud Run
+- **Hosting**: Render
 - **Features**:
   - Containerized deployment
-  - Auto-scaling (0-10 instances)
-  - Pay-per-use pricing
+  - Auto-scaling
+  - Free tier available
   - Automatic HTTPS
   - Direct database access
 
-### Database (Managed PostgreSQL)
+### Database (Neon)
 - **Technology**: PostgreSQL 16
-- **Hosting Options**:
-  - **Neon** (Recommended): Serverless PostgreSQL
-  - **Supabase**: PostgreSQL with additional features
-  - **Cloud SQL**: Fully managed GCP PostgreSQL
+- **Hosting**: Neon (Serverless PostgreSQL)
 - **Features**:
+  - Serverless architecture with auto-scaling
   - Automatic backups
-  - Connection pooling
-  - High availability
+  - Connection pooling (built-in)
+  - Branching for development
   - Encryption at rest and in transit
+  - Free tier: 0.5 GB storage
 
 ## Data Flow
 
@@ -84,7 +82,7 @@ User → Vercel (Next.js) → PostgreSQL
 
 ### Accommodation Recommendations
 ```
-User → Vercel (Next.js API) → Cloud Run (ML Service)
+User → Vercel (Next.js API) → Render (ML Service)
                                       ↓
                                PostgreSQL (fetch data)
                                       ↓
@@ -128,9 +126,9 @@ User → Vercel (Next.js API) → PostgreSQL (create booking)
 - Global CDN for fast content delivery
 - Edge functions for low latency
 
-### ML Service (Cloud Run)
-- Auto-scaling: 0-10 instances
-- Scales to zero when not in use
+### ML Service (Render)
+- Auto-scaling based on traffic
+- Scales to zero on free tier when not in use
 - Handles concurrent requests efficiently
 
 ### Database
@@ -146,9 +144,9 @@ User → Vercel (Next.js API) → PostgreSQL (create booking)
 - Error tracking
 - Deployment history
 
-### Google Cloud Run
-- Cloud Logging
-- Cloud Monitoring
+### Render
+- Real-time logs
+- Performance monitoring
 - Request metrics
 - Error rates
 
@@ -173,11 +171,11 @@ User → Vercel (Next.js API) → PostgreSQL (create booking)
 
 ### Free Tier Usage
 - Vercel: 100 GB bandwidth/month
-- Cloud Run: 2M requests/month
+- Render: 750 hours/month (free tier)
 - Neon: 0.5 GB storage
 
 ### Production Optimization
-- Cloud Run: Scale to zero when idle
+- Render: Scale to zero when idle (free tier)
 - Database: Right-size instance
 - Vercel: Optimize images and assets
 - CDN: Cache static content

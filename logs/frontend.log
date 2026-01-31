@@ -7,27 +7,169 @@ $ next dev
 
 ✓ Starting...
 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-✓ Ready in 5.4s
- GET /dashboard/admin 200 in 1213ms (compile: 691ms, proxy.ts: 162ms, render: 360ms)
- GET /api/auth/session 200 in 2.2s (compile: 2.1s, render: 137ms)
- GET /api/admin/analytics?period=daily 200 in 497ms (compile: 131ms, render: 366ms)
- GET /api/admin/analytics?period=daily 200 in 381ms (compile: 12ms, render: 370ms)
- GET /api/admin/guides 200 in 126ms (compile: 56ms, render: 70ms)
- GET /api/admin/guides 200 in 45ms (compile: 6ms, render: 39ms)
- GET /api/admin/analytics?period=daily 200 in 50ms (compile: 3ms, render: 47ms)
- GET /api/admin/analytics?period=daily 200 in 85ms (compile: 4ms, render: 80ms)
- GET / 200 in 144ms (compile: 118ms, render: 27ms)
- GET /api/admin/check-exists 200 in 134ms (compile: 82ms, render: 51ms)
- GET /api/admin/check-exists 200 in 14ms (compile: 4ms, render: 10ms)
- GET /accommodations 200 in 150ms (compile: 88ms, render: 62ms)
- GET /api/accommodations? 200 in 507ms (compile: 167ms, render: 341ms)
- GET /api/accommodations? 200 in 343ms (compile: 8ms, render: 335ms)
- GET /api/admin/check-exists 200 in 123ms (compile: 9ms, render: 114ms)
- GET /api/admin/check-exists 200 in 37ms (compile: 20ms, render: 17ms)
- GET /accommodations 200 in 33ms (compile: 3ms, render: 30ms)
- GET /api/accommodations? 200 in 193ms (compile: 3ms, render: 190ms)
- GET /api/accommodations? 200 in 155ms (compile: 3ms, render: 152ms)
- GET /api/admin/check-exists 200 in 22ms (compile: 8ms, render: 15ms)
- GET /api/admin/check-exists 200 in 58ms (compile: 6ms, render: 51ms)
- GET /recommendations 200 in 72ms (compile: 47ms, render: 25ms)
-[?25h
+✓ Ready in 2.4s
+ GET /dashboard/admin 200 in 2.2s (compile: 1456ms, proxy.ts: 291ms, render: 406ms)
+ GET /api/auth/session 200 in 2.7s (compile: 2.6s, render: 176ms)
+prisma:error 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count()` invocation in
+/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__c152d71e._.js:331:207
+
+  328 const startDate = new Date(now);
+  329 startDate.setDate(startDate.getDate() - daysToSubtract);
+  330 // Get user statistics
+→ 331 const totalUsers = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count(
+Authentication failed against the database server, the provided database credentials for `user` are not valid
+Error fetching analytics: Error [PrismaClientKnownRequestError]: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count()` invocation in
+/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__c152d71e._.js:331:207
+
+  328 const startDate = new Date(now);
+  329 startDate.setDate(startDate.getDate() - daysToSubtract);
+  330 // Get user statistics
+→ 331 const totalUsers = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count(
+Authentication failed against the database server, the provided database credentials for `user` are not valid
+    at <unknown> (app/api/admin/analytics/route.ts:23:46)
+    at async GET (app/api/admin/analytics/route.ts:23:28)
+  21 |
+  22 |         // Get user statistics
+> 23 |         const totalUsers = await prisma.user.count();
+     |                                              ^
+  24 |         const usersByType = await prisma.user.groupBy({
+  25 |             by: ["role"],
+  26 |             _count: true, {
+  code: 'P1000',
+  meta: [Object],
+  clientVersion: '7.2.0'
+}
+ GET /api/admin/analytics?period=daily 500 in 755ms (compile: 110ms, render: 645ms)
+prisma:error 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count()` invocation in
+/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__c152d71e._.js:331:207
+
+  328 const startDate = new Date(now);
+  329 startDate.setDate(startDate.getDate() - daysToSubtract);
+  330 // Get user statistics
+→ 331 const totalUsers = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count(
+Authentication failed against the database server, the provided database credentials for `user` are not valid
+Error fetching analytics: Error [PrismaClientKnownRequestError]: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count()` invocation in
+/home/gihan/WBTH/apps/web/.next/dev/server/chunks/[root-of-the-server]__c152d71e._.js:331:207
+
+  328 const startDate = new Date(now);
+  329 startDate.setDate(startDate.getDate() - daysToSubtract);
+  330 // Get user statistics
+→ 331 const totalUsers = await __TURBOPACK__imported__module__$5b$project$5d2f$packages$2f$prisma$2f$dist$2f$src$2f$client$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__$3c$locals$3e$__["prisma"].user.count(
+Authentication failed against the database server, the provided database credentials for `user` are not valid
+    at <unknown> (app/api/admin/analytics/route.ts:23:46)
+    at async GET (app/api/admin/analytics/route.ts:23:28)
+  21 |
+  22 |         // Get user statistics
+> 23 |         const totalUsers = await prisma.user.count();
+     |                                              ^
+  24 |         const usersByType = await prisma.user.groupBy({
+  25 |             by: ["role"],
+  26 |             _count: true, {
+  code: 'P1000',
+  meta: [Object],
+  clientVersion: '7.2.0'
+}
+ GET /api/admin/analytics?period=daily 500 in 337ms (compile: 5ms, render: 332ms)
+ GET /dashboard/admin 200 in 331ms (compile: 33ms, proxy.ts: 32ms, render: 267ms)
+ GET /api/auth/session 200 in 94ms (compile: 61ms, render: 33ms)
+ GET /api/admin/analytics?period=daily 200 in 356ms (compile: 19ms, render: 337ms)
+ GET /api/admin/analytics?period=daily 200 in 143ms (compile: 6ms, render: 137ms)
+ GET /api/admin/users? 200 in 232ms (compile: 98ms, render: 134ms)
+ GET /api/admin/users? 200 in 29ms (compile: 5ms, render: 24ms)
+ GET /api/admin/guides 200 in 141ms (compile: 107ms, render: 34ms)
+ GET /api/admin/guides 200 in 27ms (compile: 4ms, render: 23ms)
+ GET /api/admin/analytics?period=daily 200 in 205ms (compile: 11ms, render: 194ms)
+ GET /api/admin/analytics?period=daily 200 in 150ms (compile: 7ms, render: 143ms)
+ GET /api/auth/csrf 200 in 48ms (compile: 40ms, render: 9ms)
+ POST /api/auth/signout 200 in 15ms (compile: 3ms, render: 12ms)
+ GET / 200 in 331ms (compile: 119ms, render: 213ms)
+ GET /api/admin/check-exists 200 in 242ms (compile: 213ms, render: 29ms)
+ GET /api/auth/session 200 in 241ms (compile: 63ms, render: 178ms)
+ GET /login 200 in 2.2s (compile: 2.2s, render: 62ms)
+ GET /api/auth/providers 200 in 68ms (compile: 55ms, render: 13ms)
+ GET /api/auth/csrf 200 in 13ms (compile: 5ms, render: 9ms)
+ POST /api/auth/callback/credentials 200 in 216ms (compile: 3ms, render: 214ms)
+ GET /api/auth/session 200 in 15ms (compile: 3ms, render: 12ms)
+ GET /dashboard 200 in 996ms (compile: 802ms, proxy.ts: 20ms, render: 174ms)
+ GET /dashboard 200 in 65ms (compile: 4ms, proxy.ts: 8ms, render: 53ms)
+ GET /dashboard/provider 200 in 214ms (compile: 136ms, proxy.ts: 14ms, render: 63ms)
+ GET /dashboard/provider 200 in 40ms (compile: 8ms, proxy.ts: 7ms, render: 26ms)
+ GET /api/accommodation-provider/profile 200 in 302ms (compile: 218ms, render: 84ms)
+ GET /api/accommodation-provider/accommodations 200 in 309ms (compile: 149ms, render: 160ms)
+ GET /api/accommodation-provider/bookings 200 in 359ms (compile: 91ms, render: 267ms)
+ GET /api/accommodation-provider/profile 200 in 39ms (compile: 5ms, render: 34ms)
+ GET /api/accommodation-provider/accommodations 200 in 63ms (compile: 10ms, render: 54ms)
+ GET /api/accommodation-provider/bookings 200 in 54ms (compile: 4ms, render: 50ms)
+ GET /api/notifications?limit=10 200 in 150ms (compile: 100ms, render: 50ms)
+ GET /api/notifications?limit=10 200 in 27ms (compile: 5ms, render: 22ms)
+ GET /api/notifications?limit=10 200 in 44ms (compile: 3ms, render: 41ms)
+ GET /api/notifications?limit=10 200 in 51ms (compile: 6ms, render: 45ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 3ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 3ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 43ms (compile: 3ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 3ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 49ms (compile: 2ms, render: 46ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 3ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 4ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 43ms (compile: 4ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 2ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 2ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 36ms (compile: 1926µs, render: 34ms)
+ GET /api/notifications?limit=10 200 in 50ms (compile: 4ms, render: 47ms)
+ GET /api/notifications?limit=10 200 in 49ms (compile: 3ms, render: 46ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 3ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 85ms (compile: 10ms, render: 74ms)
+ GET /api/notifications?limit=10 200 in 139ms (compile: 5ms, render: 134ms)
+ GET /api/notifications?limit=10 200 in 58ms (compile: 3ms, render: 54ms)
+ GET /api/notifications?limit=10 200 in 102ms (compile: 8ms, render: 94ms)
+ GET /api/notifications?limit=10 200 in 92ms (compile: 2ms, render: 90ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 3ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 51ms (compile: 5ms, render: 46ms)
+ GET /api/notifications?limit=10 200 in 116ms (compile: 10ms, render: 107ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 2ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 3ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 43ms (compile: 3ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 45ms (compile: 5ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 62ms (compile: 5ms, render: 57ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 44ms (compile: 3ms, render: 42ms)
+ GET /api/notifications?limit=10 200 in 53ms (compile: 4ms, render: 50ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 3ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 5ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 2ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 3ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 36ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 4ms, render: 34ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 2ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 4ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 2ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 44ms (compile: 5ms, render: 38ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 4ms, render: 33ms)
+ GET /api/notifications?limit=10 200 in 105ms (compile: 4ms, render: 101ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 4ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 51ms (compile: 5ms, render: 45ms)
+ GET /api/notifications?limit=10 200 in 46ms (compile: 3ms, render: 44ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 43ms (compile: 3ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 44ms (compile: 2ms, render: 42ms)
+ GET /api/notifications?limit=10 200 in 40ms (compile: 3ms, render: 37ms)
+ GET /api/notifications?limit=10 200 in 45ms (compile: 3ms, render: 41ms)
+ GET /api/notifications?limit=10 200 in 41ms (compile: 2ms, render: 39ms)
+ GET /api/notifications?limit=10 200 in 42ms (compile: 2ms, render: 40ms)
+ GET /api/notifications?limit=10 200 in 37ms (compile: 3ms, render: 34ms)
+ GET /api/notifications?limit=10 200 in 38ms (compile: 3ms, render: 35ms)
+ GET /api/notifications?limit=10 200 in 39ms (compile: 2ms, render: 36ms)
