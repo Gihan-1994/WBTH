@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AdminHeader from "@/components/admin-dashboard/AdminHeader";
 import AnalyticsSection from "@/components/admin-dashboard/AnalyticsSection";
 import UsersSection from "@/components/admin-dashboard/UsersSection";
 import GuidesSection from "@/components/admin-dashboard/GuidesSection";
@@ -70,45 +69,79 @@ export default function AdminDashboardPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Header */}
-            <AdminHeader adminName={session?.user?.name || "Admin"} />
-
-            {/* Navigation Tabs */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <nav className="flex gap-1 overflow-x-auto py-4 scrollbar-hide">
-                        {tabs.map((tab) => {
-                            const Icon = tab.icon;
-                            const isActive = activeTab === tab.id;
-                            return (
-                                <button
-                                    key={tab.id}
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium whitespace-nowrap transition-all ${
-                                        isActive
-                                            ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25"
-                                            : "text-gray-600 hover:bg-gray-100"
-                                    }`}
-                                >
-                                    <Icon size={18} />
-                                    {tab.label}
-                                </button>
-                            );
-                        })}
-                    </nav>
+        <div className="min-h-screen bg-slate-50 flex">
+            {/* Sidebar */}
+            <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col z-50">
+                {/* Logo */}
+                <div className="h-[73px] px-6 border-b border-gray-200 flex items-center">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
+                            <Waves className="text-white" size={20} />
+                        </div>
+                        <div>
+                            <p className="font-semibold text-gray-900">Tourism Hub</p>
+                            <p className="text-xs text-gray-500">Admin Panel</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                {/* Navigation */}
+                <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+                    {tabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
+                                    isActive
+                                        ? "bg-gray-900 text-white"
+                                        : "text-gray-600 hover:bg-gray-100"
+                                }`}
+                            >
+                                <Icon size={20} />
+                                {tab.label}
+                            </button>
+                        );
+                    })}
+                </nav>
+
+                {/* User Info */}
+                <div className="p-4 border-t border-gray-100">
+                    <div className="flex items-center gap-3 px-4 py-3">
+                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                            <span className="text-gray-600 font-medium">
+                                {session?.user?.name?.charAt(0) || "A"}
+                            </span>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="font-medium text-gray-900 truncate">{session?.user?.name || "Admin"}</p>
+                            <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {activeTab === "analytics" && <AnalyticsSection />}
-                {activeTab === "users" && <UsersSection />}
-                {activeTab === "guides" && <GuidesSection />}
-                {activeTab === "accommodations" && <AccommodationsSection />}
-                {activeTab === "events" && <EventsSection />}
-                {activeTab === "messages" && <MessagesSection />}
-                {activeTab === "profile" && <AdminProfileSection />}
+            <main className="flex-1 ml-64">
+                {/* Top Bar */}
+                <header className="h-[73px] bg-white border-b border-gray-200 px-8 flex items-center sticky top-0 z-40">
+                    <h1 className="text-2xl font-semibold text-gray-900">
+                        {tabs.find(t => t.id === activeTab)?.label}
+                    </h1>
+                </header>
+
+                {/* Content */}
+                <div className="p-8">
+                    {activeTab === "analytics" && <AnalyticsSection />}
+                    {activeTab === "users" && <UsersSection />}
+                    {activeTab === "guides" && <GuidesSection />}
+                    {activeTab === "accommodations" && <AccommodationsSection />}
+                    {activeTab === "events" && <EventsSection />}
+                    {activeTab === "messages" && <MessagesSection />}
+                    {activeTab === "profile" && <AdminProfileSection />}
+                </div>
             </main>
         </div>
     );

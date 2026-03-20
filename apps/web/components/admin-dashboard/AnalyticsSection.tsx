@@ -167,7 +167,8 @@ export default function AnalyticsSection({ initialPeriod = "daily" }: AnalyticsS
                         <Doughnut
                             data={bookingStatusData}
                             options={{
-                                ...chartOptions,
+                                responsive: true,
+                                maintainAspectRatio: false,
                                 cutout: "70%",
                                 plugins: { legend: { display: true, position: "bottom" } }
                             }}
