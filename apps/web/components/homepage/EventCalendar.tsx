@@ -84,20 +84,20 @@ export default function EventCalendar() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center py-12">
-                <Loader2 className="animate-spin text-orange-600 mb-4" size={48} />
-                <p className="text-gray-600">Loading upcoming events...</p>
+            <div className="flex flex-col items-center justify-center py-20">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-indigo-600 border-t-transparent mb-4"></div>
+                <p className="text-gray-500">Loading upcoming events...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="text-center py-12 bg-red-50 rounded-xl border border-red-200">
-                <p className="text-red-600 font-semibold">Failed to load events</p>
+            <div className="text-center py-20 bg-red-50 rounded-xl border border-red-100">
+                <p className="text-red-600 font-medium mb-4">Failed to load events</p>
                 <button
                     onClick={fetchUpcomingEvents}
-                    className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    className="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
                 >
                     Try Again
                 </button>
@@ -107,10 +107,10 @@ export default function EventCalendar() {
 
     if (events.length === 0) {
         return (
-            <div className="text-center py-12 bg-gray-50 rounded-xl">
-                <Calendar className="mx-auto text-gray-400 mb-4" size={48} />
-                <p className="text-gray-600 text-lg">No upcoming events at the moment</p>
-                <p className="text-gray-500 text-sm mt-2">Check back soon for exciting events!</p>
+            <div className="text-center py-20">
+                <Calendar className="mx-auto text-gray-300 mb-4" size={64} />
+                <p className="text-xl text-gray-600 font-medium mb-2">No upcoming events</p>
+                <p className="text-gray-500">Check back soon for exciting events!</p>
             </div>
         );
     }
@@ -118,29 +118,29 @@ export default function EventCalendar() {
     const groupedEvents = groupEventsByDate();
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-10">
             {Object.entries(groupedEvents).map(([dateString, dateEvents]) => (
-                <div key={dateString} className="space-y-4">
+                <div key={dateString} className="space-y-5">
                     {/* Date Header */}
                     <div className="flex items-center gap-4">
-                        <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-xl shadow-lg">
+                        <div className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-xl shadow-md">
                             <div className="text-center">
                                 <div className="text-2xl font-bold">
                                     {new Date(dateEvents[0].date).getDate()}
                                 </div>
-                                <div className="text-xs uppercase tracking-wide">
+                                <div className="text-xs uppercase tracking-wide opacity-90">
                                     {new Date(dateEvents[0].date).toLocaleDateString("en-US", { month: "short" })}
                                 </div>
                             </div>
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-gray-800">{dateString}</h3>
-                            <p className="text-sm text-gray-600">{formatDayOfWeek(dateEvents[0].date.toString())}</p>
+                            <h3 className="text-xl font-bold text-gray-900">{dateString}</h3>
+                            <p className="text-sm text-gray-500">{formatDayOfWeek(dateEvents[0].date.toString())}</p>
                         </div>
                     </div>
 
                     {/* Events for this date */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ml-0 md:ml-20">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 pl-0 md:pl-[88px]">
                         {dateEvents.map((event) => (
                             <EventCard key={event.id} event={event} />
                         ))}
