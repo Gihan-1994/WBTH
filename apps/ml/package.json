@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "python api.py",
-    "start": "python api.py"
+    "setup": "./setup.sh",
+    "dev": "./venv/bin/python api.py",
+    "start": "./venv/bin/python api.py"
   }
 }
