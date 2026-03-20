@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Rajdhani', 'sans-serif'],
+        display: ['Teko', 'sans-serif'],
+        handwriting: ['Permanent Marker', 'cursive'],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
