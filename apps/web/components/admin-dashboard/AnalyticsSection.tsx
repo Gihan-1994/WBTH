@@ -14,12 +14,11 @@ import {
     Legend,
     Filler,
 } from "chart.js";
-import { Line, Bar, Pie, Doughnut } from "react-chartjs-2";
+import { Line, Bar, Doughnut } from "react-chartjs-2";
 import { Users, TrendingUp, DollarSign, MapPin, UserCheck, Building } from "lucide-react";
 import { AnalyticsData } from "./types";
 import { CHART_COLORS, TIME_PERIODS, USER_ROLE_LABELS } from "./constants";
 
-// Register Chart.js components
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -37,9 +36,6 @@ interface AnalyticsSectionProps {
     initialPeriod?: "daily" | "weekly";
 }
 
-/**
- * Analytics dashboard with Chart.js visualizations
- */
 export default function AnalyticsSection({ initialPeriod = "daily" }: AnalyticsSectionProps) {
     const [period, setPeriod] = useState<"daily" | "weekly">(initialPeriod);
     const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
@@ -66,270 +62,151 @@ export default function AnalyticsSection({ initialPeriod = "daily" }: AnalyticsS
 
     if (loading || !analytics) {
         return (
-            <div className="flex items-center justify-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <div className="flex items-center justify-center py-32">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-indigo-600 border-t-transparent"></div>
             </div>
         );
     }
 
-    // User Growth Chart Data
     const userGrowthData = {
         labels: analytics.userStats.growth.map(item => item.date),
-        datasets: [
-            {
-                label: "New Users",
-                data: analytics.userStats.growth.map(item => item.count),
-                borderColor: CHART_COLORS.primary,
-                backgroundColor: CHART_COLORS.primaryLight,
-                fill: true,
-                tension: 0.4,
-            },
-        ],
+        datasets: [{
+            label: "New Users",
+            data: analytics.userStats.growth.map(item => item.count),
+            borderColor: CHART_COLORS.primary,
+            backgroundColor: CHART_COLORS.primaryLight,
+            fill: true,
+            tension: 0.4,
+        }],
     };
 
-    // User Distribution Pie Chart Data
-    const userDistributionData = {
-        labels: Object.keys(analytics.userStats.byType).map(role => USER_ROLE_LABELS[role] || role),
-        datasets: [
-            {
-                data: Object.values(analytics.userStats.byType),
-                backgroundColor: [
-                    CHART_COLORS.info,
-                    CHART_COLORS.success,
-                    CHART_COLORS.warning,
-                    CHART_COLORS.danger,
-                ],
-                borderWidth: 2,
-                borderColor: "#fff",
-            },
-        ],
-    };
-
-    // Booking Trends Bar Chart Data
     const bookingTrendsData = {
         labels: analytics.bookingStats.overTime.map(item => item.date),
-        datasets: [
-            {
-                label: "Bookings",
-                data: analytics.bookingStats.overTime.map(item => item.count),
-                backgroundColor: CHART_COLORS.success,
-                borderRadius: 8,
-            },
-        ],
+        datasets: [{
+            label: "Bookings",
+            data: analytics.bookingStats.overTime.map(item => item.count),
+            backgroundColor: CHART_COLORS.secondary,
+            borderRadius: 6,
+        }],
     };
 
-    // Revenue Trends Line Chart Data
-    const revenueTrendsData = {
-        labels: analytics.revenueStats.trends.map(item => item.date),
-        datasets: [
-            {
-                label: "Revenue (LKR)",
-                data: analytics.revenueStats.trends.map(item => item.amount),
-                borderColor: CHART_COLORS.warning,
-                backgroundColor: CHART_COLORS.warningLight,
-                fill: true,
-                tension: 0.4,
-            },
-        ],
-    };
-
-    // Booking Status Doughnut Chart Data
     const bookingStatusData = {
-        labels: Object.keys(analytics.bookingStats.byStatus).map(status =>
-            status.charAt(0).toUpperCase() + status.slice(1)
-        ),
-        datasets: [
-            {
-                data: Object.values(analytics.bookingStats.byStatus),
-                backgroundColor: [
-                    CHART_COLORS.warning,
-                    CHART_COLORS.success,
-                    CHART_COLORS.danger,
-                ],
-                borderWidth: 2,
-                borderColor: "#fff",
-            },
-        ],
-    };
-
-    // Popular Destinations Horizontal Bar Chart Data
-    const popularDestinationsData = {
-        labels: analytics.popularDestinations.map(item => item.location),
-        datasets: [
-            {
-                label: "Bookings",
-                data: analytics.popularDestinations.map(item => item.count),
-                backgroundColor: CHART_COLORS.secondary,
-                borderRadius: 8,
-            },
-        ],
+        labels: Object.keys(analytics.bookingStats.byStatus).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+        datasets: [{
+            data: Object.values(analytics.bookingStats.byStatus),
+            backgroundColor: [CHART_COLORS.warning, CHART_COLORS.success, CHART_COLORS.danger],
+            borderWidth: 0,
+        }],
     };
 
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: "top" as const,
-            },
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { grid: { display: false } },
+            y: { grid: { color: "rgba(0,0,0,0.05)" } },
         },
     };
 
+    const stats = [
+        { label: "Total Users", value: analytics.userStats.total, icon: Users, color: "indigo" },
+        { label: "Total Bookings", value: analytics.bookingStats.total, icon: TrendingUp, color: "emerald" },
+        { label: "Platform Income", value: `$${analytics.platformIncome?.toFixed(0) || 0}`, icon: DollarSign, color: "amber" },
+        { label: "Active Guides", value: analytics.activeGuides, icon: UserCheck, color: "purple" },
+        { label: "Providers", value: analytics.activeProviders, icon: Building, color: "cyan" },
+        { label: "Revenue", value: `LKR ${(analytics.revenueStats.total / 1000).toFixed(0)}K`, icon: MapPin, color: "rose" },
+    ];
+
     return (
-        <div className="space-y-6">
-            {/* Header with Time Period Selector */}
-            <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-800">📊 Analytics Overview</h2>
-                <div className="flex gap-2">
-                    {TIME_PERIODS.map((timePeriod) => (
+        <div className="space-y-8">
+            {/* Period Toggle */}
+            <div className="flex justify-end">
+                <div className="inline-flex bg-gray-100 rounded-full p-1">
+                    {TIME_PERIODS.map((p) => (
                         <button
-                            key={timePeriod.value}
-                            onClick={() => setPeriod(timePeriod.value as "daily" | "weekly")}
-                            className={`px-4 py-2 rounded-xl font-semibold transition-all duration-200 ${period === timePeriod.value
-                                ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                                }`}
+                            key={p.value}
+                            onClick={() => setPeriod(p.value as "daily" | "weekly")}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                                period === p.value
+                                    ? "bg-white text-gray-900 shadow-sm"
+                                    : "text-gray-600 hover:text-gray-900"
+                            }`}
                         >
-                            {timePeriod.label}
+                            {p.label}
                         </button>
                     ))}
                 </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-blue-600 font-semibold mb-1">Total Users</p>
-                            <p className="text-3xl font-bold text-blue-900">{analytics.userStats.total}</p>
-                            <p className="text-sm text-blue-600 mt-2">
-                                {Object.entries(analytics.userStats.byType).map(([role, count]) => (
-                                    <span key={role} className="mr-3">
-                                        {USER_ROLE_LABELS[role]}: {count}
-                                    </span>
-                                ))}
-                            </p>
-                        </div>
-                        <Users className="text-blue-600" size={40} />
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {stats.map((stat, i) => (
+                    <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                        <stat.icon className="text-gray-400 mb-3" size={22} />
+                        <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                        <p className="text-sm text-gray-500">{stat.label}</p>
                     </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-green-600 font-semibold mb-1">Total Bookings</p>
-                            <p className="text-3xl font-bold text-green-900">{analytics.bookingStats.total}</p>
-                            <p className="text-sm text-green-600 mt-2">
-                                Conversion: {analytics.bookingStats.conversionRate}%
-                            </p>
-                        </div>
-                        <TrendingUp className="text-green-600" size={40} />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border border-orange-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-orange-600 font-semibold mb-1">Platform Income</p>
-                            <p className="text-3xl font-bold text-orange-900">
-                                ${analytics.platformIncome?.toFixed(2) || "0.00"}
-                            </p>
-                            <p className="text-sm text-orange-600 mt-2">
-                                10% fee from confirmed bookings
-                            </p>
-                        </div>
-                        <DollarSign className="text-orange-600" size={40} />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-purple-600 font-semibold mb-1">Active Guides</p>
-                            <p className="text-3xl font-bold text-purple-900">{analytics.activeGuides}</p>
-                        </div>
-                        <UserCheck className="text-purple-600" size={40} />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-pink-50 to-pink-100 p-6 rounded-2xl border border-pink-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-pink-600 font-semibold mb-1">Active Providers</p>
-                            <p className="text-3xl font-bold text-pink-900">{analytics.activeProviders}</p>
-                        </div>
-                        <Building className="text-pink-600" size={40} />
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-2xl border border-teal-200">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="teal-pink-600 font-semibold mb-1">Total Revenue</p>
-                            <p className="text-2xl font-bold text-teal-900">
-                                LKR {analytics.revenueStats.total.toLocaleString()}
-                            </p>
-                        </div>
-                        <MapPin className="text-teal-600" size={40} />
-                    </div>
-                </div>
+                ))}
             </div>
 
-            {/* Charts Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* User Growth Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">User Growth</h3>
-                    <div style={{ height: "300px" }}>
+            {/* Charts */}
+            <div className="grid lg:grid-cols-3 gap-6">
+                {/* User Growth */}
+                <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">User Growth</h3>
+                    <div style={{ height: "280px" }}>
                         <Line data={userGrowthData} options={chartOptions} />
                     </div>
                 </div>
 
-                {/* User Distribution Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">User Distribution</h3>
-                    <div style={{ height: "300px" }}>
-                        <Pie data={userDistributionData} options={chartOptions} />
-                    </div>
-                </div>
-
-                {/* Booking Trends Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Booking Trends</h3>
-                    <div style={{ height: "300px" }}>
-                        <Bar data={bookingTrendsData} options={chartOptions} />
-                    </div>
-                </div>
-
-                {/* Revenue Trends Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Revenue Trends</h3>
-                    <div style={{ height: "300px" }}>
-                        <Line data={revenueTrendsData} options={chartOptions} />
-                    </div>
-                </div>
-
-                {/* Booking Status Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Booking Status</h3>
-                    <div style={{ height: "300px" }}>
-                        <Doughnut data={bookingStatusData} options={chartOptions} />
-                    </div>
-                </div>
-
-                {/* Popular Destinations Chart */}
-                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Popular Destinations</h3>
-                    <div style={{ height: "300px" }}>
-                        <Bar
-                            data={popularDestinationsData}
+                {/* Booking Status */}
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Booking Status</h3>
+                    <div style={{ height: "280px" }} className="flex items-center justify-center">
+                        <Doughnut
+                            data={bookingStatusData}
                             options={{
                                 ...chartOptions,
-                                indexAxis: "y" as const,
+                                cutout: "70%",
+                                plugins: { legend: { display: true, position: "bottom" } }
                             }}
                         />
                     </div>
+                </div>
+            </div>
+
+            {/* Booking Trends */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">Booking Trends</h3>
+                <div style={{ height: "280px" }}>
+                    <Bar data={bookingTrendsData} options={chartOptions} />
+                </div>
+            </div>
+
+            {/* Popular Destinations */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">Popular Destinations</h3>
+                <div className="space-y-4">
+                    {analytics.popularDestinations.slice(0, 5).map((dest, i) => (
+                        <div key={i} className="flex items-center gap-4">
+                            <span className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-600">
+                                {i + 1}
+                            </span>
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="font-medium text-gray-900">{dest.location}</span>
+                                    <span className="text-sm text-gray-500">{dest.count} bookings</span>
+                                </div>
+                                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                                    <div
+                                        className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
+                                        style={{ width: `${(dest.count / analytics.popularDestinations[0].count) * 100}%` }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

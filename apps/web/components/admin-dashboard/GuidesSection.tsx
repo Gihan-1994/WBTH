@@ -1,36 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Eye, UserCheck, UserX } from "lucide-react";
+import { Search, Eye, UserCheck, UserX, X, Star } from "lucide-react";
 import { GuideData } from "./types";
 
-/**
- * Guides management section with table and filtering
- */
 export default function GuidesSection() {
     const [guides, setGuides] = useState<GuideData[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [filteredGuides, setFilteredGuides] = useState<GuideData[]>([]);
     const [selectedGuide, setSelectedGuide] = useState<GuideData | null>(null);
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetchGuides();
     }, []);
 
     useEffect(() => {
-        if (search) {
-            const filtered = guides.filter(guide =>
-                guide.user.name.toLowerCase().includes(search.toLowerCase()) ||
-                guide.user.email.toLowerCase().includes(search.toLowerCase()) ||
-                guide.city?.toLowerCase().includes(search.toLowerCase()) ||
-                guide.province?.toLowerCase().includes(search.toLowerCase())
-            );
-            setFilteredGuides(filtered);
-        } else {
-            setFilteredGuides(guides);
-        }
+        const filtered = search
+            ? guides.filter(g =>
+                g.user.name.toLowerCase().includes(search.toLowerCase()) ||
+                g.user.email.toLowerCase().includes(search.toLowerCase()) ||
+                g.city?.toLowerCase().includes(search.toLowerCase())
+            )
+            : guides;
+        setFilteredGuides(filtered);
     }, [search, guides]);
 
     const fetchGuides = async () => {
@@ -49,272 +42,180 @@ export default function GuidesSection() {
         }
     };
 
-    const handleViewDetails = (guide: GuideData) => {
-        setSelectedGuide(guide);
-        setShowModal(true);
-    };
-
     if (loading) {
-        return <div className="text-center py-10">Loading guides...</div>;
+        return (
+            <div className="flex items-center justify-center py-32">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-indigo-600 border-t-transparent"></div>
+            </div>
+        );
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-6">
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                    { label: "Total", value: guides.length },
+                    { label: "Available", value: guides.filter(g => g.availability).length },
+                    { label: "Rated", value: guides.filter(g => g.rating).length },
+                    { label: "Bookings", value: guides.reduce((s, g) => s + g._count.bookings, 0) },
+                ].map((s, i) => (
+                    <div key={i} className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
+                        <p className="text-2xl font-bold text-gray-900">{s.value}</p>
+                        <p className="text-sm text-gray-500">{s.label}</p>
+                    </div>
+                ))}
+            </div>
+
             {/* Search */}
-            <div className="flex items-center gap-2">
+            <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 <input
                     type="text"
-                    placeholder="Search by name, email, city, or province..."
+                    placeholder="Search guides..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
-                <button className="bg-purple-600 text-white px-4 py-2 rounded-xl hover:bg-purple-700 transition-colors">
-                    <Search size={20} />
-                </button>
             </div>
 
-            {/* Stats Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
-                    <p className="text-sm text-green-600 font-semibold">Total Guides</p>
-                    <p className="text-2xl font-bold text-green-900">{guides.length}</p>
-                </div>
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-                    <p className="text-sm text-blue-600 font-semibold">Available</p>
-                    <p className="text-2xl font-bold text-blue-900">
-                        {guides.filter(g => g.availability).length}
-                    </p>
-                </div>
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
-                    <p className="text-sm text-purple-600 font-semibold">With Ratings</p>
-                    <p className="text-2xl font-bold text-purple-900">
-                        {guides.filter(g => g.rating !== null).length}
-                    </p>
-                </div>
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
-                    <p className="text-sm text-orange-600 font-semibold">Total Bookings</p>
-                    <p className="text-2xl font-bold text-orange-900">
-                        {guides.reduce((sum, g) => sum + g._count.bookings, 0)}
-                    </p>
-                </div>
-            </div>
-
-            {/* Guides Table */}
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-gradient-to-r from-purple-50 to-blue-50">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Location</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Languages</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Rating</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Price</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Bookings</th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700">Actions</th>
+            {/* Table */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <table className="w-full">
+                    <thead>
+                        <tr className="border-b border-gray-100">
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Guide</th>
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Location</th>
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Languages</th>
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Rating</th>
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Price</th>
+                            <th className="px-6 py-4 text-left text-sm font-medium text-gray-500">Status</th>
+                            <th className="px-6 py-4 text-right text-sm font-medium text-gray-500">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                        {filteredGuides.map((guide) => (
+                            <tr key={guide.user_id} className="hover:bg-gray-50 transition-colors">
+                                <td className="px-6 py-4">
+                                    <p className="font-medium text-gray-900">{guide.user.name}</p>
+                                    <p className="text-sm text-gray-500">{guide.user.email}</p>
+                                </td>
+                                <td className="px-6 py-4 text-gray-600">
+                                    {guide.city || guide.province || "—"}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex gap-1 flex-wrap">
+                                        {guide.languages.slice(0, 2).map((l, i) => (
+                                            <span key={i} className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">
+                                                {l}
+                                            </span>
+                                        ))}
+                                        {guide.languages.length > 2 && (
+                                            <span className="text-xs text-gray-400">+{guide.languages.length - 2}</span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    {guide.rating ? (
+                                        <span className="flex items-center gap-1 text-gray-900">
+                                            <Star size={14} className="text-amber-500 fill-amber-500" />
+                                            {guide.rating.toFixed(1)}
+                                        </span>
+                                    ) : (
+                                        <span className="text-gray-400">—</span>
+                                    )}
+                                </td>
+                                <td className="px-6 py-4 text-gray-900">
+                                    {guide.price ? `LKR ${guide.price.toLocaleString()}` : "—"}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {guide.availability ? (
+                                        <span className="flex items-center gap-1.5 text-emerald-600 text-sm">
+                                            <UserCheck size={14} /> Available
+                                        </span>
+                                    ) : (
+                                        <span className="flex items-center gap-1.5 text-gray-400 text-sm">
+                                            <UserX size={14} /> Unavailable
+                                        </span>
+                                    )}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                    <button
+                                        onClick={() => setSelectedGuide(guide)}
+                                        className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                    >
+                                        <Eye size={18} />
+                                    </button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-100">
-                            {filteredGuides.map((guide) => (
-                                <tr key={guide.user_id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="px-6 py-4 text-sm text-gray-900">{guide.user.name}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">{guide.user.email}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-600">
-                                        {guide.city && guide.province
-                                            ? `${guide.city}, ${guide.province}`
-                                            : guide.city || guide.province || "N/A"}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex flex-wrap gap-1">
-                                            {guide.languages.slice(0, 2).map((lang, idx) => (
-                                                <span key={idx} className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
-                                                    {lang}
-                                                </span>
-                                            ))}
-                                            {guide.languages.length > 2 && (
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                                                    +{guide.languages.length - 2}
-                                                </span>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        {guide.rating ? (
-                                            <span className="flex items-center gap-1">
-                                                ⭐ {guide.rating.toFixed(1)}
-                                            </span>
-                                        ) : (
-                                            <span className="text-gray-400">No rating</span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        {guide.price ? `LKR ${guide.price.toLocaleString()}` : "N/A"}
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        {guide._count.bookings}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {guide.availability ? (
-                                            <span className="flex items-center gap-1 text-green-600">
-                                                <UserCheck size={16} />
-                                                Available
-                                            </span>
-                                        ) : (
-                                            <span className="flex items-center gap-1 text-red-600">
-                                                <UserX size={16} />
-                                                Unavailable
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center justify-center gap-2">
-                                            <button
-                                                onClick={() => handleViewDetails(guide)}
-                                                className="text-blue-600 hover:text-blue-800 transition-colors p-2 hover:bg-blue-50 rounded-lg"
-                                                title="View details"
-                                            >
-                                                <Eye size={18} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                        ))}
+                    </tbody>
+                </table>
+
                 {filteredGuides.length === 0 && (
-                    <div className="text-center py-10 text-gray-500">
-                        No guides found
-                    </div>
+                    <div className="py-16 text-center text-gray-500">No guides found</div>
                 )}
             </div>
 
-            {/* View Details Modal */}
-            {showModal && selectedGuide && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="bg-gradient-to-r from-green-500 to-blue-600 text-white p-6 rounded-t-2xl">
-                            <h3 className="text-2xl font-bold">Guide Details</h3>
-                        </div>
-
-                        <div className="p-6 space-y-6">
-                            {/* Personal Info */}
-                            <div>
-                                <h4 className="text-lg font-bold text-gray-800 mb-3">Personal Information</h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600">Name</p>
-                                        <p className="font-semibold">{selectedGuide.user.name}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Email</p>
-                                        <p className="font-semibold">{selectedGuide.user.email}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Contact</p>
-                                        <p className="font-semibold">{selectedGuide.user.contact_no || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Gender</p>
-                                        <p className="font-semibold">{selectedGuide.gender || "N/A"}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Location */}
-                            <div>
-                                <h4 className="text-lg font-bold text-gray-800 mb-3">Location</h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600">City</p>
-                                        <p className="font-semibold">{selectedGuide.city || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Province</p>
-                                        <p className="font-semibold">{selectedGuide.province || "N/A"}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Professional Info */}
-                            <div>
-                                <h4 className="text-lg font-bold text-gray-800 mb-3">Professional Information</h4>
-                                <div className="space-y-3">
-                                    <div>
-                                        <p className="text-sm text-gray-600 mb-2">Languages</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedGuide.languages.map((lang, idx) => (
-                                                <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                                                    {lang}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600 mb-2">Expertise</p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {selectedGuide.expertise.map((exp, idx) => (
-                                                <span key={idx} className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                                                    {exp}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600 mb-2">Experience</p>
-                                        <div className="space-y-1">
-                                            {selectedGuide.experience.map((exp, idx) => (
-                                                <p key={idx} className="text-sm text-gray-700">• {exp}</p>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Pricing & Stats */}
-                            <div>
-                                <h4 className="text-lg font-bold text-gray-800 mb-3">Pricing & Statistics</h4>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600">Price per Day</p>
-                                        <p className="font-semibold text-lg">
-                                            {selectedGuide.price ? `LKR ${selectedGuide.price.toLocaleString()}` : "Not set"}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Rating</p>
-                                        <p className="font-semibold text-lg">
-                                            {selectedGuide.rating ? `⭐ ${selectedGuide.rating.toFixed(1)}` : "No rating"}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Total Bookings</p>
-                                        <p className="font-semibold text-lg">{selectedGuide._count.bookings}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Availability</p>
-                                        <p className={`font-semibold text-lg ${selectedGuide.availability ? 'text-green-600' : 'text-red-600'}`}>
-                                            {selectedGuide.availability ? "Available" : "Unavailable"}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Account Number</p>
-                                        <p className="font-semibold">{selectedGuide.account_no || "Not provided"}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="p-6 border-t border-gray-200">
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
-                            >
-                                Close
+            {/* Modal */}
+            {selectedGuide && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedGuide(null)}>
+                    <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                            <h3 className="text-lg font-semibold text-gray-900">Guide Details</h3>
+                            <button onClick={() => setSelectedGuide(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+                                <X size={20} />
                             </button>
+                        </div>
+                        <div className="p-6 space-y-6">
+                            <div>
+                                <p className="text-sm text-gray-500 mb-1">Name</p>
+                                <p className="font-medium">{selectedGuide.user.name}</p>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500 mb-1">Email</p>
+                                <p>{selectedGuide.user.email}</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">City</p>
+                                    <p>{selectedGuide.city || "—"}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500 mb-1">Province</p>
+                                    <p>{selectedGuide.province || "—"}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500 mb-2">Languages</p>
+                                <div className="flex gap-2 flex-wrap">
+                                    {selectedGuide.languages.map((l, i) => (
+                                        <span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm">{l}</span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <p className="text-sm text-gray-500 mb-2">Expertise</p>
+                                <div className="flex gap-2 flex-wrap">
+                                    {selectedGuide.expertise.map((e, i) => (
+                                        <span key={i} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">{e}</span>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+                                <div>
+                                    <p className="text-sm text-gray-500">Price/Day</p>
+                                    <p className="font-semibold">{selectedGuide.price ? `LKR ${selectedGuide.price.toLocaleString()}` : "—"}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500">Rating</p>
+                                    <p className="font-semibold">{selectedGuide.rating?.toFixed(1) || "—"}</p>
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-500">Bookings</p>
+                                    <p className="font-semibold">{selectedGuide._count.bookings}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
