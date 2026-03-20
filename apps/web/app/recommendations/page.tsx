@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, MapPin, Star, Check, Search, Home, Compass, ChevronDown, X } from "lucide-react";
+import { Loader2, MapPin, Star, Check, Search, Home, Compass, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface Recommendation {
@@ -46,6 +46,8 @@ const EXPERTISE = ["Wildlife", "Cultural", "Adventure", "Historical", "Photograp
 const SRI_LANKA_DISTRICTS = ["Colombo", "Kandy", "Galle", "Jaffna", "Negombo", "Anuradhapura", "Trincomalee", "Batticaloa", "Matara", "Nuwara Eliya", "Ella", "Sigiriya", "Mirissa", "Hikkaduwa"];
 const SRI_LANKA_PROVINCES = ["Western", "Central", "Southern", "Northern", "Eastern", "North Western", "North Central", "Uva", "Sabaragamuwa"];
 
+const ITEMS_PER_PAGE = 9;
+
 export default function RecommendationsPage() {
     const [activeType, setActiveType] = useState<"accommodation" | "guide">("accommodation");
     const [loading, setLoading] = useState(false);
@@ -53,6 +55,7 @@ export default function RecommendationsPage() {
     const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
     const [totalCandidates, setTotalCandidates] = useState(0);
     const [showFilters, setShowFilters] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
     // Accommodation filters
     const [budgetMin, setBudgetMin] = useState(1000);
@@ -81,6 +84,7 @@ export default function RecommendationsPage() {
     const handleSearch = async () => {
         setLoading(true);
         setError(null);
+        setCurrentPage(1);
 
         try {
             if (activeType === "accommodation") {
@@ -166,6 +170,28 @@ export default function RecommendationsPage() {
             if (genderPreference) count++;
             return count;
         }
+    };
+
+    // Pagination
+    const totalPages = Math.ceil(recommendations.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const paginatedRecommendations = recommendations.slice(startIndex, endIndex);
+
+    const getPageNumbers = () => {
+        const pages: (number | string)[] = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            if (currentPage <= 3) {
+                pages.push(1, 2, 3, 4, "...", totalPages);
+            } else if (currentPage >= totalPages - 2) {
+                pages.push(1, "...", totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+            } else {
+                pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+            }
+        }
+        return pages;
     };
 
     return (
@@ -457,15 +483,23 @@ export default function RecommendationsPage() {
                 )}
 
                 {recommendations.length > 0 && (
-                    <p className="text-sm text-gray-500 mb-4">
-                        Showing <span className="font-medium text-gray-900">{recommendations.length}</span> of{" "}
-                        <span className="font-medium text-gray-900">{totalCandidates}</span> matches
-                    </p>
+                    <div className="flex items-center justify-between mb-4">
+                        <p className="text-sm text-gray-500">
+                            Showing <span className="font-medium text-gray-900">{startIndex + 1}-{Math.min(endIndex, recommendations.length)}</span> of{" "}
+                            <span className="font-medium text-gray-900">{recommendations.length}</span> matches
+                            {totalCandidates > recommendations.length && (
+                                <span className="text-gray-400"> (from {totalCandidates} total)</span>
+                            )}
+                        </p>
+                        {totalPages > 1 && (
+                            <p className="text-sm text-gray-400">Page {currentPage} of {totalPages}</p>
+                        )}
+                    </div>
                 )}
 
-                {recommendations.length > 0 ? (
+                {recommendations.length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {recommendations.map((rec) => (
+                        {paginatedRecommendations.map((rec) => (
                             <div key={rec.id} className="bg-white rounded-xl border border-gray-200 p-5 hover:border-gray-300 hover:shadow-sm transition-all">
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="flex-1 min-w-0">
@@ -533,7 +567,48 @@ export default function RecommendationsPage() {
                             </div>
                         ))}
                     </div>
-                ) : !loading && !error && (
+                )}
+
+                {/* Pagination */}
+                {recommendations.length > 0 && totalPages > 1 && (
+                    <div className="mt-8 flex items-center justify-center gap-1">
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage === 1}
+                            className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            <ChevronLeft size={18} />
+                        </button>
+
+                        {getPageNumbers().map((page, idx) => (
+                            typeof page === "number" ? (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentPage(page)}
+                                    className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium transition-all ${
+                                        currentPage === page
+                                            ? "bg-gray-900 text-white"
+                                            : "border border-gray-200 text-gray-600 hover:bg-gray-50"
+                                    }`}
+                                >
+                                    {page}
+                                </button>
+                            ) : (
+                                <span key={idx} className="px-2 text-gray-400">...</span>
+                            )
+                        ))}
+
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage === totalPages}
+                            className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                        >
+                            <ChevronRight size={18} />
+                        </button>
+                    </div>
+                )}
+
+                {!loading && !error && recommendations.length === 0 && (
                     <div className="text-center py-16">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Search className="text-gray-400" size={24} />
