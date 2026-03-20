@@ -40,7 +40,7 @@ export default function MessagesSection() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="p-6 border-b border-gray-100">
                     <h3 className="text-lg font-semibold text-gray-900">Send Message</h3>
@@ -117,7 +117,7 @@ export default function MessagesSection() {
                 </div>
             </div>
 
-            <p className="text-sm text-gray-500 text-center">
+            <p className="text-sm text-gray-500">
                 Messages will be sent as in-app notifications.
             </p>
         </div>
