@@ -222,32 +222,32 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                     {currentStep === 1 && (
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Name *</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
                                 <input
                                     value={formData.name}
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     placeholder="Enter your name"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                                 <input
                                     value={formData.contact_no || ""}
                                     onChange={e => setFormData({ ...formData, contact_no: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     placeholder="Enter phone number"
                                 />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">City</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">City</label>
                                     <select
                                         value={formData.city || ""}
                                         onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     >
                                         <option value="">Select City</option>
                                         {SRI_LANKA_CITIES.map(city => (
@@ -257,11 +257,11 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Province</label>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">Province</label>
                                     <select
                                         value={formData.province || ""}
                                         onChange={e => setFormData({ ...formData, province: e.target.value })}
-                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     >
                                         <option value="">Select Province</option>
                                         {SRI_LANKA_PROVINCES.map(province => (
@@ -272,11 +272,11 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Gender</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
                                 <select
                                     value={formData.gender || ""}
                                     onChange={e => setFormData({ ...formData, gender: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                 >
                                     <option value="">Select Gender</option>
                                     <option value="male">Male</option>
@@ -291,33 +291,33 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                     {currentStep === 2 && (
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Price per Day (LKR) *</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Price per Day (LKR) *</label>
                                 <input
                                     type="number"
                                     value={formData.price || 0}
                                     onChange={e => setFormData({ ...formData, price: parseFloat(e.target.value) })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Booking Price (LKR)</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Booking Price (LKR)</label>
                                 <input
                                     type="number"
                                     value={formData.booking_price || 0}
                                     onChange={e => setFormData({ ...formData, booking_price: parseFloat(e.target.value) })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     placeholder="Leave empty to use Price per Day"
                                 />
-                                <p className="text-xs text-gray-500 mt-1">This will be used for bookings. If empty, Price per Day will be used.</p>
+                                <p className="text-xs text-gray-500 mt-1.5">This will be used for bookings. If empty, Price per Day will be used.</p>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Bank Account Number</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Bank Account Number</label>
                                 <input
                                     value={formData.account_no || ""}
                                     onChange={e => setFormData({ ...formData, account_no: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                     placeholder="Enter your bank account number"
                                 />
                             </div>
@@ -325,8 +325,8 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                             <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                                 <label className="flex items-center justify-between cursor-pointer">
                                     <div>
-                                        <p className="font-medium text-gray-900">Available for Booking</p>
-                                        <p className="text-sm text-gray-500">Toggle to show availability to tourists</p>
+                                        <p className="text-sm font-medium text-gray-900">Available for Booking</p>
+                                        <p className="text-xs text-gray-500 mt-0.5">Toggle to show availability to tourists</p>
                                     </div>
                                     <div className="relative">
                                         <input
@@ -346,14 +346,14 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                     {currentStep === 3 && (
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">Languages * (Select all that apply)</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Languages * (Select all that apply)</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {LANGUAGES.map(language => (
                                         <button
                                             key={language}
                                             type="button"
                                             onClick={() => handleLanguageToggle(language)}
-                                            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                            className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                                                 (formData.languages || []).includes(language)
                                                     ? "bg-teal-100 text-teal-700 border-2 border-teal-500"
                                                     : "bg-gray-50 text-gray-700 border-2 border-transparent hover:bg-gray-100"
@@ -364,19 +364,19 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                     ))}
                                 </div>
                                 {(!formData.languages || formData.languages.length === 0) && (
-                                    <p className="text-xs text-red-500 mt-2">Select at least one language</p>
+                                    <p className="text-xs text-red-500 mt-1.5">Select at least one language</p>
                                 )}
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">Expertise (Select all that apply)</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Expertise (Select all that apply)</label>
                                 <div className="grid grid-cols-2 gap-2">
                                     {EXPERTISE.map(exp => (
                                         <button
                                             key={exp}
                                             type="button"
                                             onClick={() => handleExpertiseToggle(exp)}
-                                            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                            className={`px-3 py-2 rounded-lg text-sm transition-colors ${
                                                 (formData.expertise || []).includes(exp)
                                                     ? "bg-purple-100 text-purple-700 border-2 border-purple-500"
                                                     : "bg-gray-50 text-gray-700 border-2 border-transparent hover:bg-gray-100"
@@ -395,7 +395,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                         <div className="space-y-6">
                             {/* Profile Picture */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">Profile Picture</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
                                 {(selectedImage || formData.profile_picture) ? (
                                     <div className="relative inline-block group">
                                         <img
@@ -405,8 +405,8 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                         />
                                         <label className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
                                             <div className="text-center text-white">
-                                                <Upload size={24} className="mx-auto mb-1" />
-                                                <span className="text-sm font-medium">Change</span>
+                                                <Upload size={20} className="mx-auto mb-1" />
+                                                <span className="text-xs font-medium">Change</span>
                                             </div>
                                             <input
                                                 type="file"
@@ -425,8 +425,8 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                     </div>
                                 ) : (
                                     <label className="block w-full border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-teal-400 hover:bg-teal-50/50 transition-all">
-                                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                            <Upload size={24} className="text-gray-400" />
+                                        <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                            <Upload size={20} className="text-gray-400" />
                                         </div>
                                         <p className="text-sm font-medium text-gray-700">Click to upload photo</p>
                                         <p className="text-xs text-gray-500 mt-1">PNG, JPG, WebP up to 2MB</p>
@@ -442,7 +442,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
                             {/* Experience */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Experience (Max 5 entries)
                                 </label>
                                 <div className="space-y-3">
@@ -451,7 +451,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                             <input
                                                 value={exp}
                                                 onChange={e => handleExperienceChange(index, e.target.value)}
-                                                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all"
+                                                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-sm"
                                                 placeholder={`Experience ${index + 1}`}
                                             />
                                             <button
@@ -467,7 +467,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                                         <button
                                             type="button"
                                             onClick={addExperience}
-                                            className="w-full px-4 py-2.5 border-2 border-dashed border-gray-200 rounded-lg text-gray-600 font-medium hover:border-teal-400 hover:text-teal-600 transition-colors"
+                                            className="w-full px-4 py-2.5 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-600 hover:border-teal-400 hover:text-teal-600 transition-colors"
                                         >
                                             + Add Experience
                                         </button>
@@ -483,9 +483,9 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                     <button
                         type="button"
                         onClick={currentStep === 1 ? onClose : prevStep}
-                        className="flex items-center gap-2 px-4 py-2.5 text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 font-medium hover:bg-gray-200 rounded-lg transition-colors"
                     >
-                        <ChevronLeft size={18} />
+                        <ChevronLeft size={16} />
                         {currentStep === 1 ? "Cancel" : "Back"}
                     </button>
 
@@ -494,17 +494,17 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                             type="button"
                             onClick={nextStep}
                             disabled={!canProceed()}
-                            className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 px-5 py-2.5 text-sm bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Next
-                            <ChevronRight size={18} />
+                            <ChevronRight size={16} />
                         </button>
                     ) : (
                         <button
                             type="button"
                             onClick={handleSubmit}
                             disabled={uploading || !canProceed()}
-                            className="px-5 py-2.5 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-5 py-2.5 text-sm bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {uploading ? "Saving..." : "Save Changes"}
                         </button>

@@ -105,10 +105,12 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json(booking);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error creating booking:", error);
+        console.error("Error details:", error?.message || "Unknown error");
+        console.error("Error stack:", error?.stack);
         return NextResponse.json(
-            { error: "Failed to create booking" },
+            { error: "Failed to create booking", details: error?.message },
             { status: 500 }
         );
     }
