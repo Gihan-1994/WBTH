@@ -7,7 +7,7 @@ import { Search, MapPin, Users, Hotel, ChevronDown, ChevronLeft, ChevronRight, X
 interface Accommodation {
     id: string;
     name: string;
-    location: string;
+    district: string;
     price_range_min: number;
     price_range_max: number;
     images: string[];
@@ -26,7 +26,7 @@ export default function AccommodationsPage() {
     const [showMoreFilters, setShowMoreFilters] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [filters, setFilters] = useState({
-        location: "",
+        district: "",
         minPrice: "",
         maxPrice: "",
         guests: "",
@@ -36,7 +36,7 @@ export default function AccommodationsPage() {
     const fetchAccommodations = async () => {
         setLoading(true);
         const params = new URLSearchParams();
-        if (filters.location) params.append("location", filters.location);
+        if (filters.district) params.append("district", filters.district);
         if (filters.minPrice) params.append("minPrice", filters.minPrice);
         if (filters.maxPrice) params.append("maxPrice", filters.maxPrice);
         if (filters.guests) params.append("guests", filters.guests);
@@ -67,7 +67,7 @@ export default function AccommodationsPage() {
 
     const clearFilters = () => {
         setFilters({
-            location: "",
+            district: "",
             minPrice: "",
             maxPrice: "",
             guests: "",
@@ -133,15 +133,15 @@ export default function AccommodationsPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <form onSubmit={handleSearch}>
                         <div className="flex flex-wrap items-center gap-3">
-                            {/* Location */}
+                            {/* District */}
                             <div className="relative flex-1 min-w-[200px]">
                                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                                 <input
                                     type="text"
-                                    placeholder="Location"
+                                    placeholder="District (e.g. Colombo, Kandy)"
                                     className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm"
-                                    value={filters.location}
-                                    onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                                    value={filters.district}
+                                    onChange={(e) => setFilters({ ...filters, district: e.target.value })}
                                 />
                             </div>
 
@@ -303,7 +303,7 @@ export default function AccommodationsPage() {
                                         {/* Location */}
                                         <div className="flex items-center text-gray-500 text-sm mb-2">
                                             <MapPin size={14} className="mr-1.5 text-indigo-500" />
-                                            {acc.location}
+                                            {acc.district}
                                         </div>
 
                                         {/* Title */}

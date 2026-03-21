@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, User, UserCircle } from "lucide-react";
+import { Loader2, Mail, Lock, User, Eye, EyeOff, MapPin, Home, Compass, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 const registerSchema = z.object({
@@ -18,7 +18,29 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+const roleOptions = [
+  {
+    value: "tourist",
+    label: "Tourist",
+    description: "Explore destinations and book unique experiences",
+    icon: Compass,
+  },
+  {
+    value: "guide",
+    label: "Guide",
+    description: "Share your local expertise with travelers",
+    icon: MapPin,
+  },
+  {
+    value: "accommodation_provider",
+    label: "Host",
+    description: "List your property for travelers to stay",
+    icon: Home,
+  },
+];
+
 export default function RegisterPage() {
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -28,6 +50,9 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
+    trigger,
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -35,6 +60,15 @@ export default function RegisterPage() {
       role: "tourist",
     },
   });
+
+  const selectedRole = watch("role");
+
+  async function handleNextStep() {
+    const isValid = await trigger(["name", "email", "password"]);
+    if (isValid) {
+      setStep(2);
+    }
+  }
 
   async function onSubmit(data: RegisterFormValues) {
     setLoading(true);
@@ -53,9 +87,10 @@ export default function RegisterPage() {
         setError(resData.error ?? "Something went wrong");
       } else {
         setMsg(
-          "Registered! Check the verification link in server logs (dev) or email (prod)."
+          "Account created! Please check your email for verification link."
         );
         reset();
+        setStep(1);
       }
     } catch (err) {
       setError("Network error. Please try again.");
@@ -65,248 +100,344 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden p-4">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
-      </div>
-
-      {/* Register Form */}
-      <div className="relative z-10 w-full max-w-md">
-        <div className="space-y-6 p-8 rounded-2xl shadow-2xl bg-white/90 backdrop-blur-lg border border-white/20 animate-fade-in-up">
-          {/* Header */}
-          <div className="text-center space-y-2">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Create Account
-            </h1>
-            <p className="text-gray-600">Join us and start your journey</p>
+    <main className="min-h-screen bg-white">
+      <div className="flex min-h-screen w-full">
+        {/* Left Side - Image */}
+        <div className="hidden lg:flex lg:flex-1 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/90 to-purple-700/90 z-10"></div>
+          <img
+            src="/images/login-art-43.png"
+            alt="Travel"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="relative z-20 flex flex-col justify-center items-center p-12 text-center h-full w-full">
+            <div className="max-w-lg">
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Start Your Journey Today
+              </h2>
+              <p className="text-lg text-indigo-100">
+                Join thousands of travelers discovering authentic experiences around the world.
+              </p>
+              <div className="mt-10 grid grid-cols-3 gap-6 text-center">
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                  <p className="text-3xl font-bold text-white">50+</p>
+                  <p className="text-sm text-indigo-100 mt-1">Destinations</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                  <p className="text-3xl font-bold text-white">200+</p>
+                  <p className="text-sm text-indigo-100 mt-1">Local Guides</p>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                  <p className="text-3xl font-bold text-white">5K+</p>
+                  <p className="text-sm text-indigo-100 mt-1">Happy Travelers</p>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Name Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Full Name
-              </label>
-              <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
-                  <User size={20} />
+        {/* Right Side - Form */}
+        <div className="flex flex-1 flex-col justify-center px-8 py-12 lg:px-16 xl:px-24">
+          <div className="mx-auto w-full max-w-md">
+            {/* Logo/Brand */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                  <span className="text-white font-bold text-lg">W</span>
                 </div>
-                <input
-                  {...register("name")}
-                  placeholder="John Doe"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-300"
-                />
+                <span className="text-xl font-semibold text-gray-900">WBTH</span>
               </div>
-              {errors.name && (
-                <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-slide-in-down">
-                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>
-                  {errors.name.message}
-                </p>
-              )}
             </div>
 
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Email Address
-              </label>
-              <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
-                  <Mail size={20} />
+            {/* Step Indicator */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-all ${
+                  step >= 1 ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-500"
+                }`}>
+                  1
                 </div>
-                <input
-                  type="email"
-                  {...register("email")}
-                  placeholder="john@example.com"
-                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-300"
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-slide-in-down">
-                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors">
-                  <Lock size={20} />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  {...register("password")}
-                  placeholder="••••••••"
-                  className="w-full pl-11 pr-12 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-300"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-slide-in-down">
-                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* Role Field */}
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-gray-700">
-                I am a...
-              </label>
-              <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors pointer-events-none">
-                  <UserCircle size={20} />
-                </div>
-                <select
-                  {...register("role")}
-                  className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200 hover:border-gray-300 bg-white appearance-none cursor-pointer"
-                >
-                  <option value="tourist">Tourist</option>
-                  <option value="guide">Guide</option>
-                  <option value="accommodation_provider">
-                    Accommodation Provider
-                  </option>
-                </select>
-                {/* Custom dropdown arrow */}
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                <div className={`flex-1 h-1 rounded-full transition-all ${
+                  step >= 2 ? "bg-indigo-600" : "bg-gray-200"
+                }`}></div>
+                <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-all ${
+                  step >= 2 ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-500"
+                }`}>
+                  2
                 </div>
               </div>
-              {errors.role && (
-                <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-slide-in-down">
-                  <span className="w-1 h-1 bg-red-500 rounded-full"></span>
-                  {errors.role.message}
-                </p>
-              )}
-            </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 group"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={20} className="animate-spin" />
-                  Creating Account...
-                </>
-              ) : (
-                <>
-                  Register
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
+              {/* Header */}
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {step === 1 ? "Create your account" : "How will you use WBTH?"}
+              </h1>
+              <p className="text-gray-500 text-base">
+                {step === 1 ? "Enter your personal information" : "Select your role to personalize your experience"}
+              </p>
+            </div>
 
             {/* Success Message */}
             {msg && (
-              <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 text-sm rounded-xl border border-green-200 animate-slide-in-down">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  {msg}
+              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-emerald-700 text-sm font-medium">{msg}</p>
                 </div>
               </div>
             )}
 
             {/* Error Message */}
             {error && (
-              <div className="p-4 bg-gradient-to-r from-red-50 to-rose-50 text-red-700 text-sm rounded-xl border border-red-200 animate-slide-in-down">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  {error}
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0 w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-red-700 text-sm font-medium">{error}</p>
                 </div>
               </div>
             )}
-          </form>
 
-          {/* Login Link */}
-          <div className="text-center pt-4 border-t border-gray-200">
-            <p className="text-gray-600 text-sm">
+            {/* Form */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {/* Step 1: Personal Info */}
+              {step === 1 && (
+                <div className="space-y-5">
+                  {/* Name Field */}
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                      Full name
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <User className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        id="name"
+                        type="text"
+                        placeholder="Enter your full name"
+                        {...register("name")}
+                        className={`block w-full pl-12 pr-4 py-3.5 bg-gray-50 border ${
+                          errors.name ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+                        } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200`}
+                      />
+                    </div>
+                    {errors.name && (
+                      <p className="text-red-500 text-sm flex items-center gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-red-500"></span>
+                        {errors.name.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email Field */}
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                      Email address
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Mail className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        id="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        {...register("email")}
+                        className={`block w-full pl-12 pr-4 py-3.5 bg-gray-50 border ${
+                          errors.email ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+                        } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200`}
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-500 text-sm flex items-center gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-red-500"></span>
+                        {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="space-y-2">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <Lock className="h-5 w-5 text-gray-400" />
+                      </div>
+                      <input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Create a password (min 6 characters)"
+                        {...register("password")}
+                        className={`block w-full pl-12 pr-12 py-3.5 bg-gray-50 border ${
+                          errors.password ? "border-red-300 focus:ring-red-500 focus:border-red-500" : "border-gray-200 focus:ring-indigo-500 focus:border-indigo-500"
+                        } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition-all duration-200`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      </button>
+                    </div>
+                    {errors.password && (
+                      <p className="text-red-500 text-sm flex items-center gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-red-500"></span>
+                        {errors.password.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Next Button */}
+                  <button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 flex items-center justify-center gap-2 mt-6"
+                  >
+                    <span>Continue</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+
+                  {/* Divider */}
+                  <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-4 bg-white text-gray-500">Or sign up with</span>
+                    </div>
+                  </div>
+
+                  {/* Social Buttons */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                      </svg>
+                      <span>Google</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center gap-3 py-3 px-4 bg-white border border-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                      <span>Facebook</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Role Selection */}
+              {step === 2 && (
+                <div className="space-y-6">
+                  {/* Role Cards */}
+                  <div className="space-y-4">
+                    {roleOptions.map((option) => {
+                      const Icon = option.icon;
+                      const isSelected = selectedRole === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setValue("role", option.value as RegisterFormValues["role"])}
+                          className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 transition-all duration-200 text-left ${
+                            isSelected
+                              ? "border-indigo-500 bg-indigo-50 shadow-sm"
+                              : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                          }`}
+                        >
+                          <div className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${
+                            isSelected ? "bg-indigo-500 text-white" : "bg-gray-100 text-gray-500"
+                          }`}>
+                            <Icon className="w-6 h-6" />
+                          </div>
+                          <div className="flex-1">
+                            <p className={`font-semibold ${isSelected ? "text-indigo-700" : "text-gray-900"}`}>
+                              {option.label}
+                            </p>
+                            <p className={`text-sm mt-0.5 ${isSelected ? "text-indigo-600" : "text-gray-500"}`}>
+                              {option.description}
+                            </p>
+                          </div>
+                          <div className={`flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            isSelected ? "border-indigo-500 bg-indigo-500" : "border-gray-300"
+                          }`}>
+                            {isSelected && (
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <input type="hidden" {...register("role")} />
+
+                  {/* Buttons */}
+                  <div className="flex gap-4 mt-8">
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      className="flex-1 py-3.5 px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+                    >
+                      <ArrowLeft className="w-5 h-5" />
+                      <span>Back</span>
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 size={20} className="animate-spin" />
+                          <span>Creating...</span>
+                        </>
+                      ) : (
+                        "Create account"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+
+            {/* Sign In Link */}
+            <p className="mt-8 text-center text-gray-600">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="text-blue-600 hover:text-purple-600 font-semibold transition-colors hover:underline"
+                className="font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
               >
                 Sign in
               </Link>
             </p>
+
+            {/* Copyright */}
+            <p className="mt-6 text-center text-sm text-gray-400">
+              &copy; {new Date().getFullYear()} WBTH. All rights reserved.
+            </p>
           </div>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slide-in-down {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes blob {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-
-        .animate-fade-in-up {
-          animation: fade-in-up 0.6s ease-out;
-        }
-
-        .animate-slide-in-down {
-          animation: slide-in-down 0.3s ease-out;
-        }
-
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </main>
   );
 }

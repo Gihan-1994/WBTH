@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Rajdhani:wght@400;500;600;700&family=Teko:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,10 +9,113 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Add font files for SF Pro Rounded */
+  /* Note: Font files (sf-pro-rounded.woff2, sf-pro-rounded.woff) need to be placed in public/fonts */
+  @font-face {
+    font-family: 'SF Pro Rounded';
+    src: url('/fonts/sf-pro-rounded.woff2') format('woff2'),
+         url('/fonts/sf-pro-rounded.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --font-family-sf-pro-rounded: 'SF Pro Rounded', sans-serif;
+    --font-family-roboto: 'Roboto', sans-serif;
+
+    /* Color Variables from Figma Export */
+    --Link: rgba(30, 74, 233, 1);
+    --Primary-text: rgba(12, 20, 33, 1);
+    --Secondary-text: rgba(49, 57, 87, 1);
+    --text-rgb-12-20-33: rgba(12, 20, 33, 1);
+    --text-rgb-49-57-87: rgba(49, 57, 87, 1);
+    --text-rgb-136-151-173: rgba(136, 151, 173, 1);
+    --text-rgb-30-74-233: rgba(30, 74, 233, 1);
+    --text-white: rgba(255, 255, 255, 1);
+    --text-rgb-41-73-87: rgba(41, 73, 87, 1);
+    --text-rgb-149-156-182: rgba(149, 156, 182, 1);
+  }
+
+  /* CSS Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Prototype Links */
+  a.prototype-link {
+    text-decoration: none;
+    color: inherit;
+    display: contents;
+  }
+
+  /* Responsive padding for desktop-1 from Figma CSS */
+  .desktop-1 {
+    padding: 0; /* Reset default padding */
+  }
+
+  @media (max-width: 1440px) {
+    .desktop-1 {
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .desktop-1 {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
 }
 
 @layer utilities {
   .font-handwriting {
     font-family: 'Permanent Marker', cursive;
+  }
+
+  /* Helper classes for new Figma text colors */
+  .text-figma-primary {
+    color: var(--Primary-text);
+  }
+  .text-figma-secondary {
+    color: var(--Secondary-text);
+  }
+  .text-figma-link {
+    color: var(--Link);
+  }
+  .text-figma-rgb-12-20-33 {
+    color: var(--text-rgb-12-20-33);
+  }
+  .text-figma-rgb-49-57-87 {
+    color: var(--text-rgb-49-57-87);
+  }
+  .text-figma-rgb-136-151-173 {
+    color: var(--text-rgb-136-151-173);
+  }
+  .text-figma-rgb-30-74-233 {
+    color: var(--text-rgb-30-74-233);
+  }
+  .text-figma-white {
+    color: var(--text-white);
+  }
+  .text-figma-rgb-41-73-87 {
+    color: var(--text-rgb-41-73-87);
+  }
+  .text-figma-rgb-149-156-182 {
+    color: var(--text-rgb-149-156-182);
   }
 }

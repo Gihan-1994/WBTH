@@ -19,15 +19,18 @@ export async function GET(req: NextRequest) {
         };
     }
 
-    if (minPrice) {
+    // Price filter: find accommodations where price range overlaps with user's budget
+    // An accommodation is affordable if its minimum price is within user's max budget
+    if (maxPrice) {
         where.price_range_min = {
-            gte: parseFloat(minPrice),
+            lte: parseFloat(maxPrice),
         };
     }
 
-    if (maxPrice) {
+    // An accommodation meets minimum budget if its max price is at least user's min budget
+    if (minPrice) {
         where.price_range_max = {
-            lte: parseFloat(maxPrice),
+            gte: parseFloat(minPrice),
         };
     }
 

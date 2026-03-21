@@ -12,6 +12,8 @@ const config: Config = {
         sans: ['Rajdhani', 'sans-serif'],
         display: ['Teko', 'sans-serif'],
         handwriting: ['Permanent Marker', 'cursive'],
+        'sf-pro-rounded': ['SF Pro Rounded', 'sans-serif'], // Note: Font files for SF Pro Rounded need to be placed in public/fonts
+        roboto: ['Roboto', 'sans-serif'],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
