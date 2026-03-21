@@ -92,25 +92,20 @@ const EditProfileModal = function EditProfileModal({ profile, onClose, onSave }:
                         {/* Logo Upload */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-3">Company Logo</label>
-                            <div className="flex items-center gap-4">
-                                {(selectedImage || formData.logo) ? (
+
+                            {(selectedImage || formData.logo) ? (
+                                <div className="relative inline-block group">
                                     <img
                                         src={selectedImage || formData.logo || ""}
-                                        alt="Preview"
-                                        className="w-20 h-20 rounded-xl object-cover border border-gray-200"
+                                        alt="Company Logo"
+                                        className="w-32 h-32 rounded-xl object-cover border border-gray-200"
                                     />
-                                ) : (
-                                    <div className="w-20 h-20 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-200">
-                                        <span className="text-gray-400 text-2xl font-semibold">
-                                            {formData.company_name?.charAt(0).toUpperCase() || "?"}
-                                        </span>
-                                    </div>
-                                )}
-
-                                <div className="flex flex-col gap-2">
-                                    <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium transition-colors">
-                                        <Upload size={16} />
-                                        Upload
+                                    {/* Hover overlay to change image */}
+                                    <label className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                        <div className="text-center text-white">
+                                            <Upload size={24} className="mx-auto mb-1" />
+                                            <span className="text-sm font-medium">Change</span>
+                                        </div>
                                         <input
                                             type="file"
                                             accept="image/jpeg,image/png,image/webp"
@@ -118,19 +113,30 @@ const EditProfileModal = function EditProfileModal({ profile, onClose, onSave }:
                                             className="hidden"
                                         />
                                     </label>
-                                    {(formData.logo || selectedImage) && (
-                                        <button
-                                            type="button"
-                                            onClick={handleRemoveImage}
-                                            className="inline-flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors"
-                                        >
-                                            <Trash2 size={16} />
-                                            Remove
-                                        </button>
-                                    )}
+                                    {/* Delete button */}
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveImage}
+                                        className="absolute -top-2 -right-2 p-1.5 bg-red-500 text-white rounded-full shadow-sm hover:bg-red-600 transition-colors"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
                                 </div>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-2">Max 2MB. JPEG, PNG, or WebP</p>
+                            ) : (
+                                <label className="block w-full border-2 border-dashed border-gray-200 rounded-xl p-8 text-center cursor-pointer hover:border-emerald-400 hover:bg-emerald-50/50 transition-all">
+                                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                        <Upload size={24} className="text-gray-400" />
+                                    </div>
+                                    <p className="text-sm font-medium text-gray-700">Click to upload logo</p>
+                                    <p className="text-xs text-gray-500 mt-1">PNG, JPG, WebP up to 2MB</p>
+                                    <input
+                                        type="file"
+                                        accept="image/jpeg,image/png,image/webp"
+                                        onChange={handleImageChange}
+                                        className="hidden"
+                                    />
+                                </label>
+                            )}
                         </div>
 
                         {/* Form Fields */}
