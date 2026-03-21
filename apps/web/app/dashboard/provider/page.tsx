@@ -2,10 +2,20 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import { ProviderProfile, Accommodation, Booking, Stats } from "@/components/provider-dashboard/types";
+import {
+    Building2,
+    CalendarCheck,
+    BarChart3,
+    UserCog,
+    Home,
+    LogOut,
+    Hotel,
+    ChevronDown,
+} from "lucide-react";
 
 // Display Components
-import ProviderHeader from "@/components/provider-dashboard/ProviderHeader";
 import CompanyProfileCard from "@/components/provider-dashboard/CompanyProfileCard";
 import StatisticsCard from "@/components/provider-dashboard/StatisticsCard";
 import AccommodationsSection from "@/components/provider-dashboard/AccommodationsSection";
@@ -20,6 +30,9 @@ import ViewBookingModal from "@/components/provider-dashboard/modals/ViewBooking
 
 export default function ProviderDashboard() {
     const router = useRouter();
+    const { data: session, status } = useSession();
+    const [activeTab, setActiveTab] = useState("accommodations");
+    const [showUserMenu, setShowUserMenu] = useState(false);
 
     // Data State
     const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -35,6 +48,13 @@ export default function ProviderDashboard() {
     const [showEditAccommodation, setShowEditAccommodation] = useState<Accommodation | null>(null);
     const [showImagesModal, setShowImagesModal] = useState<Accommodation | null>(null);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+
+    const tabs = [
+        { id: "accommodations", label: "Accommodations", icon: Hotel },
+        { id: "bookings", label: "Bookings", icon: CalendarCheck },
+        { id: "statistics", label: "Statistics", icon: BarChart3 },
+        { id: "profile", label: "Profile", icon: UserCog },
+    ];
 
     // Fetch Data
     const fetchData = useCallback(async () => {
@@ -73,7 +93,6 @@ export default function ProviderDashboard() {
         if (!confirm("Confirm this booking and capture payment?")) return;
 
         try {
-            // First, get the payment for this booking
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
             if (!paymentRes.ok) {
                 alert("Payment not found for this booking");
@@ -82,7 +101,6 @@ export default function ProviderDashboard() {
 
             const { payment } = await paymentRes.json();
 
-            // Capture the payment
             const res = await fetch("/api/payments/capture", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -107,7 +125,6 @@ export default function ProviderDashboard() {
         if (!confirm("Are you sure you want to reject this booking and release payment authorization?")) return;
 
         try {
-            // First, get the payment for this booking
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
             if (!paymentRes.ok) {
                 alert("Payment not found for this booking");
@@ -116,7 +133,6 @@ export default function ProviderDashboard() {
 
             const { payment } = await paymentRes.json();
 
-            // Cancel the payment
             const res = await fetch("/api/payments/cancel", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -155,11 +171,13 @@ export default function ProviderDashboard() {
         }
     }, [fetchData]);
 
-    if (loading) {
+    if (loading || status === "loading") {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                        <Building2 className="text-emerald-600" size={32} />
+                    </div>
                     <p className="text-gray-600 font-medium">Loading dashboard...</p>
                 </div>
             </div>
@@ -167,45 +185,145 @@ export default function ProviderDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30 pb-12">
-            <ProviderHeader companyName={profile?.company_name || null} />
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white shadow-sm sticky top-0 z-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        {/* Logo */}
+                        <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center">
+                                <Building2 className="text-white" size={18} />
+                            </div>
+                            <span className="font-semibold text-gray-900">Provider Portal</span>
+                        </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    {/* Left Column: Profile */}
-                    <div className="md:col-span-1">
-                        <CompanyProfileCard
-                            profile={profile}
-                            onEditProfile={() => setShowEditProfile(true)}
-                            onChangePassword={() => setShowChangePassword(true)}
-                            onProfileUpdate={(enabled) => setProfile(prev => prev ? ({ ...prev, email_notifications_enabled: enabled }) : null)}
-                        />
-                    </div>
+                        {/* Right Section */}
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={() => router.push("/")}
+                                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+                            >
+                                <Home size={18} />
+                                <span className="hidden sm:inline">Home</span>
+                            </button>
 
-                    {/* Right Column: Accommodations & Bookings */}
-                    <div className="md:col-span-2 space-y-8">
-                        <AccommodationsSection
-                            accommodations={accommodations}
-                            onAdd={() => setShowAddAccommodation(true)}
-                            onEdit={setShowEditAccommodation}
-                            onDelete={handleDeleteAccommodation}
-                            onManageImages={setShowImagesModal}
-                        />
+                            {/* User Menu */}
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowUserMenu(!showUserMenu)}
+                                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                                >
+                                    <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+                                        <span className="text-emerald-600 font-semibold text-sm">
+                                            {profile?.company_name?.charAt(0) || session?.user?.name?.charAt(0) || "P"}
+                                        </span>
+                                    </div>
+                                    <span className="hidden sm:block text-sm font-medium text-gray-700">
+                                        {profile?.company_name || session?.user?.name || "Provider"}
+                                    </span>
+                                    <ChevronDown size={16} className="text-gray-500" />
+                                </button>
 
-                        <BookingHistorySection
-                            bookings={bookings}
-                            onView={setSelectedBooking}
-                            onConfirm={handleConfirmBooking}
-                            onCancel={handleCancelBooking}
-                        />
+                                {showUserMenu && (
+                                    <>
+                                        <div
+                                            className="fixed inset-0 z-10"
+                                            onClick={() => setShowUserMenu(false)}
+                                        />
+                                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-20">
+                                            <div className="px-4 py-2 border-b border-gray-100">
+                                                <p className="text-sm font-medium text-gray-900 truncate">
+                                                    {profile?.company_name || session?.user?.name}
+                                                </p>
+                                                <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    setShowUserMenu(false);
+                                                    setActiveTab("profile");
+                                                }}
+                                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                                            >
+                                                <UserCog size={16} />
+                                                Profile Settings
+                                            </button>
+                                            <button
+                                                onClick={() => signOut({ callbackUrl: "/login" })}
+                                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                            >
+                                                <LogOut size={16} />
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {/* Bottom Row: Statistics */}
-                <div className="w-full">
+                {/* Tab Navigation */}
+                <div className="border-t border-gray-100">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <nav className="flex gap-1 -mb-px">
+                            {tabs.map((tab) => {
+                                const Icon = tab.icon;
+                                const isActive = activeTab === tab.id;
+                                return (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
+                                            isActive
+                                                ? "border-emerald-600 text-emerald-600"
+                                                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                                        }`}
+                                    >
+                                        <Icon size={18} />
+                                        {tab.label}
+                                    </button>
+                                );
+                            })}
+                        </nav>
+                    </div>
+                </div>
+            </header>
+
+            {/* Content */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {activeTab === "accommodations" && (
+                    <AccommodationsSection
+                        accommodations={accommodations}
+                        onAdd={() => setShowAddAccommodation(true)}
+                        onEdit={setShowEditAccommodation}
+                        onDelete={handleDeleteAccommodation}
+                        onManageImages={setShowImagesModal}
+                    />
+                )}
+
+                {activeTab === "bookings" && (
+                    <BookingHistorySection
+                        bookings={bookings}
+                        onView={setSelectedBooking}
+                        onConfirm={handleConfirmBooking}
+                        onCancel={handleCancelBooking}
+                    />
+                )}
+
+                {activeTab === "statistics" && (
                     <StatisticsCard stats={stats} />
-                </div>
-            </div>
+                )}
+
+                {activeTab === "profile" && (
+                    <CompanyProfileCard
+                        profile={profile}
+                        onEditProfile={() => setShowEditProfile(true)}
+                        onChangePassword={() => setShowChangePassword(true)}
+                        onProfileUpdate={(enabled) => setProfile(prev => prev ? ({ ...prev, email_notifications_enabled: enabled }) : null)}
+                    />
+                )}
+            </main>
 
             {/* Modals */}
             {showEditProfile && profile && (
@@ -253,7 +371,7 @@ export default function ProviderDashboard() {
                     onClose={() => setShowImagesModal(null)}
                     onSave={() => {
                         setShowImagesModal(null);
-                        fetchData(); // Images updated, refresh data just in case
+                        fetchData();
                     }}
                 />
             )}

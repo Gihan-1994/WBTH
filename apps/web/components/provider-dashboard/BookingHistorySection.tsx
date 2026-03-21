@@ -1,6 +1,7 @@
 "use client";
 
 import { Booking } from "./types";
+import { Eye, Check, X, Calendar } from "lucide-react";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
@@ -15,69 +16,85 @@ export default function BookingHistorySection({
     onConfirm,
     onCancel
 }: BookingHistorySectionProps) {
+    const getStatusStyles = (status: string) => {
+        switch (status) {
+            case 'confirmed':
+                return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+            case 'pending':
+                return 'bg-amber-50 text-amber-700 border-amber-200';
+            case 'cancelled':
+                return 'bg-red-50 text-red-700 border-red-200';
+            default:
+                return 'bg-gray-50 text-gray-700 border-gray-200';
+        }
+    };
+
     return (
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">📅 Booking History</h2>
+        <div className="bg-white rounded-xl border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Booking History</h2>
+            </div>
+
             <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
                 <table className="w-full">
-                    <thead className="sticky top-0 bg-white z-10">
-                        <tr className="text-left border-b-2 border-gray-200">
-                            <th className="pb-4 font-semibold text-gray-700">Date</th>
-                            <th className="pb-4 font-semibold text-gray-700">Accommodation</th>
-                            <th className="pb-4 font-semibold text-gray-700">Tourist</th>
-                            <th className="pb-4 font-semibold text-gray-700">Amount</th>
-                            <th className="pb-4 font-semibold text-gray-700">Status</th>
-                            <th className="pb-4 font-semibold text-gray-700">Actions</th>
+                    <thead className="sticky top-0 bg-gray-50 z-10">
+                        <tr className="border-b border-gray-200">
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Accommodation</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tourist</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-gray-200">
                         {bookings.map((booking) => (
-                            <tr key={booking.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-                                <td className="py-3">
+                            <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
+                                <td className="px-6 py-4 text-gray-600">
                                     {new Date(booking.start_date).toLocaleDateString()}
                                 </td>
-                                <td className="py-3">
-                                    {booking.accommodation?.name || "Unknown"}
+                                <td className="px-6 py-4">
+                                    <span className="font-medium text-gray-900">
+                                        {booking.accommodation?.name || "Unknown"}
+                                    </span>
                                 </td>
-                                <td className="py-3">
+                                <td className="px-6 py-4 text-gray-600">
                                     {booking.user?.name || "Unknown"}
                                 </td>
-                                <td className="py-3">
-                                    <span className="font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                                <td className="px-6 py-4">
+                                    <span className="font-medium text-emerald-600">
                                         Rs {booking.price.toLocaleString()}
                                     </span>
                                 </td>
-                                <td className="py-3">
-                                    <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${booking.status === 'confirmed'
-                                        ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
-                                        booking.status === 'pending'
-                                            ? 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-700 border border-yellow-200' :
-                                            'bg-gradient-to-r from-red-100 to-rose-100 text-red-700 border border-red-200'
-                                        }`}>
+                                <td className="px-6 py-4">
+                                    <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium border capitalize ${getStatusStyles(booking.status)}`}>
                                         {booking.status}
                                     </span>
                                 </td>
-                                <td className="py-3">
-                                    <div className="flex gap-2">
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center justify-end gap-2">
                                         <button
                                             onClick={() => onView(booking)}
-                                            className="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors"
+                                            className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                            title="View Details"
                                         >
-                                            👁️ View
+                                            <Eye size={16} />
                                         </button>
                                         {booking.status === 'pending' && (
                                             <>
                                                 <button
                                                     onClick={() => onConfirm(booking.id)}
-                                                    className="text-green-600 hover:text-green-800 font-medium text-sm transition-colors"
+                                                    className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                                                    title="Confirm"
                                                 >
-                                                    ✅ Confirm
+                                                    <Check size={16} />
                                                 </button>
                                                 <button
                                                     onClick={() => onCancel(booking.id)}
-                                                    className="text-red-600 hover:text-red-800 font-medium text-sm transition-colors"
+                                                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                    title="Reject"
                                                 >
-                                                    ❌ Reject
+                                                    <X size={16} />
                                                 </button>
                                             </>
                                         )}
@@ -85,17 +102,18 @@ export default function BookingHistorySection({
                                 </td>
                             </tr>
                         ))}
-                        {bookings.length === 0 && (
-                            <tr>
-                                <td colSpan={6} className="py-12 text-center">
-                                    <div className="text-6xl mb-4">📅</div>
-                                    <p className="text-xl text-gray-600 font-medium mb-2">No bookings yet</p>
-                                    <p className="text-gray-500">Bookings will appear here once tourists make reservations</p>
-                                </td>
-                            </tr>
-                        )}
                     </tbody>
                 </table>
+
+                {bookings.length === 0 && (
+                    <div className="py-16 text-center">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Calendar size={24} className="text-gray-400" />
+                        </div>
+                        <p className="text-gray-900 font-medium mb-1">No bookings yet</p>
+                        <p className="text-gray-500 text-sm">Bookings will appear here once tourists make reservations</p>
+                    </div>
+                )}
             </div>
         </div>
     );

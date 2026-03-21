@@ -1,6 +1,7 @@
 "use client";
 
 import { Stats } from "./types";
+import { TrendingUp, Clock, CheckCircle, XCircle, DollarSign } from "lucide-react";
 
 interface StatisticsCardProps {
     stats: Stats | null;
@@ -9,43 +10,72 @@ interface StatisticsCardProps {
 export default function StatisticsCard({ stats }: StatisticsCardProps) {
     if (!stats) return null;
 
+    const statItems = [
+        {
+            label: "Total Bookings",
+            value: stats.total,
+            icon: TrendingUp,
+            color: "text-blue-600",
+            bg: "bg-blue-50",
+        },
+        {
+            label: "Pending",
+            value: stats.pending,
+            icon: Clock,
+            color: "text-amber-600",
+            bg: "bg-amber-50",
+        },
+        {
+            label: "Confirmed",
+            value: stats.confirmed,
+            icon: CheckCircle,
+            color: "text-emerald-600",
+            bg: "bg-emerald-50",
+        },
+        {
+            label: "Cancelled",
+            value: stats.cancelled,
+            icon: XCircle,
+            color: "text-red-600",
+            bg: "bg-red-50",
+        },
+    ];
+
     return (
-        <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">📊 Statistics</h2>
+        <div className="space-y-6">
+            {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
-                        {stats.total}
-                    </div>
-                    <div className="text-xs font-semibold text-gray-600">📈 Total</div>
-                </div>
+                {statItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                        <div
+                            key={item.label}
+                            className="bg-white rounded-xl border border-gray-200 p-5"
+                        >
+                            <div className="flex items-center gap-3 mb-3">
+                                <div className={`w-10 h-10 ${item.bg} rounded-lg flex items-center justify-center`}>
+                                    <Icon size={20} className={item.color} />
+                                </div>
+                            </div>
+                            <p className="text-2xl font-bold text-gray-900">{item.value}</p>
+                            <p className="text-sm text-gray-500 mt-1">{item.label}</p>
+                        </div>
+                    );
+                })}
+            </div>
 
-                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <div className="text-2xl font-bold text-yellow-600 mb-1">
-                        {stats.pending}
+            {/* Income Card */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-sm text-gray-500 mb-1">Total Income</p>
+                        <p className="text-3xl font-bold text-gray-900">
+                            Rs {stats.income.toLocaleString()}
+                        </p>
                     </div>
-                    <div className="text-xs font-semibold text-gray-600">⏳ Pending</div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <div className="text-2xl font-bold text-green-600 mb-1">
-                        {stats.confirmed}
+                    <div className="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center">
+                        <DollarSign size={28} className="text-emerald-600" />
                     </div>
-                    <div className="text-xs font-semibold text-gray-600">✅ Confirmed</div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <div className="text-2xl font-bold text-red-600 mb-1">
-                        {stats.cancelled}
-                    </div>
-                    <div className="text-xs font-semibold text-gray-600">❌ Cancelled</div>
-                </div>
-
-                <div className="col-span-2 md:col-span-4 bg-white rounded-xl shadow-md border border-gray-100 p-4 hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-1">
-                        Rs {stats.income.toLocaleString()}
-                    </div>
-                    <div className="text-xs font-semibold text-gray-600">💰 Total Income</div>
                 </div>
             </div>
         </div>
