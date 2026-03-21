@@ -1,7 +1,7 @@
 "use client";
 
 import { ProviderProfile } from "./types";
-import { MapPin, Mail, Phone, Pencil, Lock, Bell } from "lucide-react";
+import { MapPin, Mail, Phone, Pencil, Lock, Bell, Building2, User, Shield } from "lucide-react";
 
 interface CompanyProfileCardProps {
     profile: ProviderProfile | null;
@@ -37,77 +37,100 @@ export default function CompanyProfileCard({
     };
 
     return (
-        <div className="max-w-2xl">
-            <div className="bg-white rounded-xl border border-gray-200">
-                {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-900">Company Profile</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column - Company Info */}
+            <div className="lg:col-span-2 space-y-6">
+                {/* Company Details Card */}
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                        <h2 className="text-base font-semibold text-gray-900">Company Information</h2>
+                        <button
+                            onClick={onEditProfile}
+                            className="flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-700"
+                        >
+                            <Pencil size={14} />
+                            Edit
+                        </button>
+                    </div>
+                    <div className="p-6">
+                        <div className="flex items-start gap-5 mb-6">
+                            {profile.logo ? (
+                                <img
+                                    src={profile.logo}
+                                    alt="Company Logo"
+                                    className="w-20 h-20 rounded-xl object-cover border border-gray-200"
+                                />
+                            ) : (
+                                <div className="w-20 h-20 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-200">
+                                    <Building2 size={32} className="text-emerald-600" />
+                                </div>
+                            )}
+                            <div>
+                                <h3 className="text-xl font-semibold text-gray-900">{profile.company_name}</h3>
+                                <p className="text-gray-500 mt-1">Accommodation Provider</p>
+                                <div className="flex items-center gap-2 mt-2">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                                        Active
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <MapPin size={16} className="text-gray-400" />
+                                    <span className="text-sm text-gray-500">Location</span>
+                                </div>
+                                <p className="text-gray-900 font-medium ml-7">{profile.location || "Not provided"}</p>
+                            </div>
+
+                            <div className="p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Mail size={16} className="text-gray-400" />
+                                    <span className="text-sm text-gray-500">Email</span>
+                                </div>
+                                <p className="text-gray-900 font-medium ml-7">{profile.email}</p>
+                            </div>
+
+                            <div className="p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Phone size={16} className="text-gray-400" />
+                                    <span className="text-sm text-gray-500">Phone</span>
+                                </div>
+                                <p className="text-gray-900 font-medium ml-7">{profile.contact_no || "Not provided"}</p>
+                            </div>
+
+                            <div className="p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <User size={16} className="text-gray-400" />
+                                    <span className="text-sm text-gray-500">Owner</span>
+                                </div>
+                                <p className="text-gray-900 font-medium ml-7">{profile.name}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="p-6">
-                    {/* Logo and Name */}
-                    <div className="flex items-center gap-4 mb-6">
-                        {profile.logo ? (
-                            <img
-                                src={profile.logo}
-                                alt="Company Logo"
-                                className="w-16 h-16 rounded-xl object-cover border border-gray-200"
-                            />
-                        ) : (
-                            <div className="w-16 h-16 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-200">
-                                <span className="text-emerald-600 text-2xl font-bold">
-                                    {profile.company_name.charAt(0).toUpperCase()}
-                                </span>
-                            </div>
-                        )}
-                        <div>
-                            <h3 className="text-xl font-semibold text-gray-900">{profile.company_name}</h3>
-                            <p className="text-gray-500">{profile.name}</p>
-                        </div>
+                {/* Notification Settings */}
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-base font-semibold text-gray-900">Notification Settings</h2>
                     </div>
-
-                    {/* Details */}
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                            <MapPin size={18} className="text-gray-400" />
-                            <div>
-                                <p className="text-xs text-gray-500">Location</p>
-                                <p className="text-gray-900">{profile.location || "Not provided"}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                            <Mail size={18} className="text-gray-400" />
-                            <div>
-                                <p className="text-xs text-gray-500">Email</p>
-                                <p className="text-gray-900">{profile.email}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                            <Phone size={18} className="text-gray-400" />
-                            <div>
-                                <p className="text-xs text-gray-500">Phone</p>
-                                <p className="text-gray-900">{profile.contact_no || "Not provided"}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Email Notifications */}
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                        <label className="flex items-center justify-between cursor-pointer">
-                            <div className="flex items-center gap-3">
-                                <Bell size={18} className="text-gray-400" />
+                    <div className="p-6">
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-200">
+                                    <Bell size={18} className="text-gray-600" />
+                                </div>
                                 <div>
                                     <p className="font-medium text-gray-900">Email Notifications</p>
                                     <p className="text-sm text-gray-500">
-                                        {profile.email_notifications_enabled
-                                            ? 'Receive booking updates via email'
-                                            : 'Only in-app notifications'}
+                                        Receive booking confirmations and updates via email
                                     </p>
                                 </div>
                             </div>
-                            <div className="relative">
+                            <label className="relative cursor-pointer">
                                 <input
                                     type="checkbox"
                                     checked={profile.email_notifications_enabled}
@@ -115,26 +138,68 @@ export default function CompanyProfileCard({
                                     className="sr-only peer"
                                 />
                                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
-                            </div>
-                        </label>
+                            </label>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex gap-3 mt-6 pt-6 border-t border-gray-200">
-                        <button
-                            onClick={onEditProfile}
-                            className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
-                        >
-                            <Pencil size={16} />
-                            Edit Profile
-                        </button>
+            {/* Right Column - Security & Quick Actions */}
+            <div className="space-y-6">
+                {/* Security Card */}
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-base font-semibold text-gray-900">Security</h2>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center border border-gray-200">
+                                <Shield size={18} className="text-gray-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-medium text-gray-900">Password</p>
+                                <p className="text-sm text-gray-500">Last changed: Unknown</p>
+                            </div>
+                        </div>
+
                         <button
                             onClick={onChangePassword}
-                            className="flex-1 flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                            className="w-full flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                         >
                             <Lock size={16} />
                             Change Password
                         </button>
+                    </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-base font-semibold text-gray-900">Quick Actions</h2>
+                    </div>
+                    <div className="p-6 space-y-3">
+                        <button
+                            onClick={onEditProfile}
+                            className="w-full flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                        >
+                            <Pencil size={16} />
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                {/* Account Info */}
+                <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider mb-3">Account Status</p>
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Status</span>
+                            <span className="text-sm font-medium text-emerald-600">Active</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">Account Type</span>
+                            <span className="text-sm font-medium text-gray-900">Provider</span>
+                        </div>
                     </div>
                 </div>
             </div>

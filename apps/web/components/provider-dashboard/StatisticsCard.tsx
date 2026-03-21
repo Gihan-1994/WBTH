@@ -1,80 +1,149 @@
 "use client";
 
 import { Stats } from "./types";
-import { TrendingUp, Clock, CheckCircle, XCircle, DollarSign } from "lucide-react";
 
 interface StatisticsCardProps {
     stats: Stats | null;
 }
 
 export default function StatisticsCard({ stats }: StatisticsCardProps) {
-    if (!stats) return null;
+    if (!stats) {
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+                <p className="text-gray-500">No statistics available yet</p>
+            </div>
+        );
+    }
 
-    const statItems = [
-        {
-            label: "Total Bookings",
-            value: stats.total,
-            icon: TrendingUp,
-            color: "text-blue-600",
-            bg: "bg-blue-50",
-        },
-        {
-            label: "Pending",
-            value: stats.pending,
-            icon: Clock,
-            color: "text-amber-600",
-            bg: "bg-amber-50",
-        },
-        {
-            label: "Confirmed",
-            value: stats.confirmed,
-            icon: CheckCircle,
-            color: "text-emerald-600",
-            bg: "bg-emerald-50",
-        },
-        {
-            label: "Cancelled",
-            value: stats.cancelled,
-            icon: XCircle,
-            color: "text-red-600",
-            bg: "bg-red-50",
-        },
-    ];
+    const total = stats.total || 1;
+    const confirmedPercent = Math.round((stats.confirmed / total) * 100);
+    const pendingPercent = Math.round((stats.pending / total) * 100);
+    const cancelledPercent = Math.round((stats.cancelled / total) * 100);
 
     return (
         <div className="space-y-6">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {statItems.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                        <div
-                            key={item.label}
-                            className="bg-white rounded-xl border border-gray-200 p-5"
-                        >
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className={`w-10 h-10 ${item.bg} rounded-lg flex items-center justify-center`}>
-                                    <Icon size={20} className={item.color} />
-                                </div>
-                            </div>
-                            <p className="text-2xl font-bold text-gray-900">{item.value}</p>
-                            <p className="text-sm text-gray-500 mt-1">{item.label}</p>
+            {/* Top Row - Key Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Total Income */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <p className="text-sm font-medium text-gray-500 mb-1">Total Revenue</p>
+                    <p className="text-3xl font-bold text-gray-900">Rs {stats.income.toLocaleString()}</p>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-500">From {stats.confirmed} confirmed bookings</span>
                         </div>
-                    );
-                })}
+                    </div>
+                </div>
+
+                {/* Total Bookings */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <p className="text-sm font-medium text-gray-500 mb-1">Total Bookings</p>
+                    <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-500">All time bookings received</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Conversion Rate */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <p className="text-sm font-medium text-gray-500 mb-1">Confirmation Rate</p>
+                    <p className="text-3xl font-bold text-gray-900">{confirmedPercent}%</p>
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-500">{stats.confirmed} of {stats.total} bookings confirmed</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Income Card */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-sm text-gray-500 mb-1">Total Income</p>
-                        <p className="text-3xl font-bold text-gray-900">
-                            Rs {stats.income.toLocaleString()}
-                        </p>
+            {/* Bottom Row - Breakdown */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Booking Status Breakdown */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <h3 className="text-base font-semibold text-gray-900 mb-6">Booking Status</h3>
+
+                    {/* Progress Bar */}
+                    <div className="h-3 bg-gray-100 rounded-full overflow-hidden flex mb-6">
+                        {confirmedPercent > 0 && (
+                            <div
+                                className="bg-emerald-500 h-full"
+                                style={{ width: `${confirmedPercent}%` }}
+                            />
+                        )}
+                        {pendingPercent > 0 && (
+                            <div
+                                className="bg-amber-500 h-full"
+                                style={{ width: `${pendingPercent}%` }}
+                            />
+                        )}
+                        {cancelledPercent > 0 && (
+                            <div
+                                className="bg-red-500 h-full"
+                                style={{ width: `${cancelledPercent}%` }}
+                            />
+                        )}
                     </div>
-                    <div className="w-14 h-14 bg-emerald-50 rounded-xl flex items-center justify-center">
-                        <DollarSign size={28} className="text-emerald-600" />
+
+                    {/* Legend */}
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                <span className="text-gray-600">Confirmed</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="font-semibold text-gray-900">{stats.confirmed}</span>
+                                <span className="text-gray-400 ml-2">({confirmedPercent}%)</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <span className="text-gray-600">Pending</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="font-semibold text-gray-900">{stats.pending}</span>
+                                <span className="text-gray-400 ml-2">({pendingPercent}%)</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                <span className="text-gray-600">Cancelled</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="font-semibold text-gray-900">{stats.cancelled}</span>
+                                <span className="text-gray-400 ml-2">({cancelledPercent}%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Quick Stats */}
+                <div className="bg-white rounded-xl border border-gray-200 p-6">
+                    <h3 className="text-base font-semibold text-gray-900 mb-6">Overview</h3>
+
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <span className="text-gray-600">Average Booking Value</span>
+                            <span className="font-semibold text-gray-900">
+                                Rs {stats.confirmed > 0 ? Math.round(stats.income / stats.confirmed).toLocaleString() : 0}
+                            </span>
+                        </div>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <span className="text-gray-600">Pending Bookings</span>
+                            <span className="font-semibold text-amber-600">{stats.pending}</span>
+                        </div>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <span className="text-gray-600">Cancellation Rate</span>
+                            <span className="font-semibold text-gray-900">{cancelledPercent}%</span>
+                        </div>
+                        <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-lg">
+                            <span className="text-emerald-700">Success Rate</span>
+                            <span className="font-semibold text-emerald-700">{confirmedPercent}%</span>
+                        </div>
                     </div>
                 </div>
             </div>
