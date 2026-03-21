@@ -118,20 +118,6 @@ export default function RegisterPage() {
               <p className="text-lg text-indigo-100">
                 Join thousands of travelers discovering authentic experiences around the world.
               </p>
-              <div className="mt-10 grid grid-cols-3 gap-6 text-center">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                  <p className="text-3xl font-bold text-white">50+</p>
-                  <p className="text-sm text-indigo-100 mt-1">Destinations</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                  <p className="text-3xl font-bold text-white">200+</p>
-                  <p className="text-sm text-indigo-100 mt-1">Local Guides</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                  <p className="text-3xl font-bold text-white">5K+</p>
-                  <p className="text-sm text-indigo-100 mt-1">Happy Travelers</p>
-                </div>
-              </div>
             </div>
           </div>
         </div>

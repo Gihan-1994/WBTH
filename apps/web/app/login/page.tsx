@@ -282,16 +282,6 @@ function LoginForm() {
             <p className="text-lg text-blue-100">
               Connect with local guides, find unique accommodations, and create unforgettable travel experiences.
             </p>
-            <div className="mt-8 flex items-center justify-center gap-4">
-              <div className="flex -space-x-3">
-                <div className="w-10 h-10 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-sm font-medium">JD</div>
-                <div className="w-10 h-10 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-sm font-medium">AK</div>
-                <div className="w-10 h-10 rounded-full bg-white/20 border-2 border-white/40 flex items-center justify-center text-white text-sm font-medium">MR</div>
-              </div>
-              <p className="text-white/90 text-sm">
-                <span className="font-semibold">2,000+</span> travelers joined this month
-              </p>
-            </div>
           </div>
         </div>
       </div>
