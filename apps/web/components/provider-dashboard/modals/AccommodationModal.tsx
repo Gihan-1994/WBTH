@@ -65,8 +65,15 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
     }
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 flex justify-end">
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-black/40 transition-opacity"
+                onClick={onClose}
+            />
+
+            {/* Drawer */}
+            <div className="relative w-full max-w-xl bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
                     <div>
@@ -84,11 +91,11 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                 </div>
 
                 {/* Content */}
-                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
-                    <div className="p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 overflow-y-auto p-6 space-y-6">
                         {/* Basic Info */}
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div className="md:col-span-2">
+                        <div className="space-y-4">
+                            <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                     Accommodation Name <span className="text-red-500">*</span>
                                 </label>
@@ -101,38 +108,40 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                                    District <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    value={formData.district}
-                                    onChange={e => setFormData({ ...formData, district: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all bg-white"
-                                    required
-                                >
-                                    <option value="">Select District</option>
-                                    {SRI_LANKA_DISTRICTS.map(district => (
-                                        <option key={district} value={district}>{district}</option>
-                                    ))}
-                                </select>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                        District <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={formData.district}
+                                        onChange={e => setFormData({ ...formData, district: e.target.value })}
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all bg-white"
+                                        required
+                                    >
+                                        <option value="">Select District</option>
+                                        {SRI_LANKA_DISTRICTS.map(district => (
+                                            <option key={district} value={district}>{district}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Province</label>
+                                    <select
+                                        value={formData.province || ""}
+                                        onChange={e => setFormData({ ...formData, province: e.target.value })}
+                                        className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all bg-white"
+                                    >
+                                        <option value="">Select Province</option>
+                                        {SRI_LANKA_PROVINCES.map(province => (
+                                            <option key={province} value={province}>{province}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">Province</label>
-                                <select
-                                    value={formData.province || ""}
-                                    onChange={e => setFormData({ ...formData, province: e.target.value })}
-                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all bg-white"
-                                >
-                                    <option value="">Select Province</option>
-                                    {SRI_LANKA_PROVINCES.map(province => (
-                                        <option key={province} value={province}>{province}</option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div className="md:col-span-2">
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Address / Location</label>
                                 <input
                                     value={formData.location || ""}
@@ -146,7 +155,7 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                         {/* Pricing Section */}
                         <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
                             <h3 className="font-medium text-gray-900 mb-4">Pricing & Capacity</h3>
-                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-medium text-gray-600 mb-1.5">Min Price (Rs)</label>
                                     <input
@@ -223,8 +232,8 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                         {/* Amenities */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-3">Amenities</label>
-                            <div className="border border-gray-200 rounded-lg p-4 max-h-40 overflow-y-auto">
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <div className="border border-gray-200 rounded-lg p-4 max-h-40 overflow-y-auto bg-white">
+                                <div className="grid grid-cols-2 gap-2">
                                     {AMENITIES_LIST.map(amenity => (
                                         <label key={amenity} className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1.5 rounded">
                                             <input
