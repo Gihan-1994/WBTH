@@ -63,7 +63,7 @@ export default function AccommodationDetailsPage() {
         price: 0,
         paymentMethod: "online" as "online" | "pay_at_property",
     });
-    const [reservedDates, setReservedDates] = useState<{ start_date: string; end_date: string; status: string }[]>([]);
+    const [blockedDates, setBlockedDates] = useState<{ date: string; reason: string | null }[]>([]);
 
     useEffect(() => {
         const fetchAccommodation = async () => {
@@ -87,21 +87,21 @@ export default function AccommodationDetailsPage() {
         if (id) fetchAccommodation();
     }, [id]);
 
-    // Fetch reserved dates when booking modal opens
+    // Fetch blocked dates when booking modal opens
     useEffect(() => {
-        const fetchReservedDates = async () => {
+        const fetchBlockedDates = async () => {
             if (!showBookingModal || !id) return;
             try {
                 const res = await fetch(`/api/accommodations/${id}/bookings`);
                 if (res.ok) {
                     const data = await res.json();
-                    setReservedDates(data.bookings || []);
+                    setBlockedDates(data.blockedDates || []);
                 }
             } catch (error) {
-                console.error("Failed to fetch reserved dates", error);
+                console.error("Failed to fetch blocked dates", error);
             }
         };
-        fetchReservedDates();
+        fetchBlockedDates();
     }, [showBookingModal, id]);
 
     const handleBookingSubmit = async (e: React.FormEvent) => {
@@ -413,31 +413,28 @@ export default function AccommodationDetailsPage() {
                         {/* Content */}
                         <div className="flex-1 overflow-y-auto p-6">
                             <form onSubmit={handleBookingSubmit} className="space-y-5">
-                                {/* Reserved Dates Section */}
-                                {reservedDates.length > 0 && (
+                                {/* Fully Booked Dates Section */}
+                                {blockedDates.length > 0 && (
                                     <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                                         <div className="flex items-center gap-2 mb-3">
                                             <CalendarX size={18} className="text-red-600" />
-                                            <h3 className="font-medium text-red-800">Unavailable Dates</h3>
+                                            <h3 className="font-medium text-red-800">Fully Booked Dates</h3>
                                         </div>
-                                        <div className="space-y-2 max-h-32 overflow-y-auto">
-                                            {reservedDates.map((booking, index) => (
-                                                <div key={index} className="flex items-center justify-between text-sm">
-                                                    <span className="text-red-700">
-                                                        {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
-                                                    </span>
-                                                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                                                        booking.status === 'confirmed'
-                                                            ? 'bg-green-100 text-green-700'
-                                                            : 'bg-amber-100 text-amber-700'
-                                                    }`}>
-                                                        {booking.status}
-                                                    </span>
-                                                </div>
+                                        <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                                            {blockedDates.map((blocked, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="inline-flex items-center px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium"
+                                                >
+                                                    {new Date(blocked.date).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric'
+                                                    })}
+                                                </span>
                                             ))}
                                         </div>
-                                        <p className="text-xs text-red-600 mt-2">
-                                            Please select dates that don't overlap with the above reservations.
+                                        <p className="text-xs text-red-600 mt-3">
+                                            This property is fully booked on these dates. Please select different dates.
                                         </p>
                                     </div>
                                 )}

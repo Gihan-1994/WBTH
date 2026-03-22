@@ -94,8 +94,21 @@ model Accommodation {
   online_payment_enabled Boolean               @default(true)
   provider               AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
   bookings               Booking[]
+  blockedDates           BlockedDate[]
 
   @@map("accommodations")
+}
+
+model BlockedDate {
+  id               String        @id @default(uuid())
+  accommodation_id String
+  date             DateTime
+  reason           String?
+  created_at       DateTime      @default(now())
+  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id], onDelete: Cascade)
+
+  @@unique([accommodation_id, date])
+  @@map("blocked_dates")
 }
 
 model Booking {

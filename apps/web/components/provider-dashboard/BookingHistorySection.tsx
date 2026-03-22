@@ -1,7 +1,7 @@
 "use client";
 
 import { Booking } from "./types";
-import { Eye, Check, X, Calendar, CreditCard, Banknote } from "lucide-react";
+import { Eye, Check, X, Calendar, CreditCard, Banknote, ArrowRight, Copy } from "lucide-react";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
@@ -45,8 +45,9 @@ export default function BookingHistorySection({
                 <table className="w-full">
                     <thead className="sticky top-0 bg-gray-50 z-10">
                         <tr className="border-b border-gray-200">
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Period</th>
-                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Accommodation</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Place</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tourist</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
@@ -57,25 +58,54 @@ export default function BookingHistorySection({
                     <tbody className="divide-y divide-gray-200">
                         {bookings.map((booking) => (
                             <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
+                                {/* Booking ID */}
                                 <td className="px-6 py-4">
-                                    <div className="flex flex-col">
-                                        <div className="flex items-center gap-2 text-sm">
-                                            <span className="text-gray-500 text-xs w-16">Check-in:</span>
-                                            <span className="font-medium text-gray-900">
-                                                {new Date(booking.start_date).toLocaleDateString()}
+                                    <div className="flex items-center gap-1">
+                                        <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-700">
+                                            #{booking.id.slice(0, 8)}
+                                        </code>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(booking.id);
+                                            }}
+                                            className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded transition-colors"
+                                            title="Copy full ID"
+                                        >
+                                            <Copy size={12} />
+                                        </button>
+                                    </div>
+                                </td>
+                                {/* Booking Period with Calendar Visual */}
+                                <td className="px-6 py-4">
+                                    <div className="flex items-center gap-2">
+                                        {/* Check-in Date Card */}
+                                        <div className="flex flex-col items-center bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 min-w-[70px]">
+                                            <span className="text-[10px] font-medium text-emerald-600 uppercase">Check-in</span>
+                                            <span className="text-lg font-bold text-emerald-700">
+                                                {new Date(booking.start_date).getDate()}
+                                            </span>
+                                            <span className="text-[10px] text-emerald-600">
+                                                {new Date(booking.start_date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm">
-                                            <span className="text-gray-500 text-xs w-16">Check-out:</span>
-                                            <span className="font-medium text-gray-900">
-                                                {new Date(booking.end_date).toLocaleDateString()}
+                                        <ArrowRight size={16} className="text-gray-400" />
+                                        {/* Check-out Date Card */}
+                                        <div className="flex flex-col items-center bg-red-50 border border-red-200 rounded-lg px-3 py-2 min-w-[70px]">
+                                            <span className="text-[10px] font-medium text-red-600 uppercase">Check-out</span>
+                                            <span className="text-lg font-bold text-red-700">
+                                                {new Date(booking.end_date).getDate()}
+                                            </span>
+                                            <span className="text-[10px] text-red-600">
+                                                {new Date(booking.end_date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
                                             </span>
                                         </div>
-                                        <span className="text-xs text-gray-400 mt-1">
+                                        {/* Nights Badge */}
+                                        <span className="ml-1 px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
                                             {Math.ceil((new Date(booking.end_date).getTime() - new Date(booking.start_date).getTime()) / (1000 * 60 * 60 * 24))} nights
                                         </span>
                                     </div>
                                 </td>
+                                {/* Place/Accommodation */}
                                 <td className="px-6 py-4">
                                     <span className="font-medium text-gray-900">
                                         {booking.accommodation?.name || "Unknown"}

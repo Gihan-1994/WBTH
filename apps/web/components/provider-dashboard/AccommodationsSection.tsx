@@ -1,7 +1,7 @@
 "use client";
 
 import { Accommodation } from "./types";
-import { Plus, ImageIcon, Pencil, Trash2, Star, AlertCircle } from "lucide-react";
+import { Plus, ImageIcon, Pencil, Trash2, Star, AlertCircle, CalendarX } from "lucide-react";
 
 interface AccommodationsSectionProps {
     accommodations: Accommodation[];
@@ -9,6 +9,7 @@ interface AccommodationsSectionProps {
     onEdit: (acc: Accommodation) => void;
     onDelete: (id: string) => void;
     onManageImages: (acc: Accommodation) => void;
+    onManageAvailability: (acc: Accommodation) => void;
 }
 
 export default function AccommodationsSection({
@@ -16,7 +17,8 @@ export default function AccommodationsSection({
     onAdd,
     onEdit,
     onDelete,
-    onManageImages
+    onManageImages,
+    onManageAvailability
 }: AccommodationsSectionProps) {
     return (
         <div className="bg-white rounded-xl border border-gray-200">
@@ -79,6 +81,13 @@ export default function AccommodationsSection({
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center justify-end gap-2">
+                                        <button
+                                            onClick={() => onManageAvailability(acc)}
+                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="Manage Availability"
+                                        >
+                                            <CalendarX size={16} />
+                                        </button>
                                         <button
                                             onClick={() => onManageImages(acc)}
                                             className="p-2 text-gray-500 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"

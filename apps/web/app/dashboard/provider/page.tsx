@@ -27,6 +27,7 @@ import ChangePasswordModal from "@/components/provider-dashboard/modals/ChangePa
 import AccommodationModal from "@/components/provider-dashboard/modals/AccommodationModal";
 import AccommodationImagesModal from "@/components/provider-dashboard/modals/AccommodationImagesModal";
 import ViewBookingModal from "@/components/provider-dashboard/modals/ViewBookingModal";
+import BlockedDatesModal from "@/components/provider-dashboard/modals/BlockedDatesModal";
 
 export default function ProviderDashboard() {
     const router = useRouter();
@@ -47,6 +48,7 @@ export default function ProviderDashboard() {
     const [showAddAccommodation, setShowAddAccommodation] = useState(false);
     const [showEditAccommodation, setShowEditAccommodation] = useState<Accommodation | null>(null);
     const [showImagesModal, setShowImagesModal] = useState<Accommodation | null>(null);
+    const [showBlockedDatesModal, setShowBlockedDatesModal] = useState<Accommodation | null>(null);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
 
     const tabs = [
@@ -325,6 +327,7 @@ export default function ProviderDashboard() {
                         onEdit={setShowEditAccommodation}
                         onDelete={handleDeleteAccommodation}
                         onManageImages={setShowImagesModal}
+                        onManageAvailability={setShowBlockedDatesModal}
                     />
                 )}
 
@@ -400,6 +403,14 @@ export default function ProviderDashboard() {
                         setShowImagesModal(null);
                         fetchData();
                     }}
+                />
+            )}
+
+            {showBlockedDatesModal && (
+                <BlockedDatesModal
+                    accommodationId={showBlockedDatesModal.id}
+                    accommodationName={showBlockedDatesModal.name}
+                    onClose={() => setShowBlockedDatesModal(null)}
                 />
             )}
 

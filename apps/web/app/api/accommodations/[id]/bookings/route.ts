@@ -8,25 +8,23 @@ export async function GET(
     const { id } = await params;
 
     try {
-        // Get all non-cancelled bookings for this accommodation
-        const bookings = await prisma.booking.findMany({
+        // Get all blocked dates for this accommodation (marked as fully booked by provider)
+        const blockedDates = await prisma.blockedDate.findMany({
             where: {
                 accommodation_id: id,
-                status: { not: "cancelled" },
             },
             select: {
-                start_date: true,
-                end_date: true,
-                status: true,
+                date: true,
+                reason: true,
             },
-            orderBy: { start_date: "asc" },
+            orderBy: { date: "asc" },
         });
 
-        return NextResponse.json({ bookings });
+        return NextResponse.json({ blockedDates });
     } catch (error) {
-        console.error("Error fetching accommodation bookings:", error);
+        console.error("Error fetching blocked dates:", error);
         return NextResponse.json(
-            { error: "Failed to fetch bookings" },
+            { error: "Failed to fetch blocked dates" },
             { status: 500 }
         );
     }
