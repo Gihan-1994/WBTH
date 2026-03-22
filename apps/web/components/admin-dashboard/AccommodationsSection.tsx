@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Eye, ChevronDown, ChevronRight, X, Star, MapPin } from "lucide-react";
+import { Search, Eye, ChevronDown, ChevronRight, X, Star, MapPin, Trash2, Ban, CheckCircle, ExternalLink } from "lucide-react";
 import { ProviderData, AccommodationData } from "./types";
+import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
 
 export default function AccommodationsSection() {
     const [providers, setProviders] = useState<ProviderData[]>([]);
@@ -11,6 +12,19 @@ export default function AccommodationsSection() {
     const [filteredProviders, setFilteredProviders] = useState<ProviderData[]>([]);
     const [expandedProviders, setExpandedProviders] = useState<Set<string>>(new Set());
     const [selectedAccommodation, setSelectedAccommodation] = useState<AccommodationData | null>(null);
+    const [confirmation, setConfirmation] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => Promise<void>;
+        variant?: "danger" | "warning" | "info" | "success";
+        confirmLabel?: string;
+    }>({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: async () => {},
+    });
 
     useEffect(() => {
         fetchAccommodations();
@@ -52,6 +66,48 @@ export default function AccommodationsSection() {
 
     const totalAccommodations = providers.reduce((s, p) => s + p.accommodations.length, 0);
     const totalBookings = providers.reduce((s, p) => s + p.accommodations.reduce((a, acc) => a + acc._count.bookings, 0), 0);
+
+    const handleDeleteAccommodation = (accId: string, accName: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Accommodation",
+            message: `Are you sure you want to delete "${accName}"? This will also delete all associated bookings and cannot be undone.`,
+            variant: "danger",
+            confirmLabel: "Delete",
+            onConfirm: async () => {
+                const res = await fetch(`/api/admin/accommodations/${accId}`, {
+                    method: "DELETE",
+                });
+                if (res.ok) {
+                    fetchAccommodations();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete accommodation");
+                }
+            }
+        });
+    };
+
+    const handleDeleteProvider = (providerId: string, companyName: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Provider",
+            message: `Are you sure you want to delete provider "${companyName}" and ALL their accommodations? This action cannot be undone.`,
+            variant: "danger",
+            confirmLabel: "Delete Provider",
+            onConfirm: async () => {
+                const res = await fetch(`/api/admin/providers/${providerId}`, {
+                    method: "DELETE",
+                });
+                if (res.ok) {
+                    fetchAccommodations();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete provider");
+                }
+            }
+        });
+    };
 
     if (loading) {
         return (
@@ -106,7 +162,19 @@ export default function AccommodationsSection() {
                                     <p className="text-sm text-gray-500">{provider.user.name} • {provider.accommodations.length} listings</p>
                                 </div>
                             </div>
-                            {expandedProviders.has(provider.provider_id) ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteProvider(provider.provider_id, provider.company_name);
+                                    }}
+                                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                    title="Delete Provider"
+                                >
+                                    <Trash2 size={18} />
+                                </button>
+                                {expandedProviders.has(provider.provider_id) ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                            </div>
                         </button>
 
                         {expandedProviders.has(provider.provider_id) && provider.accommodations.length > 0 && (
@@ -143,12 +211,31 @@ export default function AccommodationsSection() {
                                                     ) : "—"}
                                                 </td>
                                                 <td className="px-5 py-3 text-right">
-                                                    <button
-                                                        onClick={() => setSelectedAccommodation(acc)}
-                                                        className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                                                    >
-                                                        <Eye size={18} />
-                                                    </button>
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        <button
+                                                            onClick={() => setSelectedAccommodation(acc)}
+                                                            className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                            title="View Details"
+                                                        >
+                                                            <Eye size={18} />
+                                                        </button>
+                                                        <a
+                                                            href={`/accommodations/${acc.id}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                                            title="View on Site"
+                                                        >
+                                                            <ExternalLink size={18} />
+                                                        </a>
+                                                        <button
+                                                            onClick={() => handleDeleteAccommodation(acc.id, acc.name)}
+                                                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                                            title="Delete"
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))}
@@ -226,6 +313,16 @@ export default function AccommodationsSection() {
                     </div>
                 </div>
             )}
+
+            <ConfirmationModal
+                isOpen={confirmation.isOpen}
+                onClose={() => setConfirmation(prev => ({ ...prev, isOpen: false }))}
+                onConfirm={confirmation.onConfirm}
+                title={confirmation.title}
+                message={confirmation.message}
+                variant={confirmation.variant}
+                confirmLabel={confirmation.confirmLabel}
+            />
         </div>
     );
 }

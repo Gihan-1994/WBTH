@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Eye, UserCheck, UserX, X, Star } from "lucide-react";
+import { Search, Eye, UserCheck, UserX, X, Star, Trash2, ExternalLink, Ban, CheckCircle } from "lucide-react";
 import { GuideData } from "./types";
+import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
 
 export default function GuidesSection() {
     const [guides, setGuides] = useState<GuideData[]>([]);
@@ -10,6 +11,19 @@ export default function GuidesSection() {
     const [search, setSearch] = useState("");
     const [filteredGuides, setFilteredGuides] = useState<GuideData[]>([]);
     const [selectedGuide, setSelectedGuide] = useState<GuideData | null>(null);
+    const [confirmation, setConfirmation] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => Promise<void>;
+        variant?: "danger" | "warning" | "info" | "success";
+        confirmLabel?: string;
+    }>({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: async () => {},
+    });
 
     useEffect(() => {
         fetchGuides();
@@ -39,6 +53,45 @@ export default function GuidesSection() {
             console.error("Error fetching guides:", error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDeleteGuide = (guideId: string, guideName: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Guide",
+            message: `Are you sure you want to delete guide "${guideName}"? This will also delete their user account and all associated bookings.`,
+            variant: "danger",
+            confirmLabel: "Delete",
+            onConfirm: async () => {
+                const res = await fetch(`/api/admin/guides/${guideId}`, {
+                    method: "DELETE",
+                });
+                if (res.ok) {
+                    fetchGuides();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete guide");
+                }
+            }
+        });
+    };
+
+    const handleToggleAvailability = async (guideId: string, currentStatus: boolean) => {
+        try {
+            const res = await fetch(`/api/admin/guides/${guideId}/availability`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ availability: !currentStatus }),
+            });
+            if (res.ok) {
+                fetchGuides();
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to update availability");
+            }
+        } catch (error) {
+            console.error("Error updating availability:", error);
         }
     };
 
@@ -140,12 +193,42 @@ export default function GuidesSection() {
                                     )}
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <button
-                                        onClick={() => setSelectedGuide(guide)}
-                                        className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                                    >
-                                        <Eye size={18} />
-                                    </button>
+                                    <div className="flex items-center justify-end gap-1">
+                                        <button
+                                            onClick={() => setSelectedGuide(guide)}
+                                            className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                            title="View Details"
+                                        >
+                                            <Eye size={18} />
+                                        </button>
+                                        <a
+                                            href={`/guides/${guide.user_id}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                            title="View on Site"
+                                        >
+                                            <ExternalLink size={18} />
+                                        </a>
+                                        <button
+                                            onClick={() => handleToggleAvailability(guide.user_id, guide.availability)}
+                                            className={`p-2 rounded-lg transition-colors ${
+                                                guide.availability
+                                                    ? "text-gray-400 hover:text-amber-600 hover:bg-amber-50"
+                                                    : "text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
+                                            }`}
+                                            title={guide.availability ? "Suspend" : "Activate"}
+                                        >
+                                            {guide.availability ? <Ban size={18} /> : <CheckCircle size={18} />}
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteGuide(guide.user_id, guide.user.name)}
+                                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="Delete"
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -220,6 +303,16 @@ export default function GuidesSection() {
                     </div>
                 </div>
             )}
+
+            <ConfirmationModal
+                isOpen={confirmation.isOpen}
+                onClose={() => setConfirmation(prev => ({ ...prev, isOpen: false }))}
+                onConfirm={confirmation.onConfirm}
+                title={confirmation.title}
+                message={confirmation.message}
+                variant={confirmation.variant}
+                confirmLabel={confirmation.confirmLabel}
+            />
         </div>
     );
 }
