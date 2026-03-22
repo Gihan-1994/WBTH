@@ -14,6 +14,7 @@ import {
     Plane
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
+import ProfileSwitcher from "@/components/ProfileSwitcher";
 
 // Display Components
 import TouristProfileSection from "@/components/touristdashboard/TouristProfileSection";
@@ -217,6 +218,7 @@ export default function TouristDashboard() {
 
                         {/* Right Section */}
                         <div className="flex items-center gap-3">
+                            <ProfileSwitcher currentProfile="tourist" />
                             <NotificationBell />
                             <button
                                 onClick={() => router.push("/")}

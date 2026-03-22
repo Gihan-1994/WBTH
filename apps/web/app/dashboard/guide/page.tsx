@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { GuideProfile, Booking, Stats } from "@/components/guide-dashboard/types";
 import {
     Home,
@@ -11,9 +11,11 @@ import {
     User,
     LogOut,
     Loader2,
-    Compass
+    Compass,
+    ShieldX
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
+import ProfileSwitcher from "@/components/ProfileSwitcher";
 
 // Display Components
 import GuideProfileCard from "@/components/guide-dashboard/GuideProfileCard";
@@ -29,6 +31,7 @@ type TabType = "bookings" | "statistics" | "profile";
 
 export default function GuideDashboard() {
     const router = useRouter();
+    const { data: session, status } = useSession();
 
     // Data State
     const [profile, setProfile] = useState<GuideProfile | null>(null);
@@ -70,35 +73,45 @@ export default function GuideDashboard() {
 
     // Handlers
     const handleConfirmBooking = useCallback(async (id: string) => {
-        if (!confirm("Confirm this booking and capture payment?")) return;
+        if (!confirm("Confirm this booking?")) return;
 
         try {
+            // Check if there's a payment to capture (online payment)
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
 
-            const { payment } = await paymentRes.json();
+            if (paymentRes.ok) {
+                // Online payment exists - capture via payment API
+                const { payment } = await paymentRes.json();
 
-            if (payment.status !== "authorized") {
-                alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
-                return;
-            }
+                if (payment.status !== "authorized") {
+                    alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                    return;
+                }
 
-            const res = await fetch("/api/payments/capture", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
+                const res = await fetch("/api/payments/capture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
 
-            if (res.ok) {
-                const data = await res.json();
-                alert(`Payment captured! You received $${data.providerAmount}`);
-                fetchData();
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to confirm booking");
+                }
             } else {
-                const data = await res.json();
-                alert(data.error || "Failed to capture payment");
+                // No payment (pay_at_property) - confirm directly
+                const res = await fetch(`/api/guide/bookings/${id}/confirm`, {
+                    method: "PUT",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to confirm booking");
+                }
             }
         } catch (error) {
             console.error("Error confirming booking:", error);
@@ -107,29 +120,40 @@ export default function GuideDashboard() {
     }, [fetchData]);
 
     const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to reject this booking and release payment authorization?")) return;
+        if (!confirm("Are you sure you want to reject this booking?")) return;
 
         try {
+            // Check if there's a payment to cancel (online payment)
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
 
-            const { payment } = await paymentRes.json();
+            if (paymentRes.ok) {
+                // Online payment exists - cancel via payment API
+                const { payment } = await paymentRes.json();
 
-            const res = await fetch("/api/payments/cancel", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
+                const res = await fetch("/api/payments/cancel", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
 
-            if (res.ok) {
-                alert("Booking rejected and payment authorization released");
-                fetchData();
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to reject booking");
+                }
             } else {
-                const data = await res.json();
-                alert(data.error || "Failed to cancel payment");
+                // No payment (pay_at_property) - cancel directly
+                const res = await fetch(`/api/guide/bookings/${id}/cancel`, {
+                    method: "PUT",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to reject booking");
+                }
             }
         } catch (error) {
             console.error("Error rejecting booking:", error);
@@ -143,12 +167,36 @@ export default function GuideDashboard() {
         { id: "profile" as TabType, label: "Profile", icon: User },
     ];
 
-    if (loading) {
+    const userRole = (session?.user as any)?.role;
+
+    // Redirect non-guides to their appropriate dashboard
+    useEffect(() => {
+        if (status === "authenticated" && userRole !== "guide") {
+            router.replace("/dashboard/tourist");
+        }
+    }, [status, userRole, router]);
+
+    if (loading || status === "loading") {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="flex items-center gap-3 text-gray-600">
                     <Loader2 className="animate-spin" size={24} />
                     <span className="font-medium">Loading dashboard...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // Show access denied while redirecting
+    if (userRole !== "guide") {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <ShieldX className="text-red-600" size={32} />
+                    </div>
+                    <p className="text-gray-900 font-semibold mb-1">Access Denied</p>
+                    <p className="text-gray-500 text-sm">Redirecting to your dashboard...</p>
                 </div>
             </div>
         );
@@ -194,6 +242,7 @@ export default function GuideDashboard() {
 
                         {/* Right Section */}
                         <div className="flex items-center gap-3">
+                            <ProfileSwitcher currentProfile="guide" />
                             <NotificationBell />
                             <button
                                 onClick={() => router.push("/")}

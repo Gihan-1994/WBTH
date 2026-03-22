@@ -13,7 +13,9 @@ import {
     LogOut,
     Hotel,
     ChevronDown,
+    ShieldX,
 } from "lucide-react";
+import ProfileSwitcher from "@/components/ProfileSwitcher";
 
 // Display Components
 import CompanyProfileCard from "@/components/provider-dashboard/CompanyProfileCard";
@@ -109,34 +111,46 @@ export default function ProviderDashboard() {
         setConfirmation({
             isOpen: true,
             title: "Confirm Booking",
-            message: "Are you sure you want to confirm this booking and capture the payment?",
+            message: "Are you sure you want to confirm this booking?",
             variant: "success",
             confirmLabel: "Confirm Booking",
             onConfirm: async () => {
+                // Check if there's a payment to capture (online payment)
                 const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-                if (!paymentRes.ok) {
-                    alert("Payment not found for this booking");
-                    return;
-                }
 
-                const { payment } = await paymentRes.json();
+                if (paymentRes.ok) {
+                    // Online payment exists - capture via payment API
+                    const { payment } = await paymentRes.json();
 
-                if (payment.status !== "authorized") {
-                    alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
-                    return;
-                }
+                    if (payment.status !== "authorized") {
+                        alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                        return;
+                    }
 
-                const res = await fetch("/api/payments/capture", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId: payment.id }),
-                });
+                    const res = await fetch("/api/payments/capture", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ paymentId: payment.id }),
+                    });
 
-                if (res.ok) {
-                    fetchData();
+                    if (res.ok) {
+                        fetchData();
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to confirm booking");
+                    }
                 } else {
-                    const data = await res.json();
-                    alert(data.error || "Failed to capture payment");
+                    // No payment (pay_at_property) - confirm directly
+                    const res = await fetch(`/api/accommodation-provider/bookings/${id}/confirm`, {
+                        method: "PUT",
+                    });
+
+                    if (res.ok) {
+                        fetchData();
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to confirm booking");
+                    }
                 }
             }
         });
@@ -146,29 +160,40 @@ export default function ProviderDashboard() {
         setConfirmation({
             isOpen: true,
             title: "Reject Booking",
-            message: "Are you sure you want to reject this booking? The payment authorization will be released.",
+            message: "Are you sure you want to reject this booking?",
             variant: "danger",
             confirmLabel: "Reject Booking",
             onConfirm: async () => {
+                // Check if there's a payment to cancel (online payment)
                 const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-                if (!paymentRes.ok) {
-                    alert("Payment not found for this booking");
-                    return;
-                }
 
-                const { payment } = await paymentRes.json();
+                if (paymentRes.ok) {
+                    // Online payment exists - cancel via payment API
+                    const { payment } = await paymentRes.json();
+                    const res = await fetch("/api/payments/cancel", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ paymentId: payment.id }),
+                    });
 
-                const res = await fetch("/api/payments/cancel", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId: payment.id }),
-                });
-
-                if (res.ok) {
-                    fetchData();
+                    if (res.ok) {
+                        fetchData();
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to cancel booking");
+                    }
                 } else {
-                    const data = await res.json();
-                    alert(data.error || "Failed to cancel payment");
+                    // No payment (pay_at_property) - cancel directly
+                    const res = await fetch(`/api/accommodation-provider/bookings/${id}/cancel`, {
+                        method: "PUT",
+                    });
+
+                    if (res.ok) {
+                        fetchData();
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to cancel booking");
+                    }
                 }
             }
         });
@@ -269,6 +294,15 @@ export default function ProviderDashboard() {
         });
     }, [fetchData]);
 
+    const userRole = (session?.user as any)?.role;
+
+    // Redirect non-providers to their appropriate dashboard
+    useEffect(() => {
+        if (status === "authenticated" && userRole !== "accommodation_provider") {
+            router.replace("/dashboard/tourist");
+        }
+    }, [status, userRole, router]);
+
     if (loading || status === "loading") {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -277,6 +311,21 @@ export default function ProviderDashboard() {
                         <Building2 className="text-emerald-600" size={32} />
                     </div>
                     <p className="text-gray-600 font-medium">Loading dashboard...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Show access denied while redirecting
+    if (userRole !== "accommodation_provider") {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                <div className="text-center">
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <ShieldX className="text-red-600" size={32} />
+                    </div>
+                    <p className="text-gray-900 font-semibold mb-1">Access Denied</p>
+                    <p className="text-gray-500 text-sm">Redirecting to your dashboard...</p>
                 </div>
             </div>
         );
@@ -298,6 +347,8 @@ export default function ProviderDashboard() {
 
                         {/* Right Section */}
                         <div className="flex items-center gap-4">
+                            <ProfileSwitcher currentProfile="provider" />
+
                             <button
                                 onClick={() => router.push("/")}
                                 className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
