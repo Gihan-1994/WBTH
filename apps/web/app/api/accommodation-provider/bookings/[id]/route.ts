@@ -12,10 +12,10 @@ import { prisma } from "@repo/prisma";
  */
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
-    const bookingId = params.id;
+    const { id: bookingId } = await params;
 
     if (!session || !session.user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -42,7 +42,7 @@ export async function DELETE(
             return NextResponse.json({ error: "Booking not found" }, { status: 404 });
         }
 
-        if (booking.accommodation.provider.user_id !== userId) {
+        if (!booking.accommodation || booking.accommodation.provider.user_id !== userId) {
             return NextResponse.json({ error: "Forbidden: You are not the provider for this booking" }, { status: 403 });
         }
 

@@ -5,7 +5,7 @@ import { prisma } from "@repo/prisma";
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -15,7 +15,7 @@ export async function PUT(
 
     // @ts-ignore
     const userId = session.user.id;
-    const notificationId = params.id;
+    const { id: notificationId } = await params;
 
     try {
         // Verify notification belongs to user

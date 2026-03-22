@@ -9,11 +9,11 @@ import bcrypt from "bcryptjs";
  */
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await requireAdmin();
-        const userId = params.id;
+        const { id: userId } = await params;
 
         const body = await req.json();
         const { name, email, contact_no, password } = body;
@@ -68,11 +68,11 @@ export async function PUT(
  */
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await requireAdmin();
-        const userId = params.id;
+        const { id: userId } = await params;
 
         // Prevent admin from deleting their own account
         // @ts-ignore
