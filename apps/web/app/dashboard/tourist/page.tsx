@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import { useToast } from "@/components/Toast";
 import { UserProfile, Booking, Stats } from "@/components/touristdashboard/types";
 import {
     Home,
@@ -31,6 +32,7 @@ type TabType = "bookings" | "statistics" | "profile";
 
 export default function TouristDashboard() {
     const router = useRouter();
+    const toast = useToast();
 
     // Data State
     const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -98,10 +100,10 @@ export default function TouristDashboard() {
                         if (selectedBooking?.id === id) setSelectedBooking(null);
                     } else {
                         const data = await res.json();
-                        alert(data.error || "Failed to cancel booking");
+                        toast.error(data.error || "Failed to cancel booking");
                     }
                 } catch (error) {
-                    alert("Error cancelling booking");
+                    toast.error("Error cancelling booking");
                 }
             }
         });
@@ -123,10 +125,10 @@ export default function TouristDashboard() {
                         if (selectedBooking?.id === id) setSelectedBooking(null);
                     } else {
                         const data = await res.json();
-                        alert(data.error || "Failed to delete booking");
+                        toast.error(data.error || "Failed to delete booking");
                     }
                 } catch (error) {
-                    alert("Error deleting booking");
+                    toast.error("Error deleting booking");
                 }
             }
         });
@@ -152,10 +154,10 @@ export default function TouristDashboard() {
                         }
                     } else {
                         const data = await res.json();
-                        alert(data.error || "Failed to delete bookings");
+                        toast.error(data.error || "Failed to delete bookings");
                     }
                 } catch (error) {
-                    alert("Error bulk deleting bookings");
+                    toast.error("Error bulk deleting bookings");
                 }
             }
         });

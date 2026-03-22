@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Lock, Eye, EyeOff } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface ChangePasswordModalProps {
     onClose: () => void;
@@ -15,17 +16,18 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordModalProp
     const [showCurrent, setShowCurrent] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const toast = useToast();
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
         if (newPassword !== confirmPassword) {
-            alert("New passwords do not match");
+            toast.error("New passwords do not match");
             return;
         }
 
         if (newPassword.length < 6) {
-            alert("Password must be at least 6 characters");
+            toast.error("Password must be at least 6 characters");
             return;
         }
 
@@ -40,13 +42,13 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordModalProp
             const data = await res.json();
 
             if (res.ok) {
-                alert("Password changed successfully!");
+                toast.success("Password changed successfully!");
                 onClose();
             } else {
-                alert(data.error || "Failed to change password");
+                toast.error(data.error || "Failed to change password");
             }
         } catch (err) {
-            alert("Error changing password");
+            toast.error("Error changing password");
         } finally {
             setLoading(false);
         }

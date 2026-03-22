@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Accommodation } from "../types";
 import { X, ArrowRight, ArrowLeft, Check, MapPin, DollarSign, Home, Image as ImageIcon, Upload, Trash2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 import {
     SRI_LANKA_DISTRICTS,
     SRI_LANKA_PROVINCES,
@@ -29,6 +30,7 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
     const [step, setStep] = useState(1);
     const [saving, setSaving] = useState(false);
     const [images, setImages] = useState<string[]>(accommodation?.images || []);
+    const toast = useToast();
     const [formData, setFormData] = useState<any>(accommodation || {
         name: "",
         district: "",
@@ -53,11 +55,11 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
 
         Array.from(files).forEach(file => {
             if (!file.type.startsWith("image/")) {
-                alert("Please select image files only");
+                toast.error("Please select image files only");
                 return;
             }
             if (file.size > 2 * 1024 * 1024) {
-                alert("Each image must be less than 2MB");
+                toast.error("Each image must be less than 2MB");
                 return;
             }
 
@@ -95,14 +97,14 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                 body: JSON.stringify({ ...formData, images }),
             });
             if (res.ok) {
-                alert(isEditing ? "Accommodation updated!" : "Accommodation created!");
+                toast.success(isEditing ? "Accommodation updated!" : "Accommodation created!");
                 onSave();
             } else {
                 const data = await res.json();
-                alert(data.error || "Failed to save accommodation");
+                toast.error(data.error || "Failed to save accommodation");
             }
         } catch (err) {
-            alert("Error saving accommodation");
+            toast.error("Error saving accommodation");
         } finally {
             setSaving(false);
         }

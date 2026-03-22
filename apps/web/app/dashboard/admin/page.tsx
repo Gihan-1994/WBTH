@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/Toast";
 import AnalyticsSection from "@/components/admin-dashboard/AnalyticsSection";
 import UsersSection from "@/components/admin-dashboard/UsersSection";
 import GuidesSection from "@/components/admin-dashboard/GuidesSection";
@@ -24,6 +25,7 @@ import {
 export default function AdminDashboardPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const toast = useToast();
     const [activeTab, setActiveTab] = useState("analytics");
     const [loading, setLoading] = useState(true);
 
@@ -37,7 +39,7 @@ export default function AdminDashboardPage() {
 
         // @ts-ignore
         if (session.user.role !== "admin") {
-            alert("Access denied. Admin privileges required.");
+            toast.error("Access denied. Admin privileges required.");
             router.push("/");
             return;
         }

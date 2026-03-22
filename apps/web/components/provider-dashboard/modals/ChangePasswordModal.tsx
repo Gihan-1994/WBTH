@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useToast } from "@/components/Toast";
 
 interface ChangePasswordModalProps {
     onClose: () => void;
@@ -10,6 +11,7 @@ const ChangePasswordModal = function ChangePasswordModal({ onClose }: ChangePass
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const toast = useToast();
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -22,13 +24,13 @@ const ChangePasswordModal = function ChangePasswordModal({ onClose }: ChangePass
             });
             const data = await res.json();
             if (res.ok) {
-                alert("Password changed successfully!");
+                toast.success("Password changed successfully!");
                 onClose();
             } else {
-                alert(data.error || "Failed to change password");
+                toast.error(data.error || "Failed to change password");
             }
         } catch (err) {
-            alert("Error changing password");
+            toast.error("Error changing password");
         } finally {
             setLoading(false);
         }

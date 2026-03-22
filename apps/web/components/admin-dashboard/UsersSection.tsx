@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { Search, Trash2, Users } from "lucide-react";
 import { UserData } from "./types";
 import { USER_ROLE_LABELS, USER_ROLE_COLORS } from "./constants";
+import { useToast } from "@/components/Toast";
 
 export default function UsersSection() {
+    const toast = useToast();
     const [users, setUsers] = useState<UserData[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -41,15 +43,15 @@ export default function UsersSection() {
         try {
             const response = await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
             if (response.ok) {
-                alert("User deleted successfully");
+                toast.success("User deleted successfully");
                 fetchUsers();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to delete user");
+                toast.error(data.error || "Failed to delete user");
             }
         } catch (error) {
             console.error("Error deleting user:", error);
-            alert("Failed to delete user");
+            toast.error("Failed to delete user");
         }
     };
 

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { X, CalendarX } from "lucide-react";
 import { AccommodationData } from "../types";
 import PaymentModal from "@/components/payments/PaymentModal";
+import { useToast } from "@/components/Toast";
 
 interface BookingDrawerProps {
     accommodation: AccommodationData;
@@ -22,6 +23,7 @@ export default function BookingDrawer({
 }: BookingDrawerProps) {
     const { data: session } = useSession();
     const router = useRouter();
+    const toast = useToast();
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [createdBooking, setCreatedBooking] = useState<any>(null);
     const [blockedDates, setBlockedDates] = useState<{ date: string; reason: string | null }[]>([]);
@@ -78,16 +80,16 @@ export default function BookingDrawer({
                 if (bookingData.paymentMethod === "online") {
                     setShowPaymentModal(true);
                 } else {
-                    alert("Booking confirmed! You will pay at the property upon arrival.");
+                    toast.success("Booking confirmed! You will pay at the property upon arrival.");
                     router.push("/dashboard/tourist");
                 }
             } else {
-                const error = await res.json();
-                alert(`Booking failed: ${error.error}`);
+                const errorData = await res.json();
+                toast.error(errorData.error || "Booking failed");
             }
         } catch (error) {
             console.error("Booking error", error);
-            alert("An error occurred while booking.");
+            toast.error("An error occurred while booking");
         }
     };
 

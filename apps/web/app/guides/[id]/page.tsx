@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import PaymentModal from "@/components/payments/PaymentModal";
 import Footer from "@/components/Footer";
+import { useToast } from "@/components/Toast";
 
 interface Guide {
     user_id: string;
@@ -47,6 +48,7 @@ export default function GuideDetailsPage() {
     const { data: session } = useSession();
     const router = useRouter();
     const params = useParams();
+    const toast = useToast();
     const id = params.id as string;
     const [guide, setGuide] = useState<Guide | null>(null);
     const [loading, setLoading] = useState(true);
@@ -108,12 +110,12 @@ export default function GuideDetailsPage() {
                 setShowBookingDrawer(false);
                 setShowPaymentModal(true);
             } else {
-                const error = await res.json();
-                alert(`Booking failed: ${error.error}`);
+                const errorData = await res.json();
+                toast.error(errorData.error || "Booking failed");
             }
         } catch (error) {
             console.error("Booking error", error);
-            alert("An error occurred while booking.");
+            toast.error("An error occurred while booking");
         } finally {
             setSubmitting(false);
         }

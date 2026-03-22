@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useToast } from "@/components/Toast";
 import { GuideProfile, Booking, Stats } from "@/components/guide-dashboard/types";
 import {
     Home,
@@ -32,6 +33,7 @@ type TabType = "bookings" | "statistics" | "profile";
 export default function GuideDashboard() {
     const router = useRouter();
     const { data: session, status } = useSession();
+    const toast = useToast();
 
     // Data State
     const [profile, setProfile] = useState<GuideProfile | null>(null);
@@ -84,7 +86,7 @@ export default function GuideDashboard() {
                 const { payment } = await paymentRes.json();
 
                 if (payment.status !== "authorized") {
-                    alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                    toast.error(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
                     return;
                 }
 
@@ -98,7 +100,7 @@ export default function GuideDashboard() {
                     fetchData();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to confirm booking");
+                    toast.error(data.error || "Failed to confirm booking");
                 }
             } else {
                 // No payment (pay_at_property) - confirm directly
@@ -110,12 +112,12 @@ export default function GuideDashboard() {
                     fetchData();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to confirm booking");
+                    toast.error(data.error || "Failed to confirm booking");
                 }
             }
         } catch (error) {
             console.error("Error confirming booking:", error);
-            alert("Error confirming booking");
+            toast.error("Error confirming booking");
         }
     }, [fetchData]);
 
@@ -140,7 +142,7 @@ export default function GuideDashboard() {
                     fetchData();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to reject booking");
+                    toast.error(data.error || "Failed to reject booking");
                 }
             } else {
                 // No payment (pay_at_property) - cancel directly
@@ -152,12 +154,12 @@ export default function GuideDashboard() {
                     fetchData();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to reject booking");
+                    toast.error(data.error || "Failed to reject booking");
                 }
             }
         } catch (error) {
             console.error("Error rejecting booking:", error);
-            alert("Error rejecting booking");
+            toast.error("Error rejecting booking");
         }
     }, [fetchData]);
 

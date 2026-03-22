@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Upload, Trash2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface AddEventModalProps {
     onClose: () => void;
@@ -12,6 +13,7 @@ interface AddEventModalProps {
  * Modal for adding a new event
  */
 export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps) {
+    const toast = useToast();
     const [formData, setFormData] = useState({
         title: "",
         category: "",
@@ -54,13 +56,13 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
         Array.from(files).forEach((file) => {
             // Validate file type
             if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-                alert(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
+                toast.error(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
                 return;
             }
 
             // Validate file size (2MB max for original file)
             if (file.size > 2 * 1024 * 1024) {
-                alert(`File too large: ${file.name}. Maximum size is 2MB.`);
+                toast.error(`File too large: ${file.name}. Maximum size is 2MB.`);
                 return;
             }
 
@@ -100,7 +102,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
 
                     // Check if compressed image is still too large
                     if (compressedBase64.length > 1.5 * 1024 * 1024) {
-                        alert(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
+                        toast.error(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
                         return;
                     }
 
@@ -120,7 +122,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
         e.preventDefault();
 
         if (!formData.title || !formData.category || !formData.date || !formData.location) {
-            alert("Please fill in all required fields");
+            toast.error("Please fill in all required fields");
             return;
         }
 
@@ -140,15 +142,15 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
             });
 
             if (response.ok) {
-                alert("Event created successfully!");
+                toast.success("Event created successfully!");
                 onSuccess();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to create event");
+                toast.error(data.error || "Failed to create event");
             }
         } catch (error) {
             console.error("Error creating event:", error);
-            alert("Error creating event");
+            toast.error("Error creating event");
         } finally {
             setLoading(false);
         }

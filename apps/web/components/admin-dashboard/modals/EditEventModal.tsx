@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Upload, Trash2 } from "lucide-react";
 import { EventData } from "../types";
+import { useToast } from "@/components/Toast";
 
 interface EditEventModalProps {
     event: EventData;
@@ -14,6 +15,7 @@ interface EditEventModalProps {
  * Modal for editing an existing event
  */
 export default function EditEventModal({ event, onClose, onSuccess }: EditEventModalProps) {
+    const toast = useToast();
     const [formData, setFormData] = useState({
         title: event.title,
         category: event.category,
@@ -56,13 +58,13 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
         Array.from(files).forEach((file) => {
             // Validate file type
             if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-                alert(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
+                toast.error(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
                 return;
             }
 
             // Validate file size (2MB max for original file)
             if (file.size > 2 * 1024 * 1024) {
-                alert(`File too large: ${file.name}. Maximum size is 2MB.`);
+                toast.error(`File too large: ${file.name}. Maximum size is 2MB.`);
                 return;
             }
 
@@ -102,7 +104,7 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
 
                     // Check if compressed image is still too large
                     if (compressedBase64.length > 1.5 * 1024 * 1024) {
-                        alert(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
+                        toast.error(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
                         return;
                     }
 
@@ -122,7 +124,7 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
         e.preventDefault();
 
         if (!formData.title || !formData.category || !formData.date || !formData.location) {
-            alert("Please fill in all required fields");
+            toast.error("Please fill in all required fields");
             return;
         }
 
@@ -142,15 +144,15 @@ export default function EditEventModal({ event, onClose, onSuccess }: EditEventM
             });
 
             if (response.ok) {
-                alert("Event updated successfully!");
+                toast.success("Event updated successfully!");
                 onSuccess();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to update event");
+                toast.error(data.error || "Failed to update event");
             }
         } catch (error) {
             console.error("Error updating event:", error);
-            alert("Error updating event");
+            toast.error("Error updating event");
         } finally {
             setLoading(false);
         }

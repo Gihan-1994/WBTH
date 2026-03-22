@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GuideProfile } from "../types";
 import { LANGUAGES, EXPERTISE, SRI_LANKA_CITIES, SRI_LANKA_PROVINCES } from "../constants";
 import { X, Upload, Trash2, ChevronLeft, ChevronRight, User, DollarSign, Languages as LanguagesIcon, Briefcase } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface EditProfileModalProps {
     profile: GuideProfile;
@@ -26,6 +27,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
     const [experiences, setExperiences] = useState<string[]>(profile.experience || []);
+    const toast = useToast();
 
     async function handleSubmit() {
         setUploading(true);
@@ -40,7 +42,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
                 if (!uploadRes.ok) {
                     const error = await uploadRes.json();
-                    alert(error.error || "Failed to upload profile picture");
+                    toast.error(error.error || "Failed to upload profile picture");
                     setUploading(false);
                     return;
                 }
@@ -55,13 +57,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
             });
 
             if (res.ok) {
-                alert("Profile updated successfully!");
+                toast.success("Profile updated successfully!");
                 onSave();
             } else {
-                alert("Failed to update profile");
+                toast.error("Failed to update profile");
             }
         } catch (err) {
-            alert("Error updating profile");
+            toast.error("Error updating profile");
         } finally {
             setUploading(false);
         }
@@ -108,12 +110,12 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert("Please select an image file");
+            toast.error("Please select an image file");
             return;
         }
 
         if (file.size > 2 * 1024 * 1024) {
-            alert("Image size must be less than 2MB");
+            toast.error("Image size must be less than 2MB");
             return;
         }
 
@@ -135,12 +137,12 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
             if (res.ok) {
                 setSelectedImage(null);
                 setFormData({ ...formData, profile_picture: null });
-                alert("Profile picture removed!");
+                toast.success("Profile picture removed!");
             } else {
-                alert("Failed to remove profile picture");
+                toast.error("Failed to remove profile picture");
             }
         } catch (err) {
-            alert("Error removing profile picture");
+            toast.error("Error removing profile picture");
         }
     };
 

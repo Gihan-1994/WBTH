@@ -2,6 +2,7 @@
 
 import { GuideProfile } from "./types";
 import { MapPin, Mail, Phone, Pencil, Lock, Bell, User, Shield, DollarSign, Languages, Award, Star } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface GuideProfileCardProps {
     profile: GuideProfile | null;
@@ -16,6 +17,8 @@ export default function GuideProfileCard({
     onChangePassword,
     onProfileUpdate
 }: GuideProfileCardProps) {
+    const toast = useToast();
+
     if (!profile) return null;
 
     const handleEmailToggle = async (enabled: boolean) => {
@@ -27,12 +30,12 @@ export default function GuideProfileCard({
             });
             if (res.ok) {
                 onProfileUpdate(enabled);
-                alert(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
+                toast.success(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
             } else {
-                alert('Failed to update preference');
+                toast.error('Failed to update preference');
             }
         } catch (error) {
-            alert('Error updating preference');
+            toast.error('Error updating preference');
         }
     };
 

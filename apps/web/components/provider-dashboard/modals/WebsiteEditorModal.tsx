@@ -13,6 +13,7 @@ import {
     ChevronRight,
     Check
 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface WebsiteData {
     description: string;
@@ -91,6 +92,7 @@ export default function WebsiteEditorModal({
 }: WebsiteEditorModalProps) {
     const [activeTab, setActiveTab] = useState<"content" | "design" | "sections">("content");
     const [saving, setSaving] = useState(false);
+    const toast = useToast();
 
     const [data, setData] = useState<WebsiteData>({
         description: accommodation.description || "",
@@ -121,15 +123,16 @@ export default function WebsiteEditorModal({
             });
 
             if (res.ok) {
+                toast.success("Website settings saved!");
                 onSave();
                 onClose();
             } else {
                 const error = await res.json();
-                alert(`Failed to save: ${error.error}`);
+                toast.error(error.error || "Failed to save");
             }
         } catch (error) {
             console.error("Save error:", error);
-            alert("Failed to save changes");
+            toast.error("Failed to save changes");
         } finally {
             setSaving(false);
         }

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { User, Mail, Phone, Lock, Save } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface AdminProfileData {
     id: string;
@@ -17,6 +18,7 @@ export default function AdminProfileSection() {
     const [editing, setEditing] = useState(false);
     const [saving, setSaving] = useState(false);
     const [changingPassword, setChangingPassword] = useState(false);
+    const toast = useToast();
 
     const [formData, setFormData] = useState({ name: "", email: "", contact_no: "" });
     const [passwordData, setPasswordData] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
@@ -55,12 +57,12 @@ export default function AdminProfileSection() {
             });
 
             if (response.ok) {
-                alert("Profile updated successfully!");
+                toast.success("Profile updated successfully!");
                 setEditing(false);
                 fetchProfile();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to update profile");
+                toast.error(data.error || "Failed to update profile");
             }
         } catch (error) {
             console.error("Error updating profile:", error);
@@ -71,11 +73,11 @@ export default function AdminProfileSection() {
 
     const handleChangePassword = async () => {
         if (passwordData.newPassword !== passwordData.confirmPassword) {
-            alert("Passwords do not match");
+            toast.error("Passwords do not match");
             return;
         }
         if (passwordData.newPassword.length < 6) {
-            alert("Password must be at least 6 characters");
+            toast.error("Password must be at least 6 characters");
             return;
         }
 
@@ -88,12 +90,12 @@ export default function AdminProfileSection() {
             });
 
             if (response.ok) {
-                alert("Password changed successfully!");
+                toast.success("Password changed successfully!");
                 setChangingPassword(false);
                 setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to change password");
+                toast.error(data.error || "Failed to change password");
             }
         } catch (error) {
             console.error("Error changing password:", error);

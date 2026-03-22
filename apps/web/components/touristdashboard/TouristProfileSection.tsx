@@ -2,6 +2,7 @@
 
 import { UserProfile } from "./types";
 import { MapPin, Mail, Phone, Globe, Calendar, Pencil, Lock, Bell, User, Shield } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface TouristProfileSectionProps {
     profile: UserProfile | null;
@@ -16,6 +17,8 @@ export default function TouristProfileSection({
     onEditProfile,
     onChangePassword
 }: TouristProfileSectionProps) {
+    const toast = useToast();
+
     if (!profile) return null;
 
     const handleEmailToggle = async (enabled: boolean) => {
@@ -27,12 +30,12 @@ export default function TouristProfileSection({
             });
             if (res.ok) {
                 setProfile(prev => prev ? { ...prev, email_notifications_enabled: enabled } : prev);
-                alert(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
+                toast.success(enabled ? 'Email notifications enabled' : 'Email notifications disabled');
             } else {
-                alert('Failed to update preference');
+                toast.error('Failed to update preference');
             }
         } catch (error) {
-            alert('Error updating preference');
+            toast.error('Error updating preference');
         }
     };
 

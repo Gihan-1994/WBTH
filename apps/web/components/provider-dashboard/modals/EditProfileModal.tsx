@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ProviderProfile } from "../types";
 import { X, Upload, Trash2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface EditProfileModalProps {
     profile: ProviderProfile;
@@ -14,18 +15,19 @@ const EditProfileModal = function EditProfileModal({ profile, onClose, onSave }:
     const [formData, setFormData] = useState(profile);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
+    const toast = useToast();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         if (!file.type.startsWith("image/")) {
-            alert("Please select an image file");
+            toast.error("Please select an image file");
             return;
         }
 
         if (file.size > 2 * 1024 * 1024) {
-            alert("Image size must be less than 2MB");
+            toast.error("Image size must be less than 2MB");
             return;
         }
 
@@ -53,13 +55,13 @@ const EditProfileModal = function EditProfileModal({ profile, onClose, onSave }:
                 body: JSON.stringify(formData),
             });
             if (res.ok) {
-                alert("Profile updated!");
+                toast.success("Profile updated!");
                 onSave();
             } else {
-                alert("Failed to update profile");
+                toast.error("Failed to update profile");
             }
         } catch (err) {
-            alert("Error updating profile");
+            toast.error("Error updating profile");
         } finally {
             setSaving(false);
         }

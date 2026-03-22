@@ -4,6 +4,7 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { X, CreditCard, Calendar, MapPin, DollarSign } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -29,6 +30,7 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
     const elements = useElements();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const toast = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -94,9 +96,9 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
                     }),
                 }).catch(console.error);
 
-                alert(finalStatus === "succeeded"
+                toast.success(finalStatus === "succeeded"
                     ? "Payment processed successfully!"
-                    : "Payment authorized successfully! Waiting for provider confirmation.");
+                    : "Payment authorized! Waiting for provider confirmation.");
                 onSuccess();
             } else {
                 throw new Error(`Payment authorization failed: ${finalStatus}`);

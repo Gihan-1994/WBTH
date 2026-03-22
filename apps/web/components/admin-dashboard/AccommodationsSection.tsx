@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Search, Eye, ChevronDown, ChevronRight, X, Star, MapPin, Trash2, Ban, CheckCircle, ExternalLink } from "lucide-react";
 import { ProviderData, AccommodationData } from "./types";
 import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
+import { useToast } from "@/components/Toast";
 
 export default function AccommodationsSection() {
     const [providers, setProviders] = useState<ProviderData[]>([]);
@@ -12,6 +13,7 @@ export default function AccommodationsSection() {
     const [filteredProviders, setFilteredProviders] = useState<ProviderData[]>([]);
     const [expandedProviders, setExpandedProviders] = useState<Set<string>>(new Set());
     const [selectedAccommodation, setSelectedAccommodation] = useState<AccommodationData | null>(null);
+    const toast = useToast();
     const [confirmation, setConfirmation] = useState<{
         isOpen: boolean;
         title: string;
@@ -79,10 +81,11 @@ export default function AccommodationsSection() {
                     method: "DELETE",
                 });
                 if (res.ok) {
+                    toast.success("Accommodation deleted successfully");
                     fetchAccommodations();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to delete accommodation");
+                    toast.error(data.error || "Failed to delete accommodation");
                 }
             }
         });
@@ -100,10 +103,11 @@ export default function AccommodationsSection() {
                     method: "DELETE",
                 });
                 if (res.ok) {
+                    toast.success("Provider deleted successfully");
                     fetchAccommodations();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to delete provider");
+                    toast.error(data.error || "Failed to delete provider");
                 }
             }
         });

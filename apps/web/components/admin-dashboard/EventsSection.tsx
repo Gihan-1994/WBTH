@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { EventData } from "./types";
 import { Calendar, Plus, Eye, Edit, Trash2, Search, MapPin } from "lucide-react";
 import { AddEventModal, EditEventModal, ViewEventModal } from "./modals";
+import { useToast } from "@/components/Toast";
 
 export default function EventsSection() {
+    const toast = useToast();
     const [events, setEvents] = useState<EventData[]>([]);
     const [filteredEvents, setFilteredEvents] = useState<EventData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -51,13 +53,14 @@ export default function EventsSection() {
         try {
             const response = await fetch(`/api/admin/events/${eventId}`, { method: "DELETE" });
             if (response.ok) {
-                alert("Event deleted successfully!");
+                toast.success("Event deleted successfully!");
                 fetchEvents();
             } else {
-                alert("Failed to delete event");
+                toast.error("Failed to delete event");
             }
         } catch (error) {
             console.error("Error deleting event:", error);
+            toast.error("Error deleting event");
         }
     };
 

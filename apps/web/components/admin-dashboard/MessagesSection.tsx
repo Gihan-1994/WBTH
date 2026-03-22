@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Send, Mail, Users } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 export default function MessagesSection() {
+    const toast = useToast();
     const [messageType, setMessageType] = useState<"broadcast" | "selective">("broadcast");
     const [message, setMessage] = useState("");
     const [sendEmail, setSendEmail] = useState(false);
@@ -11,7 +13,7 @@ export default function MessagesSection() {
 
     const handleSendMessage = async () => {
         if (!message.trim()) {
-            alert("Please enter a message");
+            toast.error("Please enter a message");
             return;
         }
 
@@ -25,15 +27,15 @@ export default function MessagesSection() {
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`Message sent successfully to ${data.count} users!`);
+                toast.success(`Message sent successfully to ${data.count} users!`);
                 setMessage("");
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to send message");
+                toast.error(data.error || "Failed to send message");
             }
         } catch (error) {
             console.error("Error sending message:", error);
-            alert("Failed to send message");
+            toast.error("Failed to send message");
         } finally {
             setSending(false);
         }

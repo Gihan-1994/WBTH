@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight, CalendarX, Calendar, Loader2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface BlockedDatesModalProps {
     accommodationId: string;
@@ -19,6 +20,7 @@ export default function BlockedDatesModal({
     const [selectedDates, setSelectedDates] = useState<Set<string>>(new Set());
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const toast = useToast();
 
     // Fetch existing blocked dates
     useEffect(() => {
@@ -125,13 +127,13 @@ export default function BlockedDatesModal({
                 datesToBlock.forEach((d) => newBlocked.add(d));
                 setBlockedDates(newBlocked);
                 setSelectedDates(new Set());
-                alert("Dates marked as fully booked!");
+                toast.success("Dates marked as fully booked!");
             } else {
-                alert("Failed to block dates");
+                toast.error("Failed to block dates");
             }
         } catch (error) {
             console.error("Error blocking dates:", error);
-            alert("Error blocking dates");
+            toast.error("Error blocking dates");
         } finally {
             setSaving(false);
         }
@@ -160,13 +162,13 @@ export default function BlockedDatesModal({
                 datesToUnblock.forEach((d) => newBlocked.delete(d));
                 setBlockedDates(newBlocked);
                 setSelectedDates(new Set());
-                alert("Dates unblocked!");
+                toast.success("Dates unblocked!");
             } else {
-                alert("Failed to unblock dates");
+                toast.error("Failed to unblock dates");
             }
         } catch (error) {
             console.error("Error unblocking dates:", error);
-            alert("Error unblocking dates");
+            toast.error("Error unblocking dates");
         } finally {
             setSaving(false);
         }

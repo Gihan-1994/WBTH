@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Search, Eye, UserCheck, UserX, X, Star, Trash2, ExternalLink, Ban, CheckCircle } from "lucide-react";
 import { GuideData } from "./types";
 import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
+import { useToast } from "@/components/Toast";
 
 export default function GuidesSection() {
     const [guides, setGuides] = useState<GuideData[]>([]);
@@ -11,6 +12,7 @@ export default function GuidesSection() {
     const [search, setSearch] = useState("");
     const [filteredGuides, setFilteredGuides] = useState<GuideData[]>([]);
     const [selectedGuide, setSelectedGuide] = useState<GuideData | null>(null);
+    const toast = useToast();
     const [confirmation, setConfirmation] = useState<{
         isOpen: boolean;
         title: string;
@@ -68,10 +70,11 @@ export default function GuidesSection() {
                     method: "DELETE",
                 });
                 if (res.ok) {
+                    toast.success("Guide deleted successfully");
                     fetchGuides();
                 } else {
                     const data = await res.json();
-                    alert(data.error || "Failed to delete guide");
+                    toast.error(data.error || "Failed to delete guide");
                 }
             }
         });
@@ -85,10 +88,11 @@ export default function GuidesSection() {
                 body: JSON.stringify({ availability: !currentStatus }),
             });
             if (res.ok) {
+                toast.success("Availability updated");
                 fetchGuides();
             } else {
                 const data = await res.json();
-                alert(data.error || "Failed to update availability");
+                toast.error(data.error || "Failed to update availability");
             }
         } catch (error) {
             console.error("Error updating availability:", error);

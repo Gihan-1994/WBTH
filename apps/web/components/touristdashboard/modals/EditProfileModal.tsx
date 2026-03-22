@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { UserProfile } from "../types";
 import { User, Phone, Globe, Calendar, Camera, X, Loader2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface EditProfileModalProps {
     profile: UserProfile;
@@ -14,6 +15,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
     const [formData, setFormData] = useState(profile);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
+    const toast = useToast();
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -29,7 +31,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
                 if (!uploadRes.ok) {
                     const error = await uploadRes.json();
-                    alert(error.error || "Failed to upload profile picture");
+                    toast.error(error.error || "Failed to upload profile picture");
                     setUploading(false);
                     return;
                 }
@@ -43,13 +45,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                 body: JSON.stringify(formData),
             });
             if (res.ok) {
-                alert("Profile updated successfully!");
+                toast.success("Profile updated successfully!");
                 onSave();
             } else {
-                alert("Failed to update profile");
+                toast.error("Failed to update profile");
             }
         } catch (err) {
-            alert("Error updating profile");
+            toast.error("Error updating profile");
             setUploading(false);
         }
     }
@@ -60,13 +62,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
         // Validate file type
         if (!file.type.startsWith("image/")) {
-            alert("Please select an image file");
+            toast.error("Please select an image file");
             return;
         }
 
         // Validate file size (2MB)
         if (file.size > 2 * 1024 * 1024) {
-            alert("Image size must be less than 2MB");
+            toast.error("Image size must be less than 2MB");
             return;
         }
 
@@ -89,13 +91,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
             if (res.ok) {
                 setSelectedImage(null);
                 setFormData({ ...formData, profile_picture: null });
-                alert("Profile picture removed!");
+                toast.success("Profile picture removed");
                 onSave();
             } else {
-                alert("Failed to remove profile picture");
+                toast.error("Failed to remove profile picture");
             }
         } catch (err) {
-            alert("Error removing profile picture");
+            toast.error("Error removing profile picture");
         }
     };
 
