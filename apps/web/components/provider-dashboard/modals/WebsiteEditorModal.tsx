@@ -10,7 +10,6 @@ import {
     Eye,
     Plus,
     Trash2,
-    ChevronRight,
     Check
 } from "lucide-react";
 import { useToast } from "@/components/Toast";

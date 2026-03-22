@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Eye, ChevronDown, ChevronRight, X, Star, MapPin, Trash2, Ban, CheckCircle, ExternalLink } from "lucide-react";
+import { Search, Eye, ChevronDown, ChevronRight, X, Star, MapPin, Trash2, ExternalLink } from "lucide-react";
 import { ProviderData, AccommodationData } from "./types";
 import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
 import { useToast } from "@/components/Toast";

@@ -1,7 +1,7 @@
 "use client";
 
 import { UserProfile } from "./types";
-import { MapPin, Mail, Phone, Globe, Calendar, Pencil, Lock, Bell, User, Shield } from "lucide-react";
+import { Mail, Phone, Globe, Calendar, Pencil, Lock, Bell, User, Shield } from "lucide-react";
 import { useToast } from "@/components/Toast";
 
 interface TouristProfileSectionProps {

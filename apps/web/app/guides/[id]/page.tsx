@@ -10,7 +10,6 @@ import {
     Globe,
     Award,
     User,
-    Calendar,
     X,
     Briefcase,
     Phone,

@@ -12,7 +12,6 @@ export async function PUT(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const session = await requireAdmin();
         const { id: userId } = await params;
 
         const body = await req.json();

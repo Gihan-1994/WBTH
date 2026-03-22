@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, Upload, Trash2 } from "lucide-react";
 import { EventData } from "../types";
 import { useToast } from "@/components/Toast";
