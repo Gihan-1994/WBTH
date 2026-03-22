@@ -21,6 +21,7 @@ import {
     CalendarX
 } from "lucide-react";
 import PaymentModal from "@/components/payments/PaymentModal";
+import Footer from "@/components/Footer";
 
 interface Accommodation {
     id: string;
@@ -581,6 +582,8 @@ export default function AccommodationDetailsPage() {
                     }}
                 />
             )}
+
+            <Footer />
         </div>
     );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, MapPin, Star, Check, Search, Home, Compass, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 interface Recommendation {
     id: string;
@@ -618,6 +619,8 @@ export default function RecommendationsPage() {
                     </div>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 }

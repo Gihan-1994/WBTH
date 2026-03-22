@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Calendar, Home } from "lucide-react";
 import EventCalendar from "@/components/homepage/EventCalendar";
+import Footer from "@/components/Footer";
 
 /**
  * Dedicated page for upcoming events
@@ -48,6 +49,8 @@ export default function EventsPage() {
                     <EventCalendar />
                 </div>
             </div>
+
+            <Footer />
         </div>
     );
 }

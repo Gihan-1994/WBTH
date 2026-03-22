@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
 import { MapPin, Star, Globe, Award, User, Calendar, X, Briefcase } from "lucide-react";
 import PaymentModal from "@/components/payments/PaymentModal";
+import Footer from "@/components/Footer";
 
 interface Guide {
     user_id: string;
@@ -273,6 +274,8 @@ export default function GuideDetailsPage() {
                     }}
                 />
             )}
+
+            <Footer />
         </div>
     );
 }

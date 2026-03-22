@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, MapPin, Users, Hotel, ChevronDown, ChevronLeft, ChevronRight, X, Home } from "lucide-react";
+import Footer from "@/components/Footer";
 
 interface Accommodation {
     id: string;
@@ -378,6 +379,8 @@ export default function AccommodationsPage() {
                     </>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 }

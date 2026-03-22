@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, MapPin, User, Globe, Award, ChevronDown, ChevronLeft, ChevronRight, X, Home } from "lucide-react";
+import Footer from "@/components/Footer";
 
 interface Guide {
     user_id: string;
@@ -384,6 +385,8 @@ export default function GuidesPage() {
                     </>
                 )}
             </div>
+
+            <Footer />
         </div>
     );
 }
