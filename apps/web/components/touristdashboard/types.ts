@@ -15,6 +15,8 @@ export interface Booking {
     price: number;
     status: string;
     type: string;
+    payment_method: "online" | "pay_at_property";
+    is_paid: boolean;
     accommodation?: { name: string };
     guide?: { user: { name: string } };
     payments?: { status: string }[];

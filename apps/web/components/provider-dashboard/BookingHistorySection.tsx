@@ -1,20 +1,22 @@
 "use client";
 
 import { Booking } from "./types";
-import { Eye, Check, X, Calendar } from "lucide-react";
+import { Eye, Check, X, Calendar, CreditCard, Banknote } from "lucide-react";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
     onView: (booking: Booking) => void;
     onConfirm: (id: string) => void;
     onCancel: (id: string) => void;
+    onMarkPaid?: (id: string) => void;
 }
 
 export default function BookingHistorySection({
     bookings,
     onView,
     onConfirm,
-    onCancel
+    onCancel,
+    onMarkPaid
 }: BookingHistorySectionProps) {
     const getStatusStyles = (status: string) => {
         switch (status) {
@@ -43,10 +45,11 @@ export default function BookingHistorySection({
                 <table className="w-full">
                     <thead className="sticky top-0 bg-gray-50 z-10">
                         <tr className="border-b border-gray-200">
-                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Period</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Accommodation</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tourist</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
@@ -54,8 +57,24 @@ export default function BookingHistorySection({
                     <tbody className="divide-y divide-gray-200">
                         {bookings.map((booking) => (
                             <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
-                                <td className="px-6 py-4 text-gray-600">
-                                    {new Date(booking.start_date).toLocaleDateString()}
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-col">
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <span className="text-gray-500 text-xs w-16">Check-in:</span>
+                                            <span className="font-medium text-gray-900">
+                                                {new Date(booking.start_date).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <span className="text-gray-500 text-xs w-16">Check-out:</span>
+                                            <span className="font-medium text-gray-900">
+                                                {new Date(booking.end_date).toLocaleDateString()}
+                                            </span>
+                                        </div>
+                                        <span className="text-xs text-gray-400 mt-1">
+                                            {Math.ceil((new Date(booking.end_date).getTime() - new Date(booking.start_date).getTime()) / (1000 * 60 * 60 * 24))} nights
+                                        </span>
+                                    </div>
                                 </td>
                                 <td className="px-6 py-4">
                                     <span className="font-medium text-gray-900">
@@ -72,10 +91,38 @@ export default function BookingHistorySection({
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex flex-col gap-1">
+                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border w-fit ${
+                                            booking.payment_method === 'online'
+                                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                                : 'bg-amber-50 text-amber-700 border-amber-200'
+                                        }`}>
+                                            {booking.payment_method === 'online' ? (
+                                                <><CreditCard size={12} /> Online</>
+                                            ) : (
+                                                <><Banknote size={12} /> At Property</>
+                                            )}
+                                        </span>
+                                        {booking.payment_method === 'pay_at_property' && booking.is_paid && (
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase w-fit">
+                                                Paid
+                                            </span>
+                                        )}
+                                        {booking.payment_method === 'pay_at_property' && !booking.is_paid && booking.status !== 'cancelled' && (
+                                            <button
+                                                onClick={() => onMarkPaid?.(booking.id)}
+                                                className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-700 border border-emerald-300 hover:bg-emerald-200 transition-colors cursor-pointer w-fit"
+                                            >
+                                                Mark as Paid
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                    <div className="flex flex-col gap-1">
                                         <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium border capitalize w-fit ${getStatusStyles(booking.status)}`}>
                                             {booking.status}
                                         </span>
-                                        {booking.payments && booking.payments.length > 0 && (
+                                        {booking.payment_method === 'online' && booking.payments && booking.payments.length > 0 && (
                                             <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold border uppercase w-fit ${getStatusStyles(booking.payments[0].status)}`}>
                                                 {booking.payments[0].status === 'captured' ? 'Paid' : booking.payments[0].status}
                                             </span>

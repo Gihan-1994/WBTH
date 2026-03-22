@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, Star } from "lucide-react";
+import { Eye, Star, CreditCard, Banknote } from "lucide-react";
 import { Booking } from "./types";
 import RatingModal from "./RatingModal";
 
@@ -46,6 +46,7 @@ export default function BookingHistorySection({
                             <th className="pb-4 font-semibold text-gray-700">Date</th>
                             <th className="pb-4 font-semibold text-gray-700">Details</th>
                             <th className="pb-4 font-semibold text-gray-700">Amount</th>
+                            <th className="pb-4 font-semibold text-gray-700">Payment</th>
                             <th className="pb-4 font-semibold text-gray-700">Status</th>
                             <th className="pb-4 font-semibold text-gray-700">Actions</th>
                         </tr>
@@ -73,6 +74,31 @@ export default function BookingHistorySection({
                                 </td>
                                 <td className="py-4">
                                     <div className="flex flex-col gap-1">
+                                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border w-fit ${
+                                            booking.payment_method === 'online'
+                                                ? 'bg-blue-50 text-blue-700 border-blue-200'
+                                                : 'bg-amber-50 text-amber-700 border-amber-200'
+                                        }`}>
+                                            {booking.payment_method === 'online' ? (
+                                                <><CreditCard size={12} /> Online</>
+                                            ) : (
+                                                <><Banknote size={12} /> At Property</>
+                                            )}
+                                        </span>
+                                        {booking.payment_method === 'pay_at_property' && booking.is_paid && (
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase w-fit">
+                                                Paid
+                                            </span>
+                                        )}
+                                        {booking.payment_method === 'pay_at_property' && !booking.is_paid && booking.status !== 'cancelled' && (
+                                            <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-50 text-gray-600 border border-gray-200 w-fit">
+                                                Pay at arrival
+                                            </span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td className="py-4">
+                                    <div className="flex flex-col gap-1">
                                         {/* Booking Status */}
                                         <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${booking.status === 'confirmed'
                                             ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 border border-green-200' :
@@ -82,8 +108,8 @@ export default function BookingHistorySection({
                                             }`}>
                                             {booking.status}
                                         </span>
-                                        {/* Payment Status */}
-                                        {booking.payments?.[0] && (
+                                        {/* Payment Status - only show for online payments */}
+                                        {booking.payment_method === 'online' && booking.payments?.[0] && (
                                             <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase border w-fit ${booking.payments[0].status === 'captured'
                                                 ? 'bg-green-100 text-green-700 border-green-200' :
                                                 booking.payments[0].status === 'authorized'
@@ -92,7 +118,7 @@ export default function BookingHistorySection({
                                                         ? 'bg-red-100 text-red-700 border-red-200' :
                                                         'bg-gray-100 text-gray-700 border-gray-200'
                                                 }`}>
-                                                💳 {booking.payments[0].status === 'captured' ? 'Paid' : booking.payments[0].status}
+                                                {booking.payments[0].status === 'captured' ? 'Paid' : booking.payments[0].status}
                                             </span>
                                         )}
                                     </div>
@@ -129,7 +155,7 @@ export default function BookingHistorySection({
                         ))}
                         {bookings.length === 0 && (
                             <tr>
-                                <td colSpan={5} className="py-12 text-center">
+                                <td colSpan={6} className="py-12 text-center">
                                     <div className="text-6xl mb-4">📅</div>
                                     <p className="text-xl text-gray-600 font-medium mb-2">No bookings yet</p>
                                     <p className="text-gray-500">Start exploring and make your first booking!</p>

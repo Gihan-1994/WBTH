@@ -44,6 +44,7 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
         group_size: 0,
         account_no: "",
         booking_price: 0,
+        online_payment_enabled: true,
     });
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,6 +286,44 @@ const AccommodationModal = function AccommodationModal({ accommodation, onClose,
                                     className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-mono"
                                     placeholder="For receiving payments"
                                 />
+                            </div>
+
+                            {/* Online Payment Toggle */}
+                            <div className="pt-4 border-t border-gray-100">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">
+                                            Accept Online Payments
+                                        </label>
+                                        <p className="text-xs text-gray-500 mt-0.5">
+                                            Allow tourists to pay with card when booking
+                                        </p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, online_payment_enabled: !formData.online_payment_enabled })}
+                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                            formData.online_payment_enabled !== false
+                                                ? "bg-emerald-600"
+                                                : "bg-gray-200"
+                                        }`}
+                                    >
+                                        <span
+                                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                                formData.online_payment_enabled !== false
+                                                    ? "translate-x-6"
+                                                    : "translate-x-1"
+                                            }`}
+                                        />
+                                    </button>
+                                </div>
+                                {formData.online_payment_enabled === false && (
+                                    <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                                        <p className="text-xs text-amber-700">
+                                            Tourists will only be able to pay at the property
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}

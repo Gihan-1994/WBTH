@@ -71,28 +71,29 @@ model AccommodationProvider {
 }
 
 model Accommodation {
-  id                String                @id @default(uuid())
-  provider_id       String
-  name              String
-  type              String[]
-  amenities         String[]
-  rating            Float?
-  account_no        String?
-  budget            String[]
-  district          String
-  price_range_min   Float?
-  price_range_max   Float?
-  province          String?
-  interests         String[]
-  group_size        Int?
-  num_booking_dates Int?
-  prior_bookings    Int?
-  images            String[]
-  travel_style      String[]
-  location          String?
-  booking_price     Float?
-  provider          AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
-  bookings          Booking[]
+  id                     String                @id @default(uuid())
+  provider_id            String
+  name                   String
+  type                   String[]
+  amenities             String[]
+  rating                 Float?
+  account_no             String?
+  budget                 String[]
+  district               String
+  price_range_min        Float?
+  price_range_max        Float?
+  province               String?
+  interests              String[]
+  group_size             Int?
+  num_booking_dates      Int?
+  prior_bookings         Int?
+  images                 String[]
+  travel_style           String[]
+  location               String?
+  booking_price          Float?
+  online_payment_enabled Boolean               @default(true)
+  provider               AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
+  bookings               Booking[]
 
   @@map("accommodations")
 }
@@ -109,6 +110,8 @@ model Booking {
   description      String[]
   accommodation_id String?
   guide_id         String?
+  payment_method   PaymentMethod  @default(online)
+  is_paid          Boolean        @default(false)
   accommodation    Accommodation? @relation(fields: [accommodation_id], references: [id])
   guide            Guide?         @relation(fields: [guide_id], references: [user_id])
   user             User           @relation(fields: [user_id], references: [id])
@@ -226,4 +229,9 @@ enum PaymentStatus {
   captured
   cancelled
   failed
+}
+
+enum PaymentMethod {
+  online
+  pay_at_property
 }

@@ -65,6 +65,7 @@ export async function PUT(
                 province: data.province,
                 group_size: parseInt(data.group_size),
                 account_no: data.account_no,
+                online_payment_enabled: data.online_payment_enabled !== false,
             },
         });
 

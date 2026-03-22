@@ -28,6 +28,7 @@ export interface Accommodation {
     group_size: number | null;
     account_no: string | null;
     images: string[];
+    online_payment_enabled: boolean;
 }
 
 export interface Booking {
@@ -36,6 +37,8 @@ export interface Booking {
     end_date: string;
     price: number;
     status: string;
+    payment_method: "online" | "pay_at_property";
+    is_paid: boolean;
     user?: {
         name: string;
         email: string;

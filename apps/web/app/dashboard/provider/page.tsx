@@ -157,6 +157,27 @@ export default function ProviderDashboard() {
         }
     }, [fetchData]);
 
+    const handleMarkPaid = useCallback(async (id: string) => {
+        if (!confirm("Mark this booking as paid?")) return;
+
+        try {
+            const res = await fetch(`/api/bookings/${id}/mark-paid`, {
+                method: "POST",
+            });
+
+            if (res.ok) {
+                alert("Booking marked as paid");
+                fetchData();
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to mark booking as paid");
+            }
+        } catch (error) {
+            console.error("Error marking booking as paid:", error);
+            alert("Error marking booking as paid");
+        }
+    }, [fetchData]);
+
     const handleDeleteAccommodation = useCallback(async (id: string) => {
         if (!confirm("Are you sure you want to delete this accommodation?")) return;
 
@@ -313,6 +334,7 @@ export default function ProviderDashboard() {
                         onView={setSelectedBooking}
                         onConfirm={handleConfirmBooking}
                         onCancel={handleCancelBooking}
+                        onMarkPaid={handleMarkPaid}
                     />
                 )}
 

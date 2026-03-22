@@ -199,9 +199,16 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
 
             {/* Info Message */}
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <p className="text-sm text-blue-700">
-                    ℹ️ Your card will be authorized but not charged yet. Payment will be captured when the provider confirms your booking.
+                <p className="text-sm text-blue-700 font-medium mb-1">
+                    How payment works:
                 </p>
+                <ul className="text-sm text-blue-700 list-disc list-inside space-y-0.5">
+                    <li>Your card will be authorized for the booking amount</li>
+                    <li>Funds are held but not charged immediately</li>
+                    <li>The provider will review and confirm your booking</li>
+                    <li>Payment is captured only after confirmation</li>
+                    <li>If declined, the authorization is released automatically</li>
+                </ul>
             </div>
 
             {/* Action Buttons */}
