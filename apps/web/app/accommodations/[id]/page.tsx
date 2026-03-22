@@ -3,7 +3,22 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useParams } from "next/navigation";
-import { MapPin, Star, Check, User, Calendar, X } from "lucide-react";
+import Link from "next/link";
+import {
+    MapPin,
+    Star,
+    Check,
+    User,
+    Calendar,
+    X,
+    Home,
+    ChevronLeft,
+    ChevronRight,
+    Phone,
+    Mail,
+    Shield,
+    Heart
+} from "lucide-react";
 import PaymentModal from "@/components/payments/PaymentModal";
 
 interface Accommodation {
@@ -12,7 +27,7 @@ interface Accommodation {
     location: string;
     price_range_min: number;
     price_range_max: number;
-    booking_price: number; // Default booking price
+    booking_price: number;
     images: string[];
     rating: number;
     type: string[];
@@ -39,6 +54,7 @@ export default function AccommodationDetailsPage() {
     const [showBookingModal, setShowBookingModal] = useState(false);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [createdBooking, setCreatedBooking] = useState<any>(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [bookingData, setBookingData] = useState({
         startDate: "",
         endDate: "",
@@ -52,7 +68,6 @@ export default function AccommodationDetailsPage() {
                 if (res.ok) {
                     const data = await res.json();
                     setAccommodation(data);
-                    // Use booking_price if available, fallback to price_range_min
                     setBookingData(prev => ({ ...prev, price: data.booking_price || data.price_range_min || 0 }));
                 }
             } catch (error) {
@@ -89,7 +104,7 @@ export default function AccommodationDetailsPage() {
                 const booking = await res.json();
                 setCreatedBooking(booking);
                 setShowBookingModal(false);
-                setShowPaymentModal(true); // Open payment modal instead of alert
+                setShowPaymentModal(true);
             } else {
                 const error = await res.json();
                 alert(`Booking failed: ${error.error}`);
@@ -100,118 +115,241 @@ export default function AccommodationDetailsPage() {
         }
     };
 
-    if (loading) return <div className="p-8 text-center">Loading...</div>;
-    if (!accommodation) return <div className="p-8 text-center">Accommodation not found</div>;
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-indigo-600 border-t-transparent"></div>
+            </div>
+        );
+    }
+
+    if (!accommodation) {
+        return (
+            <div className="min-h-screen bg-white flex items-center justify-center px-4">
+                <div className="text-center max-w-sm">
+                    <h2 className="text-xl font-semibold text-gray-900 mb-2">Accommodation not found</h2>
+                    <p className="text-gray-500 mb-6">This accommodation may have been removed or doesn't exist.</p>
+                    <Link href="/accommodations" className="text-indigo-600 font-medium hover:underline">
+                        ← Back to accommodations
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    const images = accommodation.images?.length > 0 ? accommodation.images : [];
+    const hasMultipleImages = images.length > 1;
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
-            {/* Image Gallery (Simple) */}
-            <div className="h-[400px] bg-gray-200 relative">
-                {accommodation.images && accommodation.images.length > 0 ? (
-                    <img src={accommodation.images[0]} alt={accommodation.name} className="w-full h-full object-cover" />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400">No Image Available</div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-8 text-white">
-                    <div className="max-w-7xl mx-auto">
-                        <h1 className="text-4xl font-bold mb-2">{accommodation.name}</h1>
-                        <div className="flex items-center gap-4">
-                            <span className="flex items-center"><MapPin size={18} className="mr-1" /> {accommodation.location}</span>
-                            <span className="flex items-center bg-yellow-500 text-black px-2 py-0.5 rounded font-bold text-sm">★ {accommodation.rating || "N/A"}</span>
-                        </div>
-                    </div>
+        <div className="min-h-screen bg-white">
+            {/* Breadcrumb */}
+            <div className="border-b border-gray-100">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
+                    <nav className="flex items-center gap-2 text-sm text-gray-500">
+                        <Link href="/" className="hover:text-gray-900 transition">Home</Link>
+                        <span>/</span>
+                        <Link href="/accommodations" className="hover:text-gray-900 transition">Accommodations</Link>
+                        <span>/</span>
+                        <span className="text-gray-900 truncate max-w-[200px]">{accommodation.name}</span>
+                    </nav>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
-                        <h2 className="text-2xl font-bold mb-4">About this place</h2>
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {accommodation.type.map(t => (
-                                <span key={t} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">{t}</span>
-                            ))}
-                        </div>
-                        <p className="text-gray-600">
-                            Experience a wonderful stay at {accommodation.name}. Located in {accommodation.location}, we offer the best amenities for your comfort.
-                        </p>
-                    </div>
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
-                        <h2 className="text-2xl font-bold mb-4">Pricing Information</h2>
-                        {accommodation.price_range_max && accommodation.price_range_min && (
-                            <p className="text-gray-600">
-                                Price range: <span className="font-semibold text-gray-900">Rs {accommodation.price_range_min.toLocaleString()} - Rs {accommodation.price_range_max.toLocaleString()} </span>&nbsp;per full day
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
-                        <h2 className="text-2xl font-bold mb-4">Amenities</h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {accommodation.amenities.map((amenity) => (
-                                <div key={amenity} className="flex items-center text-gray-700">
-                                    <Check size={18} className="text-green-500 mr-2" />
-                                    {amenity}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {accommodation.travel_style && accommodation.travel_style.length > 0 && (
-                        <div className="bg-white p-6 rounded-xl shadow-sm">
-                            <h2 className="text-2xl font-bold mb-4">Travel Style</h2>
-                            <div className="flex flex-wrap gap-2">
-                                {accommodation.travel_style.map((style) => (
-                                    <span key={style} className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm capitalize">{style}</span>
-                                ))}
-                            </div>
+            {/* Image Gallery */}
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6">
+                <div className="relative aspect-[16/9] md:aspect-[2/1] rounded-2xl overflow-hidden bg-gray-100">
+                    {images.length > 0 ? (
+                        <>
+                            <img
+                                src={images[currentImageIndex]}
+                                alt={accommodation.name}
+                                className="w-full h-full object-cover"
+                            />
+                            {hasMultipleImages && (
+                                <>
+                                    <button
+                                        onClick={() => setCurrentImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1)}
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-105 transition"
+                                    >
+                                        <ChevronLeft size={20} />
+                                    </button>
+                                    <button
+                                        onClick={() => setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:scale-105 transition"
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-3 py-1 rounded-full">
+                                        {currentImageIndex + 1} / {images.length}
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                            <Home size={48} className="text-gray-300" />
                         </div>
                     )}
-
-                    {accommodation.interests && accommodation.interests.length > 0 && (
-                        <div className="bg-white p-6 rounded-xl shadow-sm">
-                            <h2 className="text-2xl font-bold mb-4">Interests</h2>
-                            <div className="flex flex-wrap gap-2">
-                                {accommodation.interests.map((interest) => (
-                                    <span key={interest} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">{interest}</span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="bg-white p-6 rounded-xl shadow-sm">
-                        <h2 className="text-2xl font-bold mb-4">Host Info</h2>
-                        <div className="flex items-center gap-4">
-                            <div className="bg-gray-200 w-12 h-12 rounded-full flex items-center justify-center">
-                                <User size={24} className="text-gray-500" />
-                            </div>
-                            <div>
-                                <p className="font-semibold">{accommodation.provider.user.name}</p>
-                                <p className="text-gray-500 text-sm">Contact: {accommodation.provider.user.contact_no}</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
+            </div>
 
-                {/* Booking Sidebar */}
-                <div className="lg:col-span-1">
-                    <div className="bg-white p-6 rounded-xl shadow-lg sticky top-8">
-                        <div className="flex justify-between items-end mb-6">
-                            <div>
-                                <span className="text-2xl font-bold">Rs {(accommodation.booking_price || accommodation.price_range_min || 0).toLocaleString()}</span>
-                                <span className="text-gray-500">&nbsp; per previous booking</span>
+            {/* Content */}
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+                <div className="lg:grid lg:grid-cols-3 lg:gap-12">
+                    {/* Main Content */}
+                    <div className="lg:col-span-2">
+                        {/* Header */}
+                        <div className="mb-8">
+                            <div className="flex flex-wrap gap-2 mb-3">
+                                {accommodation.type.map(t => (
+                                    <span key={t} className="text-xs font-medium text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+                                        {t}
+                                    </span>
+                                ))}
                             </div>
-
+                            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+                                {accommodation.name}
+                            </h1>
+                            <div className="flex flex-wrap items-center gap-4 text-gray-600">
+                                <span className="flex items-center gap-1.5">
+                                    <MapPin size={16} className="text-gray-400" />
+                                    {accommodation.location}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <Star size={16} className="text-yellow-500" fill="currentColor" />
+                                    <span className="font-medium text-gray-900">{accommodation.rating || "New"}</span>
+                                </span>
+                            </div>
                         </div>
 
-                        <button
-                            onClick={() => setShowBookingModal(true)}
-                            className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition mb-4"
-                        >
-                            Book Now
-                        </button>
-                        <p className="text-center text-gray-500 text-sm">You won't be charged yet</p>
+                        <hr className="border-gray-100 mb-8" />
+
+                        {/* About */}
+                        <div className="mb-8">
+                            <h2 className="text-lg font-semibold text-gray-900 mb-3">About this place</h2>
+                            <p className="text-gray-600 leading-relaxed">
+                                {accommodation.description || `Experience a wonderful stay at ${accommodation.name}. Located in ${accommodation.location}, this accommodation offers exceptional comfort and amenities for an unforgettable experience.`}
+                            </p>
+                        </div>
+
+                        <hr className="border-gray-100 mb-8" />
+
+                        {/* Amenities */}
+                        {accommodation.amenities?.length > 0 && (
+                            <>
+                                <div className="mb-8">
+                                    <h2 className="text-lg font-semibold text-gray-900 mb-4">What this place offers</h2>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        {accommodation.amenities.map((amenity) => (
+                                            <div key={amenity} className="flex items-center gap-3 text-gray-700">
+                                                <Check size={18} className="text-gray-400 flex-shrink-0" />
+                                                <span>{amenity}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <hr className="border-gray-100 mb-8" />
+                            </>
+                        )}
+
+                        {/* Tags */}
+                        {(accommodation.travel_style?.length > 0 || accommodation.interests?.length > 0) && (
+                            <>
+                                <div className="mb-8">
+                                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Tags</h2>
+                                    <div className="flex flex-wrap gap-2">
+                                        {accommodation.travel_style?.map((style) => (
+                                            <span key={style} className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm">
+                                                {style}
+                                            </span>
+                                        ))}
+                                        {accommodation.interests?.map((interest) => (
+                                            <span key={interest} className="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full text-sm">
+                                                {interest}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                                <hr className="border-gray-100 mb-8" />
+                            </>
+                        )}
+
+                        {/* Host */}
+                        <div className="mb-8">
+                            <h2 className="text-lg font-semibold text-gray-900 mb-4">Hosted by</h2>
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 bg-gray-900 rounded-full flex items-center justify-center text-white text-xl font-semibold">
+                                    {accommodation.provider.user.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <p className="font-semibold text-gray-900">{accommodation.provider.user.name}</p>
+                                    <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                                        <span className="flex items-center gap-1">
+                                            <Phone size={14} />
+                                            {accommodation.provider.user.contact_no}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sidebar */}
+                    <div className="lg:col-span-1 mt-8 lg:mt-0">
+                        <div className="sticky top-6 border border-gray-200 rounded-xl p-6 shadow-sm">
+                            {/* Price */}
+                            <div className="mb-6">
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-2xl font-bold text-gray-900">
+                                        LKR {(accommodation.booking_price || accommodation.price_range_min || 0).toLocaleString()}
+                                    </span>
+                                    <span className="text-gray-500">/ night</span>
+                                </div>
+                                {accommodation.price_range_max && accommodation.price_range_max !== accommodation.price_range_min && (
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Range: LKR {accommodation.price_range_min?.toLocaleString()} - {accommodation.price_range_max?.toLocaleString()}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* Book Button */}
+                            <button
+                                onClick={() => setShowBookingModal(true)}
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition mb-3"
+                            >
+                                Reserve
+                            </button>
+                            <p className="text-center text-gray-500 text-sm mb-6">You won't be charged yet</p>
+
+                            {/* Features */}
+                            <div className="space-y-3 pt-6 border-t border-gray-100">
+                                <div className="flex items-start gap-3">
+                                    <Shield size={20} className="text-gray-400 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="font-medium text-gray-900 text-sm">Secure booking</p>
+                                        <p className="text-gray-500 text-sm">Your payment is protected</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Heart size={20} className="text-gray-400 flex-shrink-0 mt-0.5" />
+                                    <div>
+                                        <p className="font-medium text-gray-900 text-sm">Free cancellation</p>
+                                        <p className="text-gray-500 text-sm">Cancel anytime before check-in</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Contact */}
+                            <div className="mt-6 pt-6 border-t border-gray-100">
+                                <a
+                                    href={`tel:${accommodation.provider.user.contact_no}`}
+                                    className="flex items-center justify-center gap-2 w-full border border-gray-200 text-gray-700 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition"
+                                >
+                                    <Phone size={16} />
+                                    Contact Host
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -219,52 +357,62 @@ export default function AccommodationDetailsPage() {
             {/* Booking Modal */}
             {showBookingModal && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl max-w-md w-full p-6 relative">
-                        <button
-                            onClick={() => setShowBookingModal(false)}
-                            className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
-                        >
-                            <X size={24} />
-                        </button>
-                        <h2 className="text-2xl font-bold mb-6">Book your stay</h2>
-                        <form onSubmit={handleBookingSubmit} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
-                                <input
-                                    type="date"
-                                    required
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    value={bookingData.startDate}
-                                    onChange={(e) => setBookingData({ ...bookingData, startDate: e.target.value })}
-                                />
+                    <div className="bg-white rounded-xl max-w-md w-full shadow-xl">
+                        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                            <h2 className="text-lg font-semibold text-gray-900">Reserve your stay</h2>
+                            <button
+                                onClick={() => setShowBookingModal(false)}
+                                className="text-gray-400 hover:text-gray-600 transition"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleBookingSubmit} className="p-5">
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Check-in</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                                        value={bookingData.startDate}
+                                        onChange={(e) => setBookingData({ ...bookingData, startDate: e.target.value })}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Check-out</label>
+                                    <input
+                                        type="date"
+                                        required
+                                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
+                                        value={bookingData.endDate}
+                                        onChange={(e) => setBookingData({ ...bookingData, endDate: e.target.value })}
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
-                                <input
-                                    type="date"
-                                    required
-                                    className="w-full px-3 py-2 border rounded-lg"
-                                    value={bookingData.endDate}
-                                    onChange={(e) => setBookingData({ ...bookingData, endDate: e.target.value })}
-                                />
+
+                            <div className="bg-gray-50 rounded-lg p-4 mb-5">
+                                <div className="flex justify-between text-sm mb-2">
+                                    <span className="text-gray-600">Price per night</span>
+                                    <span className="font-medium">LKR {bookingData.price.toLocaleString()}</span>
+                                </div>
+                                {bookingData.startDate && bookingData.endDate && (
+                                    <div className="flex justify-between text-sm pt-2 border-t border-gray-200">
+                                        <span className="font-medium">Total</span>
+                                        <span className="font-semibold text-indigo-600">
+                                            LKR {(bookingData.price * Math.max(1, Math.ceil((new Date(bookingData.endDate).getTime() - new Date(bookingData.startDate).getTime()) / (1000 * 60 * 60 * 24)))).toLocaleString()}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Price per night</label>
-                                <input
-                                    type="number"
-                                    readOnly
-                                    className="w-full px-3 py-2 border rounded-lg bg-gray-100"
-                                    value={bookingData.price}
-                                />
-                            </div>
-                            <div className="pt-4">
-                                <button
-                                    type="submit"
-                                    className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
-                                >
-                                    Confirm Booking
-                                </button>
-                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition"
+                            >
+                                Confirm Reservation
+                            </button>
                         </form>
                     </div>
                 </div>
