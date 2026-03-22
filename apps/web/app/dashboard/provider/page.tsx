@@ -31,6 +31,7 @@ import AccommodationImagesModal from "@/components/provider-dashboard/modals/Acc
 import ViewBookingModal from "@/components/provider-dashboard/modals/ViewBookingModal";
 import BlockedDatesModal from "@/components/provider-dashboard/modals/BlockedDatesModal";
 import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
+import WebsiteEditorModal from "@/components/provider-dashboard/modals/WebsiteEditorModal";
 
 export default function ProviderDashboard() {
     const router = useRouter();
@@ -52,6 +53,7 @@ export default function ProviderDashboard() {
     const [showEditAccommodation, setShowEditAccommodation] = useState<Accommodation | null>(null);
     const [showImagesModal, setShowImagesModal] = useState<Accommodation | null>(null);
     const [showBlockedDatesModal, setShowBlockedDatesModal] = useState<Accommodation | null>(null);
+    const [showWebsiteEditor, setShowWebsiteEditor] = useState<Accommodation | null>(null);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
     const [confirmation, setConfirmation] = useState<{
         isOpen: boolean;
@@ -449,6 +451,7 @@ export default function ProviderDashboard() {
                         onDelete={handleDeleteAccommodation}
                         onManageImages={setShowImagesModal}
                         onManageAvailability={setShowBlockedDatesModal}
+                        onEditWebsite={setShowWebsiteEditor}
                     />
                 )}
 
@@ -535,6 +538,17 @@ export default function ProviderDashboard() {
                     accommodationId={showBlockedDatesModal.id}
                     accommodationName={showBlockedDatesModal.name}
                     onClose={() => setShowBlockedDatesModal(null)}
+                />
+            )}
+
+            {showWebsiteEditor && (
+                <WebsiteEditorModal
+                    accommodation={showWebsiteEditor}
+                    onClose={() => setShowWebsiteEditor(null)}
+                    onSave={() => {
+                        setShowWebsiteEditor(null);
+                        fetchData();
+                    }}
                 />
             )}
 

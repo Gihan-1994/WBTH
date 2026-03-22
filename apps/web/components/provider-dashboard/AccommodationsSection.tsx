@@ -1,7 +1,7 @@
 "use client";
 
 import { Accommodation } from "./types";
-import { Plus, ImageIcon, Pencil, Trash2, Star, AlertCircle, CalendarX } from "lucide-react";
+import { Plus, ImageIcon, Pencil, Trash2, Star, AlertCircle, CalendarX, Globe } from "lucide-react";
 
 interface AccommodationsSectionProps {
     accommodations: Accommodation[];
@@ -10,6 +10,7 @@ interface AccommodationsSectionProps {
     onDelete: (id: string) => void;
     onManageImages: (acc: Accommodation) => void;
     onManageAvailability: (acc: Accommodation) => void;
+    onEditWebsite?: (acc: Accommodation) => void;
 }
 
 export default function AccommodationsSection({
@@ -18,7 +19,8 @@ export default function AccommodationsSection({
     onEdit,
     onDelete,
     onManageImages,
-    onManageAvailability
+    onManageAvailability,
+    onEditWebsite
 }: AccommodationsSectionProps) {
     return (
         <div className="bg-white rounded-xl border border-gray-200">
@@ -81,6 +83,15 @@ export default function AccommodationsSection({
                                 </td>
                                 <td className="px-6 py-4">
                                     <div className="flex items-center justify-end gap-2">
+                                        {onEditWebsite && (
+                                            <button
+                                                onClick={() => onEditWebsite(acc)}
+                                                className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                                                title="Edit Website"
+                                            >
+                                                <Globe size={16} />
+                                            </button>
+                                        )}
                                         <button
                                             onClick={() => onManageAvailability(acc)}
                                             className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"

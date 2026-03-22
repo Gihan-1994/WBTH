@@ -92,6 +92,22 @@ model Accommodation {
   location               String?
   booking_price          Float?
   online_payment_enabled Boolean               @default(true)
+
+  // Website template fields
+  description            String?               // Main about text
+  tagline                String?               // Short marketing tagline
+  check_in_time          String?               // e.g., "2:00 PM"
+  check_out_time         String?               // e.g., "11:00 AM"
+  house_rules            String[]              // Array of rules
+
+  // Website customization
+  theme_color            String?               @default("#4F46E5")  // Primary brand color
+  hero_image_index       Int?                  @default(0)          // Which image is hero
+  template_style         String?               @default("modern")   // modern, classic, luxury
+
+  // Additional sections (JSON for flexibility)
+  custom_sections        Json?                 // {facilities: [...], cuisines: [...], testimonials: [...]}
+
   provider               AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
   bookings               Booking[]
   blockedDates           BlockedDate[]
