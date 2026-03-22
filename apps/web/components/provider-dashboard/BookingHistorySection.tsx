@@ -1,23 +1,34 @@
 "use client";
 
+import { useState } from "react";
 import { Booking } from "./types";
-import { Eye, Check, X, Calendar, CreditCard, Banknote, ArrowRight, Copy } from "lucide-react";
+import { Eye, Check, X, Calendar, CreditCard, Banknote, ArrowRight, Copy, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
+    accommodationCount?: number;
     onView: (booking: Booking) => void;
     onConfirm: (id: string) => void;
     onCancel: (id: string) => void;
     onMarkPaid?: (id: string) => void;
 }
 
+const ITEMS_PER_PAGE = 8;
+
 export default function BookingHistorySection({
     bookings,
+    accommodationCount = 1,
     onView,
     onConfirm,
     onCancel,
     onMarkPaid
 }: BookingHistorySectionProps) {
+    const showPlaceColumn = accommodationCount > 1;
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const totalPages = Math.ceil(bookings.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedBookings = bookings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
     const getStatusStyles = (status: string) => {
         switch (status) {
             case 'confirmed':
@@ -41,13 +52,15 @@ export default function BookingHistorySection({
                 <h2 className="text-lg font-semibold text-gray-900">Booking History</h2>
             </div>
 
-            <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
-                <table className="w-full">
-                    <thead className="sticky top-0 bg-gray-50 z-10">
+            <div className="overflow-x-auto">
+                <table className="w-full min-w-[900px]">
+                    <thead className="bg-gray-50">
                         <tr className="border-b border-gray-200">
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Period</th>
-                            <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Place</th>
+                            {showPlaceColumn && (
+                                <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Place</th>
+                            )}
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Tourist</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
@@ -56,7 +69,7 @@ export default function BookingHistorySection({
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                        {bookings.map((booking) => (
+                        {paginatedBookings.map((booking) => (
                             <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
                                 {/* Booking ID */}
                                 <td className="px-6 py-4">
@@ -75,42 +88,26 @@ export default function BookingHistorySection({
                                         </button>
                                     </div>
                                 </td>
-                                {/* Booking Period with Calendar Visual */}
+                                {/* Booking Period */}
                                 <td className="px-6 py-4">
-                                    <div className="flex items-center gap-2">
-                                        {/* Check-in Date Card */}
-                                        <div className="flex flex-col items-center bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2 min-w-[70px]">
-                                            <span className="text-[10px] font-medium text-emerald-600 uppercase">Check-in</span>
-                                            <span className="text-lg font-bold text-emerald-700">
-                                                {new Date(booking.start_date).getDate()}
-                                            </span>
-                                            <span className="text-[10px] text-emerald-600">
-                                                {new Date(booking.start_date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
-                                            </span>
+                                    <div className="text-sm">
+                                        <div className="flex items-center gap-1 text-gray-900">
+                                            <span>{new Date(booking.start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                                            <ArrowRight size={14} className="text-gray-400" />
+                                            <span>{new Date(booking.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                         </div>
-                                        <ArrowRight size={16} className="text-gray-400" />
-                                        {/* Check-out Date Card */}
-                                        <div className="flex flex-col items-center bg-red-50 border border-red-200 rounded-lg px-3 py-2 min-w-[70px]">
-                                            <span className="text-[10px] font-medium text-red-600 uppercase">Check-out</span>
-                                            <span className="text-lg font-bold text-red-700">
-                                                {new Date(booking.end_date).getDate()}
-                                            </span>
-                                            <span className="text-[10px] text-red-600">
-                                                {new Date(booking.end_date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })}
-                                            </span>
-                                        </div>
-                                        {/* Nights Badge */}
-                                        <span className="ml-1 px-2 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-600">
+                                        <span className="text-xs text-gray-500">
                                             {Math.ceil((new Date(booking.end_date).getTime() - new Date(booking.start_date).getTime()) / (1000 * 60 * 60 * 24))} nights
                                         </span>
                                     </div>
                                 </td>
-                                {/* Place/Accommodation */}
-                                <td className="px-6 py-4">
-                                    <span className="font-medium text-gray-900">
-                                        {booking.accommodation?.name || "Unknown"}
-                                    </span>
-                                </td>
+                                {showPlaceColumn && (
+                                    <td className="px-6 py-4">
+                                        <span className="text-sm text-gray-900">
+                                            {booking.accommodation?.name || "—"}
+                                        </span>
+                                    </td>
+                                )}
                                 <td className="px-6 py-4 text-gray-600">
                                     {booking.user?.name || "Unknown"}
                                 </td>
@@ -193,16 +190,48 @@ export default function BookingHistorySection({
                     </tbody>
                 </table>
 
-                {bookings.length === 0 && (
-                    <div className="py-16 text-center">
-                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Calendar size={24} className="text-gray-400" />
-                        </div>
-                        <p className="text-gray-900 font-medium mb-1">No bookings yet</p>
-                        <p className="text-gray-500 text-sm">Bookings will appear here once tourists make reservations</p>
-                    </div>
-                )}
             </div>
+
+            {/* Pagination */}
+            {bookings.length > 0 && (
+                <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                        Showing {startIndex + 1}-{Math.min(startIndex + ITEMS_PER_PAGE, bookings.length)} of {bookings.length} bookings
+                    </p>
+                    {totalPages > 1 && (
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                <ChevronLeft size={16} />
+                            </button>
+                            <span className="text-sm text-gray-600 px-2">
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                <ChevronRight size={16} />
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* Empty State */}
+            {bookings.length === 0 && (
+                <div className="py-16 text-center">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Calendar size={24} className="text-gray-400" />
+                    </div>
+                    <p className="text-gray-900 font-medium mb-1">No bookings yet</p>
+                    <p className="text-gray-500 text-sm">Bookings will appear here once tourists make reservations</p>
+                </div>
+            )}
         </div>
     );
 }

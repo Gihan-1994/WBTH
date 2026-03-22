@@ -334,6 +334,7 @@ export default function ProviderDashboard() {
                 {activeTab === "bookings" && (
                     <BookingHistorySection
                         bookings={bookings}
+                        accommodationCount={accommodations.length}
                         onView={setSelectedBooking}
                         onConfirm={handleConfirmBooking}
                         onCancel={handleCancelBooking}
