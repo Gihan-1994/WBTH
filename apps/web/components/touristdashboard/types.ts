@@ -17,6 +17,7 @@ export interface Booking {
     type: string;
     accommodation?: { name: string };
     guide?: { user: { name: string } };
+    payments?: { status: string }[];
 }
 
 export interface Stats {

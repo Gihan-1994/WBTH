@@ -72,21 +72,34 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
             );
 
             if (stripeError) {
-                throw new Error(stripeError.message);
+                // Check if payment intent was already authorized/succeeded
+                if (stripeError.payment_intent?.status === "requires_capture" ||
+                    stripeError.payment_intent?.status === "succeeded") {
+                    console.log("Payment was already processed:", stripeError.payment_intent.status);
+                } else {
+                    throw new Error(stripeError.message);
+                }
             }
 
-            if (paymentIntent?.status === "requires_capture") {
+            const finalStatus = paymentIntent?.status || stripeError?.payment_intent?.status;
+
+            if (finalStatus === "requires_capture" || finalStatus === "succeeded") {
                 // Update payment status to authorized
                 await fetch("/api/payments/update-status", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId, status: "authorized" }),
+                    body: JSON.stringify({
+                        paymentId,
+                        status: finalStatus === "succeeded" ? "captured" : "authorized"
+                    }),
                 }).catch(console.error);
 
-                alert("Payment authorized successfully! Waiting for provider confirmation.");
+                alert(finalStatus === "succeeded"
+                    ? "Payment processed successfully!"
+                    : "Payment authorized successfully! Waiting for provider confirmation.");
                 onSuccess();
             } else {
-                throw new Error("Payment authorization failed");
+                throw new Error(`Payment authorization failed: ${finalStatus}`);
             }
         } catch (err: any) {
             console.error("Payment error:", err);

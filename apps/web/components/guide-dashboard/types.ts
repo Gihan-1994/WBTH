@@ -30,6 +30,9 @@ export interface Booking {
         email: string;
         contact_no: string | null;
     };
+    payments?: {
+        status: string;
+    }[];
 }
 
 export interface Stats {

@@ -83,16 +83,16 @@ export default function BookingHistorySection({
                                             {booking.status}
                                         </span>
                                         {/* Payment Status */}
-                                        {(booking as any).payments?.[0] && (
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${(booking as any).payments[0].status === 'captured'
-                                                ? 'bg-green-50 text-green-600 border border-green-200' :
-                                                (booking as any).payments[0].status === 'authorized'
-                                                    ? 'bg-blue-50 text-blue-600 border border-blue-200' :
-                                                    (booking as any).payments[0].status === 'cancelled'
-                                                        ? 'bg-red-50 text-red-600 border border-red-200' :
-                                                        'bg-gray-50 text-gray-600 border border-gray-200'
+                                        {booking.payments?.[0] && (
+                                            <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase border w-fit ${booking.payments[0].status === 'captured'
+                                                ? 'bg-green-100 text-green-700 border-green-200' :
+                                                booking.payments[0].status === 'authorized'
+                                                    ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                                                    booking.payments[0].status === 'cancelled'
+                                                        ? 'bg-red-100 text-red-700 border-red-200' :
+                                                        'bg-gray-100 text-gray-700 border-gray-200'
                                                 }`}>
-                                                💳 {(booking as any).payments[0].status}
+                                                💳 {booking.payments[0].status === 'captured' ? 'Paid' : booking.payments[0].status}
                                             </span>
                                         )}
                                     </div>

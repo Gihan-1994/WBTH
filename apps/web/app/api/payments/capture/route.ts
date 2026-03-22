@@ -51,31 +51,54 @@ export async function POST(req: NextRequest) {
 
         // Check payment status
         if (payment.status === "captured") {
-            return NextResponse.json({ error: "Payment already captured" }, { status: 400 });
+            return NextResponse.json({ error: "Payment already captured" }, { status: 200 });
         }
 
         if (payment.status === "cancelled") {
             return NextResponse.json({ error: "Payment was cancelled" }, { status: 400 });
         }
 
+        if (payment.status !== "authorized") {
+            return NextResponse.json(
+                { error: `Payment is in ${payment.status} status. Only authorized payments can be captured.` },
+                { status: 400 }
+            );
+        }
+
         // Find the Stripe PaymentIntent
-        const paymentIntents = await stripe.paymentIntents.list({
-            limit: 100,
-        });
+        let paymentIntentId = payment.stripe_payment_intent_id;
 
-        const paymentIntent = paymentIntents.data.find(
-            (pi) => pi.metadata.bookingId === payment.booking_id
-        );
+        if (!paymentIntentId) {
+            // Fallback to searching by metadata if stripe_payment_intent_id is missing
+            const paymentIntents = await stripe.paymentIntents.list({
+                limit: 100,
+            });
 
-        if (!paymentIntent) {
+            const foundIntent = paymentIntents.data.find(
+                (pi) => pi.metadata.bookingId === payment.booking_id
+            );
+            paymentIntentId = foundIntent?.id || null;
+        }
+
+        if (!paymentIntentId) {
             return NextResponse.json(
                 { error: "Stripe PaymentIntent not found" },
                 { status: 404 }
             );
         }
 
+        // Retrieve the PaymentIntent to check its status
+        const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+        if (paymentIntent.status !== "requires_capture") {
+            return NextResponse.json(
+                { error: `Stripe PaymentIntent is in ${paymentIntent.status} state, but requires_capture is needed.` },
+                { status: 400 }
+            );
+        }
+
         // Capture the payment
-        const capturedIntent = await stripe.paymentIntents.capture(paymentIntent.id);
+        const capturedIntent = await stripe.paymentIntents.capture(paymentIntentId);
 
         if (capturedIntent.status !== "succeeded") {
             return NextResponse.json(

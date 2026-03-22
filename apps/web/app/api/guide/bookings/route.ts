@@ -21,6 +21,10 @@ export async function GET(req: NextRequest) {
                 user: {
                     select: { name: true, email: true, contact_no: true },
                 },
+                payments: {
+                    orderBy: { id: "desc" },
+                    take: 1,
+                },
             },
         });
 

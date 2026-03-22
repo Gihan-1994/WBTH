@@ -24,6 +24,10 @@ export default function BookingHistorySection({
                 return 'bg-amber-50 text-amber-700';
             case 'cancelled':
                 return 'bg-red-50 text-red-700';
+            case 'captured':
+                return 'bg-blue-50 text-blue-700';
+            case 'authorized':
+                return 'bg-purple-50 text-purple-700';
             default:
                 return 'bg-gray-50 text-gray-700';
         }
@@ -108,9 +112,16 @@ export default function BookingHistorySection({
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className={`px-2.5 py-1 inline-flex text-xs font-medium rounded-full ${getStatusStyles(booking.status)}`}>
-                                            {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                                        </span>
+                                        <div className="flex flex-col gap-1">
+                                            <span className={`px-2.5 py-1 inline-flex text-xs font-medium rounded-full w-fit ${getStatusStyles(booking.status)}`}>
+                                                {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                                            </span>
+                                            {booking.payments && booking.payments.length > 0 && (
+                                                <span className={`px-2 py-0.5 inline-flex text-[10px] font-bold rounded-full uppercase w-fit ${getStatusStyles(booking.payments[0].status)}`}>
+                                                    {booking.payments[0].status === 'captured' ? 'Paid' : booking.payments[0].status}
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right">
                                         <div className="flex items-center justify-end gap-2">

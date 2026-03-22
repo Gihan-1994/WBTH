@@ -44,6 +44,9 @@ export interface Booking {
     accommodation?: {
         name: string;
     };
+    payments?: {
+        status: string;
+    }[];
 }
 
 export interface Stats {

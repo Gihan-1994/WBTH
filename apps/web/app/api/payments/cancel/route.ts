@@ -52,21 +52,43 @@ export async function POST(req: NextRequest) {
         }
 
         if (payment.status === "cancelled") {
-            return NextResponse.json({ error: "Payment already cancelled" }, { status: 400 });
+            return NextResponse.json({ success: true, message: "Payment already cancelled" }, { status: 200 });
         }
 
         // Find the Stripe PaymentIntent
-        const paymentIntents = await stripe.paymentIntents.list({
-            limit: 100,
-        });
+        let paymentIntentId = payment.stripe_payment_intent_id;
 
-        const paymentIntent = paymentIntents.data.find(
-            (pi) => pi.metadata.bookingId === payment.booking_id
-        );
+        if (!paymentIntentId) {
+            // Fallback to searching by metadata if stripe_payment_intent_id is missing
+            const paymentIntents = await stripe.paymentIntents.list({
+                limit: 100,
+            });
 
-        if (paymentIntent) {
-            // Cancel the PaymentIntent (releases authorization)
-            await stripe.paymentIntents.cancel(paymentIntent.id);
+            const foundIntent = paymentIntents.data.find(
+                (pi) => pi.metadata.bookingId === payment.booking_id
+            );
+            paymentIntentId = foundIntent?.id || null;
+        }
+
+        if (paymentIntentId) {
+            try {
+                // Retrieve the PaymentIntent to check its status
+                const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+                // Only cancel if it's in a cancellable state
+                if (paymentIntent.status === "requires_payment_method" ||
+                    paymentIntent.status === "requires_confirmation" ||
+                    paymentIntent.status === "requires_action" ||
+                    paymentIntent.status === "requires_capture") {
+                    // Cancel the PaymentIntent (releases authorization)
+                    await stripe.paymentIntents.cancel(paymentIntentId);
+                } else {
+                    console.log(`PaymentIntent ${paymentIntentId} is in status ${paymentIntent.status}, skipping Stripe cancel.`);
+                }
+            } catch (stripeErr: any) {
+                console.error("Error cancelling Stripe PaymentIntent:", stripeErr);
+                // Continue with DB update even if Stripe cancel fails (e.g. if it was already cancelled)
+            }
         }
 
         // Update payment status to cancelled

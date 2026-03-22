@@ -101,6 +101,11 @@ export default function ProviderDashboard() {
 
             const { payment } = await paymentRes.json();
 
+            if (payment.status !== "authorized") {
+                alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                return;
+            }
+
             const res = await fetch("/api/payments/capture", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
