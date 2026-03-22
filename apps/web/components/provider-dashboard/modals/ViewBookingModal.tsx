@@ -2,14 +2,15 @@
 
 
 import { Booking } from "../types";
-import { X, Calendar, User, MapPin, Phone, Mail, Clock, CreditCard, Receipt } from "lucide-react";
+import { X, Calendar, User, MapPin, Phone, Mail, Clock, CreditCard, Receipt, Trash2 } from "lucide-react";
 
 interface ViewBookingModalProps {
     booking: Booking;
     onClose: () => void;
+    onDelete?: (id: string) => void;
 }
 
-const ViewBookingModal = function ViewBookingModal({ booking, onClose }: ViewBookingModalProps) {
+const ViewBookingModal = function ViewBookingModal({ booking, onClose, onDelete }: ViewBookingModalProps) {
     const getStatusStyles = (status: string) => {
         switch (status) {
             case 'confirmed':
@@ -146,13 +147,22 @@ const ViewBookingModal = function ViewBookingModal({ booking, onClose }: ViewBoo
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-100 bg-gray-50/50">
+                <div className="p-6 border-t border-gray-100 bg-gray-50/50 space-y-3">
                     <button
                         onClick={onClose}
                         className="w-full py-3 px-4 bg-gray-900 text-white font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-lg shadow-gray-200"
                     >
                         Close Details
                     </button>
+                    {onDelete && (
+                        <button
+                            onClick={() => onDelete(booking.id)}
+                            className="w-full py-3 px-4 bg-white text-red-600 font-semibold rounded-xl border border-red-200 hover:bg-red-50 transition-colors flex items-center justify-center gap-2"
+                        >
+                            <Trash2 size={18} />
+                            Delete Booking
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

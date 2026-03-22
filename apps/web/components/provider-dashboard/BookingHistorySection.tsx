@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Booking } from "./types";
-import { Eye, Check, X, Calendar, CreditCard, Banknote, ArrowRight, Copy, ChevronLeft, ChevronRight } from "lucide-react";
+import { Eye, Check, X, Calendar, CreditCard, Banknote, ArrowRight, Copy, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 
 interface BookingHistorySectionProps {
     bookings: Booking[];
@@ -11,6 +11,8 @@ interface BookingHistorySectionProps {
     onConfirm: (id: string) => void;
     onCancel: (id: string) => void;
     onMarkPaid?: (id: string) => void;
+    onDelete?: (id: string) => void;
+    onBulkDelete?: (ids: string[]) => void;
 }
 
 const ITEMS_PER_PAGE = 8;
@@ -21,14 +23,31 @@ export default function BookingHistorySection({
     onView,
     onConfirm,
     onCancel,
-    onMarkPaid
+    onMarkPaid,
+    onDelete,
+    onBulkDelete
 }: BookingHistorySectionProps) {
     const showPlaceColumn = accommodationCount > 1;
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const totalPages = Math.ceil(bookings.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const paginatedBookings = bookings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === paginatedBookings.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(paginatedBookings.map(b => b.id));
+        }
+    };
+
+    const toggleSelect = (id: string) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
     const getStatusStyles = (status: string) => {
         switch (status) {
             case 'confirmed':
@@ -48,14 +67,36 @@ export default function BookingHistorySection({
 
     return (
         <div className="bg-white rounded-xl border border-gray-200">
-            <div className="px-6 py-4 border-b border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 className="text-lg font-semibold text-gray-900">Booking History</h2>
+                {selectedIds.length > 0 && (
+                    <button
+                        onClick={() => {
+                            if (onBulkDelete) {
+                                onBulkDelete(selectedIds);
+                                setSelectedIds([]);
+                            }
+                        }}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-700 border border-red-200 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
+                    >
+                        <Trash2 size={16} />
+                        Delete Selected ({selectedIds.length})
+                    </button>
+                )}
             </div>
 
             <div className="overflow-x-auto">
                 <table className="w-full min-w-[900px]">
                     <thead className="bg-gray-50">
                         <tr className="border-b border-gray-200">
+                            <th className="px-6 py-3 text-left">
+                                <input
+                                    type="checkbox"
+                                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                    checked={paginatedBookings.length > 0 && selectedIds.length === paginatedBookings.length}
+                                    onChange={toggleSelectAll}
+                                />
+                            </th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                             <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Booking Period</th>
                             {showPlaceColumn && (
@@ -70,7 +111,15 @@ export default function BookingHistorySection({
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {paginatedBookings.map((booking) => (
-                            <tr key={booking.id} className="hover:bg-gray-50 transition-colors">
+                            <tr key={booking.id} className={`hover:bg-gray-50 transition-colors ${selectedIds.includes(booking.id) ? 'bg-indigo-50/30' : ''}`}>
+                                <td className="px-6 py-4">
+                                    <input
+                                        type="checkbox"
+                                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                                        checked={selectedIds.includes(booking.id)}
+                                        onChange={() => toggleSelect(booking.id)}
+                                    />
+                                </td>
                                 {/* Booking ID */}
                                 <td className="px-6 py-4">
                                     <div className="flex items-center gap-1">
@@ -183,6 +232,13 @@ export default function BookingHistorySection({
                                                 </button>
                                             </>
                                         )}
+                                        <button
+                                            onClick={() => onDelete?.(booking.id)}
+                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                            title="Delete"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

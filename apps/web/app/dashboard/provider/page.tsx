@@ -180,6 +180,56 @@ export default function ProviderDashboard() {
         }
     }, [fetchData]);
 
+    const handleDeleteBooking = useCallback(async (id: string) => {
+        if (!confirm("Are you sure you want to delete this booking? This action cannot be undone.")) return;
+
+        try {
+            const res = await fetch(`/api/accommodation-provider/bookings/${id}`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                alert("Booking deleted successfully");
+                fetchData();
+                if (selectedBooking?.id === id) {
+                    setSelectedBooking(null);
+                }
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to delete booking");
+            }
+        } catch (error) {
+            console.error("Error deleting booking:", error);
+            alert("Error deleting booking");
+        }
+    }, [fetchData, selectedBooking]);
+
+    const handleBulkDeleteBookings = useCallback(async (ids: string[]) => {
+        if (!confirm(`Are you sure you want to delete ${ids.length} bookings? This action cannot be undone.`)) return;
+
+        try {
+            const res = await fetch("/api/accommodation-provider/bookings/bulk-delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ids }),
+            });
+
+            if (res.ok) {
+                alert(`${ids.length} bookings deleted successfully`);
+                fetchData();
+                if (selectedBooking && ids.includes(selectedBooking.id)) {
+                    setSelectedBooking(null);
+                }
+            } else {
+                const data = await res.json();
+                alert(data.error || "Failed to delete bookings");
+            }
+        } catch (error) {
+            console.error("Error bulk deleting bookings:", error);
+            alert("Error bulk deleting bookings");
+        }
+    }, [fetchData, selectedBooking]);
+
     const handleDeleteAccommodation = useCallback(async (id: string) => {
         if (!confirm("Are you sure you want to delete this accommodation?")) return;
 
@@ -339,6 +389,8 @@ export default function ProviderDashboard() {
                         onConfirm={handleConfirmBooking}
                         onCancel={handleCancelBooking}
                         onMarkPaid={handleMarkPaid}
+                        onDelete={handleDeleteBooking}
+                        onBulkDelete={handleBulkDeleteBookings}
                     />
                 )}
 
@@ -419,6 +471,7 @@ export default function ProviderDashboard() {
                 <ViewBookingModal
                     booking={selectedBooking}
                     onClose={() => setSelectedBooking(null)}
+                    onDelete={handleDeleteBooking}
                 />
             )}
         </div>
