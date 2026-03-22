@@ -293,10 +293,12 @@ export default function AccommodationsPage() {
                                             </div>
                                         )}
                                         {/* Rating Badge */}
-                                        <div className="absolute top-4 right-4 flex items-center bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                                            <span className="text-yellow-500 mr-1">★</span>
-                                            <span className="text-sm font-semibold text-gray-800">{acc.rating || "N/A"}</span>
-                                        </div>
+                                      {acc.rating && (<div
+                                        className="absolute top-4 right-4 flex items-center bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full">
+                                        <span className="text-yellow-500 mr-1">★</span>
+                                        <span
+                                          className="text-sm font-semibold text-gray-800">{acc.rating || "N/A"}</span>
+                                      </div>)}
                                     </div>
 
                                     {/* Content */}
