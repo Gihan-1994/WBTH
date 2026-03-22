@@ -24,6 +24,7 @@ import BookingHistorySection from "@/components/touristdashboard/BookingHistoryS
 import EditProfileModal from "@/components/touristdashboard/modals/EditProfileModal";
 import ChangePasswordModal from "@/components/touristdashboard/modals/ChangePasswordModal";
 import ViewBookingModal from "@/components/touristdashboard/modals/ViewBookingModal";
+import ConfirmationModal from "@/components/touristdashboard/modals/ConfirmationModal";
 
 type TabType = "bookings" | "statistics" | "profile";
 
@@ -41,6 +42,18 @@ export default function TouristDashboard() {
     const [showEditProfile, setShowEditProfile] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+    const [confirmation, setConfirmation] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+        variant?: "danger" | "warning" | "info" | "success";
+    }>({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: () => {},
+    });
 
     // Fetch Data
     const fetchData = useCallback(async () => {
@@ -69,23 +82,83 @@ export default function TouristDashboard() {
 
     // Handlers
     const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to cancel this booking?")) return;
-
-        try {
-            const res = await fetch(`/api/bookings/${id}/cancel`, {
-                method: "PATCH",
-            });
-            if (res.ok) {
-                alert("Booking cancelled successfully");
-                fetchData();
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to cancel booking");
+        setConfirmation({
+            isOpen: true,
+            title: "Cancel Booking",
+            message: "Are you sure you want to cancel this booking? This action cannot be undone.",
+            variant: "danger",
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/bookings/${id}/cancel`, {
+                        method: "PATCH",
+                    });
+                    if (res.ok) {
+                        fetchData();
+                        if (selectedBooking?.id === id) setSelectedBooking(null);
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to cancel booking");
+                    }
+                } catch (error) {
+                    alert("Error cancelling booking");
+                }
             }
-        } catch (error) {
-            alert("Error cancelling booking");
-        }
-    }, [fetchData]);
+        });
+    }, [fetchData, selectedBooking]);
+
+    const handleDeleteBooking = useCallback(async (id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Booking",
+            message: "Are you sure you want to delete this booking from your history? This action cannot be undone.",
+            variant: "danger",
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/tourist/bookings/${id}`, {
+                        method: "DELETE",
+                    });
+                    if (res.ok) {
+                        fetchData();
+                        if (selectedBooking?.id === id) setSelectedBooking(null);
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to delete booking");
+                    }
+                } catch (error) {
+                    alert("Error deleting booking");
+                }
+            }
+        });
+    }, [fetchData, selectedBooking]);
+
+    const handleBulkDeleteBookings = useCallback(async (ids: string[]) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Bulk Delete Bookings",
+            message: `Are you sure you want to delete ${ids.length} bookings from your history?`,
+            variant: "danger",
+            onConfirm: async () => {
+                try {
+                    const res = await fetch("/api/tourist/bookings/bulk-delete", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ ids }),
+                    });
+                    if (res.ok) {
+                        fetchData();
+                        if (selectedBooking && ids.includes(selectedBooking.id)) {
+                            setSelectedBooking(null);
+                        }
+                    } else {
+                        const data = await res.json();
+                        alert(data.error || "Failed to delete bookings");
+                    }
+                } catch (error) {
+                    alert("Error bulk deleting bookings");
+                }
+            }
+        });
+    }, [fetchData, selectedBooking]);
 
     const tabs = [
         { id: "bookings" as TabType, label: "My Bookings", icon: Calendar },
@@ -228,6 +301,8 @@ export default function TouristDashboard() {
                         bookings={bookings}
                         onViewBooking={setSelectedBooking}
                         onCancelBooking={handleCancelBooking}
+                        onDeleteBooking={handleDeleteBooking}
+                        onBulkDeleteBookings={handleBulkDeleteBookings}
                         onRefresh={fetchData}
                     />
                 )}
@@ -266,8 +341,19 @@ export default function TouristDashboard() {
                 <ViewBookingModal
                     booking={selectedBooking}
                     onClose={() => setSelectedBooking(null)}
+                    onCancel={handleCancelBooking}
+                    onDelete={handleDeleteBooking}
                 />
             )}
+
+            <ConfirmationModal
+                isOpen={confirmation.isOpen}
+                onClose={() => setConfirmation(prev => ({ ...prev, isOpen: false }))}
+                onConfirm={confirmation.onConfirm}
+                title={confirmation.title}
+                message={confirmation.message}
+                variant={confirmation.variant}
+            />
         </div>
     );
 }

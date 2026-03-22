@@ -28,6 +28,7 @@ import AccommodationModal from "@/components/provider-dashboard/modals/Accommoda
 import AccommodationImagesModal from "@/components/provider-dashboard/modals/AccommodationImagesModal";
 import ViewBookingModal from "@/components/provider-dashboard/modals/ViewBookingModal";
 import BlockedDatesModal from "@/components/provider-dashboard/modals/BlockedDatesModal";
+import ConfirmationModal from "@/components/provider-dashboard/modals/ConfirmationModal";
 
 export default function ProviderDashboard() {
     const router = useRouter();
@@ -50,6 +51,19 @@ export default function ProviderDashboard() {
     const [showImagesModal, setShowImagesModal] = useState<Accommodation | null>(null);
     const [showBlockedDatesModal, setShowBlockedDatesModal] = useState<Accommodation | null>(null);
     const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+    const [confirmation, setConfirmation] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => Promise<void>;
+        variant?: "danger" | "warning" | "info" | "success";
+        confirmLabel?: string;
+    }>({
+        isOpen: false,
+        title: "",
+        message: "",
+        onConfirm: async () => {},
+    });
 
     const tabs = [
         { id: "accommodations", label: "Accommodations", icon: Hotel },
@@ -91,162 +105,168 @@ export default function ProviderDashboard() {
     }, [fetchData]);
 
     // Handlers
-    const handleConfirmBooking = useCallback(async (id: string) => {
-        if (!confirm("Confirm this booking and capture payment?")) return;
-
-        try {
-            const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
-
-            const { payment } = await paymentRes.json();
-
-            if (payment.status !== "authorized") {
-                alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
-                return;
-            }
-
-            const res = await fetch("/api/payments/capture", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                alert(`Payment captured! You received $${data.providerAmount}`);
-                fetchData();
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to capture payment");
-            }
-        } catch (error) {
-            console.error("Error confirming booking:", error);
-            alert("Error confirming booking");
-        }
-    }, [fetchData]);
-
-    const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to reject this booking and release payment authorization?")) return;
-
-        try {
-            const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
-
-            const { payment } = await paymentRes.json();
-
-            const res = await fetch("/api/payments/cancel", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
-
-            if (res.ok) {
-                alert("Booking rejected and payment authorization released");
-                fetchData();
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to cancel payment");
-            }
-        } catch (error) {
-            console.error("Error rejecting booking:", error);
-            alert("Error rejecting booking");
-        }
-    }, [fetchData]);
-
-    const handleMarkPaid = useCallback(async (id: string) => {
-        if (!confirm("Mark this booking as paid?")) return;
-
-        try {
-            const res = await fetch(`/api/bookings/${id}/mark-paid`, {
-                method: "POST",
-            });
-
-            if (res.ok) {
-                alert("Booking marked as paid");
-                fetchData();
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to mark booking as paid");
-            }
-        } catch (error) {
-            console.error("Error marking booking as paid:", error);
-            alert("Error marking booking as paid");
-        }
-    }, [fetchData]);
-
-    const handleDeleteBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to delete this booking? This action cannot be undone.")) return;
-
-        try {
-            const res = await fetch(`/api/accommodation-provider/bookings/${id}`, {
-                method: "DELETE",
-            });
-
-            if (res.ok) {
-                alert("Booking deleted successfully");
-                fetchData();
-                if (selectedBooking?.id === id) {
-                    setSelectedBooking(null);
+    const handleConfirmBooking = useCallback((id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Confirm Booking",
+            message: "Are you sure you want to confirm this booking and capture the payment?",
+            variant: "success",
+            confirmLabel: "Confirm Booking",
+            onConfirm: async () => {
+                const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
+                if (!paymentRes.ok) {
+                    alert("Payment not found for this booking");
+                    return;
                 }
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to delete booking");
+
+                const { payment } = await paymentRes.json();
+
+                if (payment.status !== "authorized") {
+                    alert(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                    return;
+                }
+
+                const res = await fetch("/api/payments/capture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to capture payment");
+                }
             }
-        } catch (error) {
-            console.error("Error deleting booking:", error);
-            alert("Error deleting booking");
-        }
+        });
+    }, [fetchData]);
+
+    const handleCancelBooking = useCallback((id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Reject Booking",
+            message: "Are you sure you want to reject this booking? The payment authorization will be released.",
+            variant: "danger",
+            confirmLabel: "Reject Booking",
+            onConfirm: async () => {
+                const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
+                if (!paymentRes.ok) {
+                    alert("Payment not found for this booking");
+                    return;
+                }
+
+                const { payment } = await paymentRes.json();
+
+                const res = await fetch("/api/payments/cancel", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to cancel payment");
+                }
+            }
+        });
+    }, [fetchData]);
+
+    const handleMarkPaid = useCallback((id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Mark as Paid",
+            message: "Confirm that you have received payment for this booking?",
+            variant: "success",
+            confirmLabel: "Confirm Payment",
+            onConfirm: async () => {
+                const res = await fetch(`/api/bookings/${id}/mark-paid`, {
+                    method: "POST",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to mark booking as paid");
+                }
+            }
+        });
+    }, [fetchData]);
+
+    const handleDeleteBooking = useCallback((id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Booking",
+            message: "Are you sure you want to delete this booking? This action cannot be undone.",
+            variant: "danger",
+            confirmLabel: "Delete",
+            onConfirm: async () => {
+                const res = await fetch(`/api/accommodation-provider/bookings/${id}`, {
+                    method: "DELETE",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                    if (selectedBooking?.id === id) {
+                        setSelectedBooking(null);
+                    }
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete booking");
+                }
+            }
+        });
     }, [fetchData, selectedBooking]);
 
-    const handleBulkDeleteBookings = useCallback(async (ids: string[]) => {
-        if (!confirm(`Are you sure you want to delete ${ids.length} bookings? This action cannot be undone.`)) return;
+    const handleBulkDeleteBookings = useCallback((ids: string[]) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Multiple Bookings",
+            message: `Are you sure you want to delete ${ids.length} booking${ids.length > 1 ? 's' : ''}? This action cannot be undone.`,
+            variant: "danger",
+            confirmLabel: "Delete All",
+            onConfirm: async () => {
+                const res = await fetch("/api/accommodation-provider/bookings/bulk-delete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ids }),
+                });
 
-        try {
-            const res = await fetch("/api/accommodation-provider/bookings/bulk-delete", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ids }),
-            });
-
-            if (res.ok) {
-                alert(`${ids.length} bookings deleted successfully`);
-                fetchData();
-                if (selectedBooking && ids.includes(selectedBooking.id)) {
-                    setSelectedBooking(null);
+                if (res.ok) {
+                    fetchData();
+                    if (selectedBooking && ids.includes(selectedBooking.id)) {
+                        setSelectedBooking(null);
+                    }
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete bookings");
                 }
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to delete bookings");
             }
-        } catch (error) {
-            console.error("Error bulk deleting bookings:", error);
-            alert("Error bulk deleting bookings");
-        }
+        });
     }, [fetchData, selectedBooking]);
 
-    const handleDeleteAccommodation = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to delete this accommodation?")) return;
-
-        try {
-            const res = await fetch(`/api/accommodation-provider/accommodations/${id}`, {
-                method: "DELETE",
-            });
-            if (res.ok) {
-                alert("Accommodation deleted successfully");
-                fetchData();
-            } else {
-                const data = await res.json();
-                alert(data.error || "Failed to delete accommodation");
+    const handleDeleteAccommodation = useCallback((id: string) => {
+        setConfirmation({
+            isOpen: true,
+            title: "Delete Accommodation",
+            message: "Are you sure you want to delete this accommodation? All associated bookings will also be affected.",
+            variant: "danger",
+            confirmLabel: "Delete",
+            onConfirm: async () => {
+                const res = await fetch(`/api/accommodation-provider/accommodations/${id}`, {
+                    method: "DELETE",
+                });
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || "Failed to delete accommodation");
+                }
             }
-        } catch (error) {
-            alert("Error deleting accommodation");
-        }
+        });
     }, [fetchData]);
 
     if (loading || status === "loading") {
@@ -474,6 +494,16 @@ export default function ProviderDashboard() {
                     onDelete={handleDeleteBooking}
                 />
             )}
+
+            <ConfirmationModal
+                isOpen={confirmation.isOpen}
+                onClose={() => setConfirmation(prev => ({ ...prev, isOpen: false }))}
+                onConfirm={confirmation.onConfirm}
+                title={confirmation.title}
+                message={confirmation.message}
+                variant={confirmation.variant}
+                confirmLabel={confirmation.confirmLabel}
+            />
         </div>
     );
 }
