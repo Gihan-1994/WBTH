@@ -13,6 +13,7 @@
     "postinstall": "cd node_modules/@prisma && ln -sf ../../.prisma .prisma 2>/dev/null || true"
   },
   "devDependencies": {
+    "baseline-browser-mapping": "^2.10.10",
     "prettier": "^3.3.3",
     "turbo": "^2.0.0"
   },
