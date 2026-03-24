@@ -7,6 +7,8 @@ import { X, CalendarX } from "lucide-react";
 import { AccommodationData } from "../types";
 import PaymentModal from "@/components/payments/PaymentModal";
 import { useToast } from "@/components/Toast";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
 
 interface BookingDrawerProps {
     accommodation: AccommodationData;
@@ -27,6 +29,8 @@ export default function BookingDrawer({
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [createdBooking, setCreatedBooking] = useState<any>(null);
     const [blockedDates, setBlockedDates] = useState<{ date: string; reason: string | null }[]>([]);
+    const [dayPicker_BlockedDates, setDayPicker_BlockedDates] = useState<Date[]>([]);
+    const [calendarSelection, setCalendarSelection] = useState<{ from?: Date; to?: Date }>({});
     const [bookingData, setBookingData] = useState({
         startDate: "",
         endDate: "",
@@ -42,6 +46,12 @@ export default function BookingDrawer({
                 if (res.ok) {
                     const data = await res.json();
                     setBlockedDates(data.blockedDates || []);
+                  const dates = (data.blockedDates || []).map((bd: any) => {
+                    const d = new Date(bd.date);
+                    d.setHours(0, 0, 0, 0);
+                    return d;
+                  });
+                    setDayPicker_BlockedDates(dates);
                 }
             } catch (error) {
                 console.error("Failed to fetch blocked dates", error);
@@ -55,6 +65,23 @@ export default function BookingDrawer({
         if (!session) {
             router.push("/login");
             return;
+        }
+
+        // Validate: check if any blocked dates fall within selected range
+        if (bookingData.startDate && bookingData.endDate && dayPicker_BlockedDates.length > 0) {
+            const start = new Date(bookingData.startDate);
+            const end = new Date(bookingData.endDate);
+
+            const blockedInRange = dayPicker_BlockedDates.filter(blockedDate => {
+                const bd = new Date(blockedDate);
+                bd.setHours(0, 0, 0, 0);
+                return bd >= start && bd <= end;
+            });
+
+            if (blockedInRange.length > 0) {
+                toast.error("Selected dates include blocked dates. Please choose different dates.");
+                return;
+            }
         }
 
         try {
@@ -155,37 +182,124 @@ export default function BookingDrawer({
                                 )}
 
                                 {/* Date Selection */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-3">Select Dates</label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-xs text-gray-500 mb-1.5">Check-in</label>
-                                            <input
-                                                type="date"
-                                                required
-                                                min={new Date().toISOString().split('T')[0]}
-                                                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:border-transparent outline-none text-sm"
-                                                style={{ "--tw-ring-color": themeColor } as any}
-                                                value={bookingData.startDate}
-                                                onChange={(e) => setBookingData({ ...bookingData, startDate: e.target.value })}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs text-gray-500 mb-1.5">Check-out</label>
-                                            <input
-                                                type="date"
-                                                required
-                                                min={bookingData.startDate || new Date().toISOString().split('T')[0]}
-                                                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:border-transparent outline-none text-sm"
-                                                style={{ "--tw-ring-color": themeColor } as any}
-                                                value={bookingData.endDate}
-                                                onChange={(e) => setBookingData({ ...bookingData, endDate: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
+                                {/*<div>*/}
+                                {/*    <label className="block text-sm font-medium text-gray-700 mb-3">Select Dates</label>*/}
+                                {/*    <div className="grid grid-cols-2 gap-4">*/}
+                                {/*        <div>*/}
+                                {/*            <label className="block text-xs text-gray-500 mb-1.5">Check-in</label>*/}
+                                {/*            <input*/}
+                                {/*                type="date"*/}
+                                {/*                required*/}
+                                {/*                min={new Date().toISOString().split('T')[0]}*/}
+                                {/*                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:border-transparent outline-none text-sm"*/}
+                                {/*                style={{ "--tw-ring-color": themeColor } as any}*/}
+                                {/*                value={bookingData.startDate}*/}
+                                {/*                onChange={(e) => setBookingData({ ...bookingData, startDate: e.target.value })}*/}
+                                {/*            />*/}
+                                {/*        </div>*/}
+                                {/*        <div>*/}
+                                {/*            <label className="block text-xs text-gray-500 mb-1.5">Check-out</label>*/}
+                                {/*            <input*/}
+                                {/*                type="date"*/}
+                                {/*                required*/}
+                                {/*                min={bookingData.startDate || new Date().toISOString().split('T')[0]}*/}
+                                {/*                className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:border-transparent outline-none text-sm"*/}
+                                {/*                style={{ "--tw-ring-color": themeColor } as any}*/}
+                                {/*                value={bookingData.endDate}*/}
+                                {/*                onChange={(e) => setBookingData({ ...bookingData, endDate: e.target.value })}*/}
+                                {/*            />*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
+                              {/* Date Selection with Calendar */}
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-3">Select Dates</label>
+                                <div className="border border-gray-200 rounded-lg p-4 mb-4">
+                                  <DayPicker
+                                    selected={calendarSelection.from ? { from: calendarSelection.from, to: calendarSelection.to } : undefined}
+                                    mode="range"
+                                    onSelect={(range) => {
+                                      setCalendarSelection({ from: range?.from, to: range?.to });
+
+                                      if (range?.from) {
+                                        const year = range.from.getFullYear();
+                                        const month = String(range.from.getMonth() + 1).padStart(2, '0');
+                                        const day = String(range.from.getDate()).padStart(2, '0');
+                                        setBookingData(prev => ({ ...prev, startDate: `${year}-${month}-${day}`, endDate: "" }));
+                                      }
+                                      if (range?.to) {
+                                        const year = range.to.getFullYear();
+                                        const month = String(range.to.getMonth() + 1).padStart(2, '0');
+                                        const day = String(range.to.getDate()).padStart(2, '0');
+                                        setBookingData(prev => ({ ...prev, endDate: `${year}-${month}-${day}` }));
+                                      }
+                                    }}
+                                    disabled={[
+                                      ...dayPicker_BlockedDates,
+                                      { before: new Date() }
+                                    ]}
+                                    numberOfMonths={1}
+                                    modifiers={{ blocked: dayPicker_BlockedDates }}
+                                    modifiersStyles={{
+                                      blocked: {
+                                        color: '#dc2626',
+                                        textDecoration: 'line-through',
+                                        backgroundColor: '#fef2f2'
+                                      }
+                                    }}
+                                    className="mx-auto"
+                                  />
                                 </div>
 
-                                {/* Check-in/out Times */}
+                                {/* Selected Dates Display */}
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="block text-xs text-gray-500 mb-1.5">Check-in</label>
+                                    <input
+                                      type="text"
+                                      readOnly
+                                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm"
+                                      value={bookingData.startDate ? bookingData.startDate : "Select date"}
+                                        placeholder="Select date"
+                                        />
+                                        </div>
+                                        <div>
+                                        <label className="block text-xs text-gray-500 mb-1.5">Check-out</label>
+                                        <input
+                                        type="text"
+                                        readOnly
+                                        className="w-full px-3 py-2.5 border border-gray-200 rounded-lg bg-gray-50 text-sm"
+                                        value={bookingData.endDate ? bookingData.endDate : "Select date"}
+                                        placeholder="Select date"
+                                        />
+                                        </div>
+                                        </div>
+
+                                        {/* Warning if selected range includes blocked dates */}
+                                        {bookingData.startDate && bookingData.endDate && dayPicker_BlockedDates.length > 0 && (() => {
+                                            const start = new Date(bookingData.startDate);
+                                            const end = new Date(bookingData.endDate);
+                                            const blockedInRange = dayPicker_BlockedDates.filter(blockedDate => {
+                                                const bd = new Date(blockedDate);
+                                                bd.setHours(0, 0, 0, 0);
+                                                return bd >= start && bd <= end;
+                                            });
+                                            if (blockedInRange.length > 0) {
+                                                return (
+                                                    <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                        <p className="text-sm text-red-700">
+                                                            ⚠️ Selected dates include blocked dates ({blockedInRange.length}). Please choose different dates.
+                                                        </p>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })()}
+                                        </div>
+
+
+
+                                      {/* Check-in/out Times */}
                                 {(accommodation.check_in_time || accommodation.check_out_time) && (
                                     <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                                         {accommodation.check_in_time && (
