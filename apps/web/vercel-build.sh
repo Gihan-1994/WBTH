@@ -3,10 +3,10 @@ set -e
 
 echo "Starting custom Vercel build process..."
 
-# 1. Generate Prisma Client
+# 1. Generate Prisma Client with DATABASE_URL from environment
 echo "Generating Prisma Client..."
 cd ../../packages/prisma
-npx prisma generate
+DATABASE_URL="$DATABASE_URL" npx prisma generate
 cd ../../apps/web
 
 # 2. Run Next.js Build

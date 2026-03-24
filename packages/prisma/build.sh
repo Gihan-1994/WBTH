@@ -2,6 +2,6 @@
 set -e
 
 echo "Building Prisma package..."
-npx tsc && npx prisma generate
+npx prisma generate && npx tsc
 
 echo "Prisma build complete!"
