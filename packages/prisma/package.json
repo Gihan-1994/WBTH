@@ -14,7 +14,7 @@
     "build": "./build.sh",
     "migrate": "node -r dotenv/config $(which prisma) migrate deploy",
     "seed": "tsx seed/index.ts",
-    "dev": "prisma db pull && prisma generate"
+    "dev": "prisma generate && ./build.sh"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

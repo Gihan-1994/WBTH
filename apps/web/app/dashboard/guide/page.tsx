@@ -2,10 +2,23 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useToast } from "@/components/Toast";
 import { GuideProfile, Booking, Stats } from "@/components/guide-dashboard/types";
+import {
+    Home,
+    Calendar,
+    BarChart3,
+    User,
+    LogOut,
+    Loader2,
+    Compass,
+    ShieldX
+} from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
+import ProfileSwitcher from "@/components/ProfileSwitcher";
 
 // Display Components
-import GuideHeader from "@/components/guide-dashboard/GuideHeader";
 import GuideProfileCard from "@/components/guide-dashboard/GuideProfileCard";
 import StatisticsCard from "@/components/guide-dashboard/StatisticsCard";
 import BookingHistorySection from "@/components/guide-dashboard/BookingHistorySection";
@@ -15,14 +28,19 @@ import EditProfileModal from "@/components/guide-dashboard/modals/EditProfileMod
 import ChangePasswordModal from "@/components/guide-dashboard/modals/ChangePasswordModal";
 import ViewBookingModal from "@/components/guide-dashboard/modals/ViewBookingModal";
 
+type TabType = "bookings" | "statistics" | "profile";
+
 export default function GuideDashboard() {
     const router = useRouter();
+    const { data: session, status } = useSession();
+    const toast = useToast();
 
     // Data State
     const [profile, setProfile] = useState<GuideProfile | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState<TabType>("bookings");
 
     // Modal State
     const [showEditProfile, setShowEditProfile] = useState(false);
@@ -57,115 +75,284 @@ export default function GuideDashboard() {
 
     // Handlers
     const handleConfirmBooking = useCallback(async (id: string) => {
-        if (!confirm("Confirm this booking and capture payment?")) return;
+        if (!confirm("Confirm this booking?")) return;
 
         try {
-            // First, get the payment for this booking
+            // Check if there's a payment to capture (online payment)
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
 
-            const { payment } = await paymentRes.json();
+            if (paymentRes.ok) {
+                // Online payment exists - capture via payment API
+                const { payment } = await paymentRes.json();
 
-            // Capture the payment
-            const res = await fetch("/api/payments/capture", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
+                if (payment.status !== "authorized") {
+                    toast.error(`Cannot capture payment with status: ${payment.status}. The user might not have completed the authorization yet.`);
+                    return;
+                }
 
-            if (res.ok) {
-                const data = await res.json();
-                alert(`Payment captured! You received $${data.providerAmount}`);
-                fetchData();
+                const res = await fetch("/api/payments/capture", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    toast.error(data.error || "Failed to confirm booking");
+                }
             } else {
-                const data = await res.json();
-                alert(data.error || "Failed to capture payment");
+                // No payment (pay_at_property) - confirm directly
+                const res = await fetch(`/api/guide/bookings/${id}/confirm`, {
+                    method: "PUT",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    toast.error(data.error || "Failed to confirm booking");
+                }
             }
         } catch (error) {
             console.error("Error confirming booking:", error);
-            alert("Error confirming booking");
+            toast.error("Error confirming booking");
         }
     }, [fetchData]);
 
     const handleCancelBooking = useCallback(async (id: string) => {
-        if (!confirm("Are you sure you want to reject this booking and release payment authorization?")) return;
+        if (!confirm("Are you sure you want to reject this booking?")) return;
 
         try {
-            // First, get the payment for this booking
+            // Check if there's a payment to cancel (online payment)
             const paymentRes = await fetch(`/api/payments/by-booking/${id}`);
-            if (!paymentRes.ok) {
-                alert("Payment not found for this booking");
-                return;
-            }
 
-            const { payment } = await paymentRes.json();
+            if (paymentRes.ok) {
+                // Online payment exists - cancel via payment API
+                const { payment } = await paymentRes.json();
 
-            // Cancel the payment
-            const res = await fetch("/api/payments/cancel", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentId: payment.id }),
-            });
+                const res = await fetch("/api/payments/cancel", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId: payment.id }),
+                });
 
-            if (res.ok) {
-                alert("Booking rejected and payment authorization released");
-                fetchData();
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    toast.error(data.error || "Failed to reject booking");
+                }
             } else {
-                const data = await res.json();
-                alert(data.error || "Failed to cancel payment");
+                // No payment (pay_at_property) - cancel directly
+                const res = await fetch(`/api/guide/bookings/${id}/cancel`, {
+                    method: "PUT",
+                });
+
+                if (res.ok) {
+                    fetchData();
+                } else {
+                    const data = await res.json();
+                    toast.error(data.error || "Failed to reject booking");
+                }
             }
         } catch (error) {
             console.error("Error rejecting booking:", error);
-            alert("Error rejecting booking");
+            toast.error("Error rejecting booking");
         }
     }, [fetchData]);
 
-    if (loading) {
+    const tabs = [
+        { id: "bookings" as TabType, label: "Bookings", icon: Calendar },
+        { id: "statistics" as TabType, label: "Statistics", icon: BarChart3 },
+        { id: "profile" as TabType, label: "Profile", icon: User },
+    ];
+
+    const userRole = (session?.user as any)?.role;
+
+    // Redirect non-guides to their appropriate dashboard
+    useEffect(() => {
+        if (status === "authenticated" && userRole !== "guide") {
+            router.replace("/dashboard/tourist");
+        }
+    }, [status, userRole, router]);
+
+    if (loading || status === "loading") {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="flex items-center gap-3 text-gray-600">
+                    <Loader2 className="animate-spin" size={24} />
+                    <span className="font-medium">Loading dashboard...</span>
+                </div>
+            </div>
+        );
+    }
+
+    // Show access denied while redirecting
+    if (userRole !== "guide") {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-medium">Loading dashboard...</p>
+                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <ShieldX className="text-red-600" size={32} />
+                    </div>
+                    <p className="text-gray-900 font-semibold mb-1">Access Denied</p>
+                    <p className="text-gray-500 text-sm">Redirecting to your dashboard...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-green-50/30 to-blue-50/30 pb-12">
-            <GuideHeader guideName={profile?.name || null} />
+        <div className="min-h-screen bg-gray-50">
+            {/* Header */}
+            <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        {/* Logo & Title */}
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
+                                <Compass size={22} className="text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-lg font-semibold text-gray-900">Guide Portal</h1>
+                                <p className="text-xs text-gray-500">Tourism Hub</p>
+                            </div>
+                        </div>
 
-            <div className="max-w-7xl mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                    {/* Left Column: Profile */}
-                    <div className="md:col-span-1">
-                        <GuideProfileCard
-                            profile={profile}
-                            onEditProfile={() => setShowEditProfile(true)}
-                            onChangePassword={() => setShowChangePassword(true)}
-                            onProfileUpdate={(enabled) => setProfile(prev => prev ? { ...prev, email_notifications_enabled: enabled } : prev)}
-                        />
+                        {/* Navigation Tabs */}
+                        <nav className="hidden md:flex items-center gap-1">
+                            {tabs.map((tab) => {
+                                const Icon = tab.icon;
+                                return (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                            activeTab === tab.id
+                                                ? "bg-teal-50 text-teal-700"
+                                                : "text-gray-600 hover:bg-gray-100"
+                                        }`}
+                                    >
+                                        <Icon size={18} />
+                                        {tab.label}
+                                    </button>
+                                );
+                            })}
+                        </nav>
+
+                        {/* Right Section */}
+                        <div className="flex items-center gap-3">
+                            <ProfileSwitcher currentProfile="guide" />
+                            <NotificationBell />
+                            <button
+                                onClick={() => router.push("/")}
+                                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                title="Go to Home"
+                            >
+                                <Home size={20} />
+                            </button>
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                                title="Sign Out"
+                            >
+                                <LogOut size={20} />
+                            </button>
+                        </div>
                     </div>
 
-                    {/* Right Column: Bookings */}
-                    <div className="md:col-span-2">
-                        <BookingHistorySection
-                            bookings={bookings}
-                            onView={setSelectedBooking}
-                            onConfirm={handleConfirmBooking}
-                            onCancel={handleCancelBooking}
-                        />
+                    {/* Mobile Navigation */}
+                    <div className="md:hidden flex items-center gap-1 pb-3 overflow-x-auto">
+                        {tabs.map((tab) => {
+                            const Icon = tab.icon;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                                        activeTab === tab.id
+                                            ? "bg-teal-50 text-teal-700"
+                                            : "text-gray-600 hover:bg-gray-100"
+                                    }`}
+                                >
+                                    <Icon size={18} />
+                                    {tab.label}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
+            </header>
 
-                {/* Bottom Row: Statistics */}
-                <div className="w-full">
+            {/* Welcome Banner */}
+            {profile && (
+                <div className="bg-white border-b border-gray-200">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                        <div className="flex items-center gap-4">
+                            {profile.profile_picture ? (
+                                <img
+                                    src={profile.profile_picture}
+                                    alt={profile.name}
+                                    className="w-12 h-12 rounded-full object-cover border-2 border-teal-100"
+                                />
+                            ) : (
+                                <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center border-2 border-teal-100">
+                                    <User size={24} className="text-teal-600" />
+                                </div>
+                            )}
+                            <div>
+                                <h2 className="text-lg font-semibold text-gray-900">
+                                    Welcome back, {profile.name}
+                                </h2>
+                                <p className="text-sm text-gray-500">
+                                    {profile.availability
+                                        ? "You are currently available for bookings"
+                                        : "You are currently unavailable for bookings"}
+                                </p>
+                            </div>
+                            {profile.rating && (
+                                <div className="ml-auto hidden sm:flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-lg">
+                                    <span className="text-amber-500">&#9733;</span>
+                                    <span className="text-sm font-medium text-amber-700">
+                                        {profile.rating.toFixed(1)} Rating
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Main Content */}
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {activeTab === "bookings" && (
+                    <BookingHistorySection
+                        bookings={bookings}
+                        onView={setSelectedBooking}
+                        onConfirm={handleConfirmBooking}
+                        onCancel={handleCancelBooking}
+                    />
+                )}
+
+                {activeTab === "statistics" && (
                     <StatisticsCard stats={stats} />
-                </div>
-            </div>
+                )}
+
+                {activeTab === "profile" && (
+                    <GuideProfileCard
+                        profile={profile}
+                        onEditProfile={() => setShowEditProfile(true)}
+                        onChangePassword={() => setShowChangePassword(true)}
+                        onProfileUpdate={(enabled) =>
+                            setProfile((prev) =>
+                                prev ? { ...prev, email_notifications_enabled: enabled } : prev
+                            )
+                        }
+                    />
+                )}
+            </main>
 
             {/* Modals */}
             {showEditProfile && profile && (
@@ -180,9 +367,7 @@ export default function GuideDashboard() {
             )}
 
             {showChangePassword && (
-                <ChangePasswordModal
-                    onClose={() => setShowChangePassword(false)}
-                />
+                <ChangePasswordModal onClose={() => setShowChangePassword(false)} />
             )}
 
             {selectedBooking && (

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@repo/prisma";
+import { PaymentMethod } from "@prisma/client";
 
 export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
     const userId = session.user.id;
     const data = await req.json();
 
-    const { type, itemId, startDate, endDate, price, location } = data;
+    const { type, itemId, startDate, endDate, price, location, paymentMethod } = data;
 
     if (!type || !itemId || !startDate || !endDate || !price) {
         return NextResponse.json(
@@ -34,6 +35,45 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        // Check for duplicate bookings (same user + accommodation/guide + overlapping dates)
+        const existingBooking = await prisma.booking.findFirst({
+            where: {
+                user_id: userId,
+                status: { not: "cancelled" },
+                ...(type === "accommodation"
+                    ? { accommodation_id: itemId }
+                    : { guide_id: itemId }),
+                OR: [
+                    {
+                        // New booking starts within existing booking
+                        start_date: { lte: start },
+                        end_date: { gt: start },
+                    },
+                    {
+                        // New booking ends within existing booking
+                        start_date: { lt: end },
+                        end_date: { gte: end },
+                    },
+                    {
+                        // New booking completely contains existing booking
+                        start_date: { gte: start },
+                        end_date: { lte: end },
+                    },
+                ],
+            },
+        });
+
+        if (existingBooking) {
+            return NextResponse.json(
+                { error: "You already have a booking for this accommodation/guide during these dates" },
+                { status: 409 }
+            );
+        }
+
+        // Validate payment method
+        const validPaymentMethod: PaymentMethod =
+            paymentMethod === "pay_at_property" ? "pay_at_property" : "online";
+
         let bookingData: any = {
             user_id: userId,
             type,
@@ -42,6 +82,8 @@ export async function POST(req: NextRequest) {
             price: parseFloat(price),
             status: "pending",
             location,
+            payment_method: validPaymentMethod,
+            is_paid: false,
         };
 
         if (type === "accommodation") {
@@ -105,10 +147,12 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json(booking);
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error creating booking:", error);
+        console.error("Error details:", error?.message || "Unknown error");
+        console.error("Error stack:", error?.stack);
         return NextResponse.json(
-            { error: "Failed to create booking" },
+            { error: "Failed to create booking", details: error?.message },
             { status: 500 }
         );
     }

@@ -1,18 +1,18 @@
 // Admin Dashboard Constants
 
 export const CHART_COLORS = {
-    primary: "rgba(102, 126, 234, 1)",
-    primaryLight: "rgba(102, 126, 234, 0.2)",
-    secondary: "rgba(118, 75, 162, 1)",
-    secondaryLight: "rgba(118, 75, 162, 0.2)",
-    success: "rgba(34, 197, 94, 1)",
-    successLight: "rgba(34, 197, 94, 0.2)",
-    warning: "rgba(251, 146, 60, 1)",
-    warningLight: "rgba(251, 146, 60, 0.2)",
-    danger: "rgba(239, 68, 68, 1)",
+    primary: "rgba(99, 102, 241, 1)", // indigo-500
+    primaryLight: "rgba(99, 102, 241, 0.2)",
+    secondary: "rgba(147, 51, 234, 1)", // purple-600
+    secondaryLight: "rgba(147, 51, 234, 0.2)",
+    success: "rgba(16, 185, 129, 1)", // emerald-500
+    successLight: "rgba(16, 185, 129, 0.2)",
+    warning: "rgba(245, 158, 11, 1)", // amber-500
+    warningLight: "rgba(245, 158, 11, 0.2)",
+    danger: "rgba(239, 68, 68, 1)", // red-500
     dangerLight: "rgba(239, 68, 68, 0.2)",
-    info: "rgba(59, 130, 246, 1)",
-    infoLight: "rgba(59, 130, 246, 0.2)",
+    info: "rgba(6, 182, 212, 1)", // cyan-500
+    infoLight: "rgba(6, 182, 212, 0.2)",
 };
 
 export const TIME_PERIODS = [

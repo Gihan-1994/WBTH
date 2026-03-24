@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { UserProfile } from "../types";
+import { User, Phone, Globe, Calendar, Camera, X, Loader2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface EditProfileModalProps {
     profile: UserProfile;
@@ -9,13 +11,11 @@ interface EditProfileModalProps {
     onSave: () => void;
 }
 
-/**
- * Modal for editing tourist profile details
- */
 export default function EditProfileModal({ profile, onClose, onSave }: EditProfileModalProps) {
     const [formData, setFormData] = useState(profile);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
+    const toast = useToast();
 
     async function handleSubmit(e: any) {
         e.preventDefault();
@@ -31,7 +31,7 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
                 if (!uploadRes.ok) {
                     const error = await uploadRes.json();
-                    alert(error.error || "Failed to upload profile picture");
+                    toast.error(error.error || "Failed to upload profile picture");
                     setUploading(false);
                     return;
                 }
@@ -45,13 +45,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
                 body: JSON.stringify(formData),
             });
             if (res.ok) {
-                alert("Profile updated successfully!");
+                toast.success("Profile updated successfully!");
                 onSave();
             } else {
-                alert("Failed to update profile");
+                toast.error("Failed to update profile");
             }
         } catch (err) {
-            alert("Error updating profile");
+            toast.error("Error updating profile");
             setUploading(false);
         }
     }
@@ -62,13 +62,13 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
 
         // Validate file type
         if (!file.type.startsWith("image/")) {
-            alert("Please select an image file");
+            toast.error("Please select an image file");
             return;
         }
 
         // Validate file size (2MB)
         if (file.size > 2 * 1024 * 1024) {
-            alert("Image size must be less than 2MB");
+            toast.error("Image size must be less than 2MB");
             return;
         }
 
@@ -91,119 +91,179 @@ export default function EditProfileModal({ profile, onClose, onSave }: EditProfi
             if (res.ok) {
                 setSelectedImage(null);
                 setFormData({ ...formData, profile_picture: null });
-                alert("Profile picture removed!");
+                toast.success("Profile picture removed");
                 onSave();
             } else {
-                alert("Failed to remove profile picture");
+                toast.error("Failed to remove profile picture");
             }
         } catch (err) {
-            alert("Error removing profile picture");
+            toast.error("Error removing profile picture");
         }
-    }
+    };
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-100 max-h-[90vh] overflow-y-auto">
-                <h2 className="text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Edit Profile</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Profile Picture Upload */}
-                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
-                        <label className="block text-sm font-bold text-gray-700 mb-3">📸 Profile Picture</label>
-                        <div className="flex flex-col items-center gap-3">
-                            {/* Image Preview */}
-                            {(selectedImage || formData.profile_picture) ? (
-                                <div className="relative">
-                                    <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-md opacity-75"></div>
-                                    <img
-                                        src={(selectedImage || formData.profile_picture) as string}
-                                        alt="Preview"
-                                        className="relative w-24 h-24 rounded-full object-cover ring-4 ring-white shadow-xl"
-                                    />
-                                </div>
-                            ) : (
-                                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center ring-4 ring-white shadow-lg">
-                                    <span className="text-gray-400 text-4xl font-bold">
-                                        {formData.name?.charAt(0).toUpperCase() || "?"}
-                                    </span>
-                                </div>
-                            )}
+        <div className="fixed inset-0 z-[60] flex justify-end">
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-gray-900/40 transition-opacity backdrop-blur-sm"
+                onClick={onClose}
+            />
 
-                            {/* Upload Buttons */}
-                            <div className="flex gap-2">
-                                <label className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-200 font-semibold text-sm">
-                                    Choose Image
-                                    <input
-                                        type="file"
-                                        accept="image/jpeg,image/png,image/webp"
-                                        onChange={handleImageChange}
-                                        className="hidden"
-                                    />
-                                </label>
-                                {(formData.profile_picture || selectedImage) && (
-                                    <button
-                                        type="button"
-                                        onClick={handleRemoveImage}
-                                        className="bg-red-600 text-white px-4 py-2 rounded-xl hover:bg-red-700 transition-colors font-semibold text-sm"
-                                    >
-                                        Remove
-                                    </button>
-                                )}
-                            </div>
-                            <p className="text-xs text-gray-500">Max size: 2MB • Formats: JPEG, PNG, WebP</p>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
-                        <input
-                            value={formData.name}
-                            onChange={e => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full border-2 border-gray-200 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-                        <input
-                            value={formData.contact_no || ""}
-                            onChange={e => setFormData({ ...formData, contact_no: e.target.value })}
-                            className="w-full border-2 border-gray-200 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Country</label>
-                        <input
-                            value={formData.country || ""}
-                            onChange={e => setFormData({ ...formData, country: e.target.value })}
-                            className="w-full border-2 border-gray-200 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Date of Birth</label>
-                        <input
-                            type="date"
-                            value={formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ""}
-                            onChange={e => setFormData({ ...formData, dob: e.target.value })}
-                            className="w-full border-2 border-gray-200 px-4 py-2.5 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        />
-                    </div>
-                    <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+            {/* Drawer */}
+            <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-gray-200 bg-white sticky top-0 z-10">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-lg font-semibold text-gray-900">Edit Profile</h2>
                         <button
-                            type="button"
                             onClick={onClose}
                             disabled={uploading}
-                            className="px-5 py-2.5 text-gray-700 font-semibold hover:bg-gray-100 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
                         >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={uploading}
-                            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {uploading ? "Uploading..." : "💾 Save Changes"}
+                            <X size={20} />
                         </button>
                     </div>
+                </div>
+
+                {/* Content */}
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
+                    <div className="p-6 space-y-6">
+                        {/* Profile Picture Upload */}
+                        <section className="space-y-3">
+                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                <Camera size={14} className="text-blue-500" />
+                                Profile Picture
+                            </h3>
+                            <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                <div className="flex items-center gap-4">
+                                    {(selectedImage || formData.profile_picture) ? (
+                                        <img
+                                            src={(selectedImage || formData.profile_picture) as string}
+                                            alt="Preview"
+                                            className="w-16 h-16 rounded-xl object-cover border border-gray-200"
+                                        />
+                                    ) : (
+                                        <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-200">
+                                            <User size={24} className="text-blue-600" />
+                                        </div>
+                                    )}
+                                    <div className="flex-1">
+                                        <div className="flex gap-2">
+                                            <label className="cursor-pointer inline-flex items-center gap-2 bg-white text-gray-700 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors font-medium text-sm">
+                                                <Camera size={14} />
+                                                Choose
+                                                <input
+                                                    type="file"
+                                                    accept="image/jpeg,image/png,image/webp"
+                                                    onChange={handleImageChange}
+                                                    className="hidden"
+                                                />
+                                            </label>
+                                            {(formData.profile_picture || selectedImage) && (
+                                                <button
+                                                    type="button"
+                                                    onClick={handleRemoveImage}
+                                                    className="text-red-600 px-3 py-2 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm"
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-2">Max 2MB. JPEG, PNG, WebP</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Personal Information */}
+                        <section className="space-y-3">
+                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                <User size={14} className="text-blue-500" />
+                                Personal Information
+                            </h3>
+                            <div className="space-y-4">
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <User size={14} className="text-gray-400" />
+                                        <label className="text-xs text-gray-500 font-medium">Full Name</label>
+                                    </div>
+                                    <input
+                                        value={formData.name}
+                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                        className="w-full bg-white border border-gray-200 px-3 py-2 rounded-lg text-gray-900 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="Enter your name"
+                                    />
+                                </div>
+
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <Phone size={14} className="text-gray-400" />
+                                        <label className="text-xs text-gray-500 font-medium">Phone Number</label>
+                                    </div>
+                                    <input
+                                        value={formData.contact_no || ""}
+                                        onChange={e => setFormData({ ...formData, contact_no: e.target.value })}
+                                        className="w-full bg-white border border-gray-200 px-3 py-2 rounded-lg text-gray-900 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="Enter your phone number"
+                                    />
+                                </div>
+
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <Globe size={14} className="text-gray-400" />
+                                        <label className="text-xs text-gray-500 font-medium">Country</label>
+                                    </div>
+                                    <input
+                                        value={formData.country || ""}
+                                        onChange={e => setFormData({ ...formData, country: e.target.value })}
+                                        className="w-full bg-white border border-gray-200 px-3 py-2 rounded-lg text-gray-900 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                        placeholder="Enter your country"
+                                    />
+                                </div>
+
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <Calendar size={14} className="text-gray-400" />
+                                        <label className="text-xs text-gray-500 font-medium">Date of Birth</label>
+                                    </div>
+                                    <input
+                                        type="date"
+                                        value={formData.dob ? new Date(formData.dob).toISOString().split('T')[0] : ""}
+                                        onChange={e => setFormData({ ...formData, dob: e.target.value })}
+                                        className="w-full bg-white border border-gray-200 px-3 py-2 rounded-lg text-gray-900 font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                    </div>
                 </form>
+
+                {/* Footer Actions */}
+                <div className="p-6 border-t border-gray-100 bg-gray-50 space-y-3">
+                    <button
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={uploading}
+                        className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                        {uploading ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Saving...
+                            </>
+                        ) : (
+                            "Save Changes"
+                        )}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        disabled={uploading}
+                        className="w-full py-3 px-4 bg-white text-gray-700 font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );

@@ -65,6 +65,17 @@ export async function PUT(
                 province: data.province,
                 group_size: parseInt(data.group_size),
                 account_no: data.account_no,
+                online_payment_enabled: data.online_payment_enabled !== false,
+                // Website template fields
+                ...(data.description !== undefined && { description: data.description }),
+                ...(data.tagline !== undefined && { tagline: data.tagline }),
+                ...(data.check_in_time !== undefined && { check_in_time: data.check_in_time }),
+                ...(data.check_out_time !== undefined && { check_out_time: data.check_out_time }),
+                ...(data.house_rules !== undefined && { house_rules: data.house_rules }),
+                ...(data.theme_color !== undefined && { theme_color: data.theme_color }),
+                ...(data.hero_image_index !== undefined && { hero_image_index: data.hero_image_index }),
+                ...(data.template_style !== undefined && { template_style: data.template_style }),
+                ...(data.custom_sections !== undefined && { custom_sections: data.custom_sections }),
             },
         });
 

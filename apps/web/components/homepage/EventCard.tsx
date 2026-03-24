@@ -35,67 +35,53 @@ export default function EventCard({ event }: EventCardProps) {
         <>
             <div
                 onClick={() => setShowModal(true)}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group border border-gray-100 cursor-pointer flex flex-col h-full hover:-translate-y-1"
+                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group border border-gray-100 cursor-pointer flex flex-col h-full"
             >
                 {/* Image Section */}
-                <div className="aspect-video overflow-hidden relative">
+                <div className="h-40 overflow-hidden relative">
                     {event.eventImages && event.eventImages.length > 0 ? (
                         <img
                             src={event.eventImages[0]}
                             alt={event.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                     ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
-                            <Tag className="text-orange-400" size={48} />
+                        <div className="w-full h-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
+                            <Tag className="text-indigo-300" size={40} />
                         </div>
                     )}
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <div className="bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                            <ExternalLink size={18} />
-                            <span className="font-semibold">View Details</span>
-                        </div>
+                    {/* Category Badge */}
+                    <div className="absolute top-3 left-3">
+                        <span className="bg-white/95 backdrop-blur-sm text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+                            {event.category}
+                        </span>
                     </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-3">
-                        {/* Category */}
-                        <span className="inline-block px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-xs font-bold uppercase tracking-wider">
-                            {event.category}
-                        </span>
+                <div className="p-5 flex-1 flex flex-col">
+                    {/* Title */}
+                    <h4 className="font-display text-lg font-bold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition-colors mb-3">
+                        {event.title}
+                    </h4>
 
-                        {/* Title */}
-                        <h4 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors leading-tight">
-                            {event.title}
-                        </h4>
-
-                        {/* Info List */}
-                        <div className="space-y-2">
-                            <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <div className="p-1.5 bg-orange-50 rounded-lg">
-                                    <Clock size={14} className="text-orange-500" />
-                                </div>
-                                <span className="font-medium">{formatTime(event.date)}</span>
-                            </div>
-
-                            <div className="flex items-center gap-3 text-sm text-gray-600">
-                                <div className="p-1.5 bg-orange-50 rounded-lg">
-                                    <MapPin size={14} className="text-orange-500" />
-                                </div>
-                                <span className="line-clamp-1 font-medium">{event.location}</span>
-                            </div>
+                    {/* Info */}
+                    <div className="space-y-2 mb-4">
+                        <div className="flex items-center text-sm text-gray-500">
+                            <Clock size={14} className="mr-2 text-indigo-500" />
+                            <span>{formatTime(event.date)}</span>
+                        </div>
+                        <div className="flex items-center text-sm text-gray-500">
+                            <MapPin size={14} className="mr-2 text-indigo-500" />
+                            <span className="line-clamp-1">{event.location}</span>
                         </div>
                     </div>
 
-                    {/* Footer Button (Just for visual cue) */}
-                    <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
-                        <span className="text-sm font-bold text-orange-600">See full details</span>
-                        <div className="p-2 rounded-full bg-gray-50 group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                            <ExternalLink size={16} />
-                        </div>
+                    {/* CTA */}
+                    <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <span className="text-indigo-600 font-semibold text-sm group-hover:underline">
+                            View Details →
+                        </span>
                     </div>
                 </div>
             </div>

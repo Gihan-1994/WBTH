@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Accommodation } from "../types";
+import { useToast } from "@/components/Toast";
 
 interface AccommodationImagesModalProps {
     accommodation: Accommodation;
@@ -12,6 +13,7 @@ interface AccommodationImagesModalProps {
 const AccommodationImagesModal = function AccommodationImagesModal({ accommodation, onClose, onSave }: AccommodationImagesModalProps) {
     const [images, setImages] = useState<string[]>(accommodation.images || []);
     const [uploading, setUploading] = useState(false);
+    const toast = useToast();
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -51,13 +53,13 @@ const AccommodationImagesModal = function AccommodationImagesModal({ accommodati
                 body: JSON.stringify({ images }),
             });
             if (res.ok) {
-                alert("Images updated successfully!");
+                toast.success("Images updated successfully!");
                 onSave();
             } else {
-                alert("Failed to update images");
+                toast.error("Failed to update images");
             }
         } catch (err) {
-            alert("Error updating images");
+            toast.error("Error updating images");
         } finally {
             setUploading(false);
         }

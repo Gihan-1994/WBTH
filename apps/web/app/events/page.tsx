@@ -1,42 +1,56 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { Calendar, Home } from "lucide-react";
 import EventCalendar from "@/components/homepage/EventCalendar";
+import Footer from "@/components/Footer";
 
 /**
  * Dedicated page for upcoming events
  */
 export default function EventsPage() {
     return (
-        <main className="min-h-screen bg-gradient-to-br from-gray-50 via-orange-50/20 to-red-50/20 pt-10 pb-20">
-            <div className="max-w-7xl mx-auto px-4">
-                {/* Header & Back Button */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                    <div className="flex items-center gap-4">
-                        <div className="bg-gradient-to-br from-orange-100 to-orange-200 p-4 rounded-2xl shadow-sm">
-                            <Calendar className="text-orange-600" size={32} />
+        <div className="min-h-screen bg-gray-50">
+            {/* Hero Banner */}
+            <div
+                className="relative h-[320px] bg-cover bg-center"
+                style={{
+                    backgroundImage: "url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')"
+                }}
+            >
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 via-purple-900/80 to-indigo-900/90" />
+                <div className="relative z-10 h-full flex flex-col justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {/* Breadcrumb */}
+                    <nav className="flex items-center gap-2 text-sm text-white/70 mb-4">
+                        <Link href="/" className="hover:text-white transition-colors flex items-center gap-1">
+                            <Home size={14} />
+                            Home
+                        </Link>
+                        <span>/</span>
+                        <span className="text-white">Events</span>
+                    </nav>
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="bg-white/10 backdrop-blur-sm p-3 rounded-xl border border-white/20">
+                            <Calendar className="text-white" size={32} />
                         </div>
-                        <div>
-                            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Upcoming Events</h1>
-                            <p className="text-gray-600 text-lg">Discover and join exciting events around you</p>
-                        </div>
+                        <h1 className="font-display text-5xl md:text-6xl font-bold text-white tracking-tight">
+                            Upcoming Events
+                        </h1>
                     </div>
-
-                    <Link
-                        href="/"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm hover:shadow-md group w-fit"
-                    >
-                        <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                        Return to Home
-                    </Link>
+                    <p className="text-xl text-white/80 max-w-2xl">
+                        Discover festivals, cultural celebrations, and exciting happenings across Sri Lanka
+                    </p>
                 </div>
+            </div>
 
-                {/* Main Content Area */}
-                <div className="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-orange-100/50">
+            {/* Main Content Area */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
                     <EventCalendar />
                 </div>
             </div>
-        </main>
+
+            <Footer />
+        </div>
     );
 }

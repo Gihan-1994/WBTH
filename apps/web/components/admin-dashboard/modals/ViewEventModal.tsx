@@ -42,13 +42,13 @@ export default function ViewEventModal({ event, onClose }: ViewEventModalProps) 
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Event Details</h2>
+                <div className="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-2xl flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-gray-900">Event Details</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500"
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                 </div>
 
@@ -95,7 +95,7 @@ export default function ViewEventModal({ event, onClose }: ViewEventModalProps) 
                                             key={index}
                                             onClick={() => setCurrentImageIndex(index)}
                                             className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${index === currentImageIndex
-                                                    ? "border-blue-600 scale-105"
+                                                    ? "border-gray-900 scale-105"
                                                     : "border-gray-200 hover:border-gray-400"
                                                 }`}
                                         >
@@ -112,47 +112,47 @@ export default function ViewEventModal({ event, onClose }: ViewEventModalProps) 
                     )}
 
                     {/* Title */}
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl border border-blue-100">
-                        <h3 className="text-3xl font-bold text-gray-800 mb-2">{event.title}</h3>
+                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                        <h3 className="text-2xl font-semibold text-gray-900">{event.title}</h3>
                     </div>
 
                     {/* Info Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Category */}
-                        <div className="bg-orange-50 p-4 rounded-xl border border-orange-100">
+                        <div className="bg-white p-4 rounded-xl border border-gray-100">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-orange-100 rounded-lg">
-                                    <Tag className="text-orange-600" size={20} />
+                                <div className="p-2 bg-gray-100 rounded-lg">
+                                    <Tag className="text-gray-600" size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 font-medium">Category</p>
-                                    <p className="text-lg font-semibold text-gray-800">{event.category}</p>
+                                    <p className="text-xs text-gray-500 font-medium">Category</p>
+                                    <p className="text-sm font-semibold text-gray-900">{event.category}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Date */}
-                        <div className="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <div className="bg-white p-4 rounded-xl border border-gray-100">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-green-100 rounded-lg">
-                                    <Calendar className="text-green-600" size={20} />
+                                <div className="p-2 bg-gray-100 rounded-lg">
+                                    <Calendar className="text-gray-600" size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 font-medium">Date & Time</p>
-                                    <p className="text-lg font-semibold text-gray-800">{formatDate(event.date)}</p>
+                                    <p className="text-xs text-gray-500 font-medium">Date & Time</p>
+                                    <p className="text-sm font-semibold text-gray-900">{formatDate(event.date)}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Location */}
-                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 md:col-span-2">
+                        <div className="bg-white p-4 rounded-xl border border-gray-100">
                             <div className="flex items-center gap-3">
-                                <div className="p-2 bg-blue-100 rounded-lg">
-                                    <MapPin className="text-blue-600" size={20} />
+                                <div className="p-2 bg-gray-100 rounded-lg">
+                                    <MapPin className="text-gray-600" size={18} />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-gray-600 font-medium">Location</p>
-                                    <p className="text-lg font-semibold text-gray-800">{event.location}</p>
+                                    <p className="text-xs text-gray-500 font-medium">Location</p>
+                                    <p className="text-sm font-semibold text-gray-900">{event.location}</p>
                                 </div>
                             </div>
                         </div>
@@ -160,15 +160,15 @@ export default function ViewEventModal({ event, onClose }: ViewEventModalProps) 
 
                     {/* Description */}
                     {event.description && event.description.length > 0 && (
-                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                            <h4 className="text-lg font-bold text-gray-800 mb-4">Description</h4>
+                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                            <h4 className="text-sm font-semibold text-gray-900 mb-4">Description</h4>
                             <ul className="space-y-2">
                                 {event.description.map((desc, index) => (
                                     <li key={index} className="flex items-start gap-3">
-                                        <span className="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                                        <span className="flex-shrink-0 w-5 h-5 bg-gray-900 text-white rounded-full flex items-center justify-center text-xs font-medium">
                                             {index + 1}
                                         </span>
-                                        <span className="text-gray-700 leading-relaxed">{desc}</span>
+                                        <span className="text-gray-600 text-sm leading-relaxed">{desc}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -179,7 +179,7 @@ export default function ViewEventModal({ event, onClose }: ViewEventModalProps) 
                     <div className="pt-4">
                         <button
                             onClick={onClose}
-                            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
+                            className="w-full px-6 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors"
                         >
                             Close
                         </button>

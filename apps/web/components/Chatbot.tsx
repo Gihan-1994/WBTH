@@ -19,44 +19,34 @@ interface ChatbotProps {
 export default function Chatbot({ inline = false }: ChatbotProps) {
     const [iframeLoaded, setIframeLoaded] = useState(false);
 
+    // TODO: Update Botpress webchat to newer version - v3.5 is deprecated and returning 404
+    // Get new embed code from Botpress Cloud dashboard
     useEffect(() => {
-        console.log("🔄 Chatbot component mounted");
-
-        // Try loading the script
         const script = document.createElement("script");
         script.src = "https://cdn.botpress.cloud/webchat/v3.5/inject.js";
         script.async = true;
 
         script.onload = () => {
-            console.log("✅ Script loaded, checking for botpressWebChat...");
-            console.log("Window object:", window);
-            console.log("botpressWebChat exists?", !!window.botpressWebChat);
-
             setTimeout(() => {
                 if (window.botpressWebChat) {
-                    console.log("✅ Found botpressWebChat, initializing...");
                     try {
                         window.botpressWebChat.init({
                             configUrl: "https://files.bpcontent.cloud/2025/12/31/22/20251231220130-A107GDPS.json",
                             hostUrl: "https://cdn.botpress.cloud/webchat/v3.5",
                         });
                         setIframeLoaded(true);
-                        console.log("✅ Initialization complete");
-                    } catch (error) {
-                        console.error("❌ Init error:", error);
+                    } catch {
+                        // Silently fail - Botpress needs to be updated
+                        setIframeLoaded(true);
                     }
                 } else {
-                    console.error("❌ botpressWebChat still not found after delay");
-                    // Try alternative: direct iframe embed
-                    console.log("🔄 Trying iframe fallback...");
-                    setIframeLoaded(true); // Enable button anyway
+                    setIframeLoaded(true);
                 }
             }, 2000);
         };
 
-        script.onerror = (error) => {
-            console.error("❌ Script load error:", error);
-            setIframeLoaded(true); // Enable button to try iframe
+        script.onerror = () => {
+            setIframeLoaded(true);
         };
 
         document.body.appendChild(script);
@@ -69,19 +59,18 @@ export default function Chatbot({ inline = false }: ChatbotProps) {
     }, []);
 
     const openChat = () => {
-        console.log("🖱️ Button clicked");
-
-
         if (window.botpressWebChat) {
-            console.log("✅ Using botpressWebChat.sendEvent");
             try {
                 window.botpressWebChat.sendEvent({ type: "show" });
-            } catch (error) {
-                console.error("❌ sendEvent error:", error);
+            } catch {
+                // Fallback: open in new window
+                window.open(
+                    "https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/31/22/20251231220130-A107GDPS.json",
+                    "botpress-chat",
+                    "width=400,height=600"
+                );
             }
         } else {
-            console.log("⚠️ botpressWebChat not available, opening in new window");
-            // Fallback: open in new window
             window.open(
                 "https://cdn.botpress.cloud/webchat/v3.5/shareable.html?configUrl=https://files.bpcontent.cloud/2025/12/31/22/20251231220130-A107GDPS.json",
                 "botpress-chat",

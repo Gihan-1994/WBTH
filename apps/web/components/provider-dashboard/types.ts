@@ -28,6 +28,17 @@ export interface Accommodation {
     group_size: number | null;
     account_no: string | null;
     images: string[];
+    online_payment_enabled: boolean;
+    // Website template fields
+    description?: string | null;
+    tagline?: string | null;
+    check_in_time?: string | null;
+    check_out_time?: string | null;
+    house_rules?: string[];
+    theme_color?: string | null;
+    hero_image_index?: number | null;
+    template_style?: string | null;
+    custom_sections?: any;
 }
 
 export interface Booking {
@@ -36,6 +47,8 @@ export interface Booking {
     end_date: string;
     price: number;
     status: string;
+    payment_method: "online" | "pay_at_property";
+    is_paid: boolean;
     user?: {
         name: string;
         email: string;
@@ -44,6 +57,9 @@ export interface Booking {
     accommodation?: {
         name: string;
     };
+    payments?: {
+        status: string;
+    }[];
 }
 
 export interface Stats {

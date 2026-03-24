@@ -4,6 +4,7 @@ import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { X, CreditCard, Calendar, MapPin, DollarSign } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -29,6 +30,7 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
     const elements = useElements();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const toast = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -72,21 +74,34 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
             );
 
             if (stripeError) {
-                throw new Error(stripeError.message);
+                // Check if payment intent was already authorized/succeeded
+                if (stripeError.payment_intent?.status === "requires_capture" ||
+                    stripeError.payment_intent?.status === "succeeded") {
+                    console.log("Payment was already processed:", stripeError.payment_intent.status);
+                } else {
+                    throw new Error(stripeError.message);
+                }
             }
 
-            if (paymentIntent?.status === "requires_capture") {
+            const finalStatus = paymentIntent?.status || stripeError?.payment_intent?.status;
+
+            if (finalStatus === "requires_capture" || finalStatus === "succeeded") {
                 // Update payment status to authorized
                 await fetch("/api/payments/update-status", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId, status: "authorized" }),
+                    body: JSON.stringify({
+                        paymentId,
+                        status: finalStatus === "succeeded" ? "captured" : "authorized"
+                    }),
                 }).catch(console.error);
 
-                alert("Payment authorized successfully! Waiting for provider confirmation.");
+                toast.success(finalStatus === "succeeded"
+                    ? "Payment processed successfully!"
+                    : "Payment authorized! Waiting for provider confirmation.");
                 onSuccess();
             } else {
-                throw new Error("Payment authorization failed");
+                throw new Error(`Payment authorization failed: ${finalStatus}`);
             }
         } catch (err: any) {
             console.error("Payment error:", err);
@@ -186,9 +201,16 @@ function PaymentForm({ bookingId, bookingDetails, onClose, onSuccess }: PaymentM
 
             {/* Info Message */}
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                <p className="text-sm text-blue-700">
-                    ℹ️ Your card will be authorized but not charged yet. Payment will be captured when the provider confirms your booking.
+                <p className="text-sm text-blue-700 font-medium mb-1">
+                    How payment works:
                 </p>
+                <ul className="text-sm text-blue-700 list-disc list-inside space-y-0.5">
+                    <li>Your card will be authorized for the booking amount</li>
+                    <li>Funds are held but not charged immediately</li>
+                    <li>The provider will review and confirm your booking</li>
+                    <li>Payment is captured only after confirmation</li>
+                    <li>If declined, the authorization is released automatically</li>
+                </ul>
             </div>
 
             {/* Action Buttons */}

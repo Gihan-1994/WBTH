@@ -8,8 +8,8 @@ import json
 from typing import List, Dict, Optional
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import psycopg
+from psycopg.rows import dict_row
 from dotenv import load_dotenv
 from recommender import AccommodationRecommender, load_accommodations
 from GuidesRecommendationModel.guide_recommender import GuideRecommender
@@ -27,7 +27,7 @@ FLASK_PORT = os.getenv('FLASK_PORT')
 def get_db_connection():
     """Create and return a database connection."""
     try:
-        conn = psycopg2.connect(DATABASE_URL)
+        conn = psycopg.connect(DATABASE_URL, row_factory=dict_row)
         return conn
     except Exception as e:
         print(f"Database connection error: {e}")
@@ -55,8 +55,8 @@ def fetch_accommodations_from_db(
         List of accommodation dictionaries in ML model format
     """
     conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    
+    cur = conn.cursor()
+
     try:
         # Build dynamic query
         query = """
@@ -288,7 +288,7 @@ def fetch_guides_from_db(
 ) -> List[Dict]:
     """Fetch guides from PostgreSQL database."""
     conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur = conn.cursor()
     
     try:
         query = """

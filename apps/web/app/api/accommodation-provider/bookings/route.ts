@@ -36,6 +36,10 @@ export async function GET(req: NextRequest) {
                 accommodation: {
                     select: { name: true },
                 },
+                payments: {
+                    orderBy: { id: "desc" },
+                    take: 1,
+                },
             },
         });
 

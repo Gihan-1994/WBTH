@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { Shield, ArrowLeft } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 /**
  * One-time admin registration page
  */
 export default function AdminRegisterPage() {
     const router = useRouter();
+    const toast = useToast();
     const [loading, setLoading] = useState(false);
     const [checkingAdmin, setCheckingAdmin] = useState(true);
     const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ export default function AdminRegisterPage() {
             if (response.ok) {
                 const data = await response.json();
                 if (data.exists) {
-                    alert("Admin already exists. Redirecting to login...");
+                    toast.warning("Admin already exists. Redirecting to login...");
                     router.push("/login");
                 }
             }
@@ -46,12 +48,12 @@ export default function AdminRegisterPage() {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match");
+            toast.error("Passwords do not match");
             return;
         }
 
         if (formData.password.length < 6) {
-            alert("Password must be at least 6 characters");
+            toast.error("Password must be at least 6 characters");
             return;
         }
 
@@ -72,7 +74,7 @@ export default function AdminRegisterPage() {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Admin registered successfully! Logging you in...");
+                toast.success("Admin registered successfully! Logging you in...");
 
                 // Auto-login
                 const result = await signIn("credentials", {
@@ -84,15 +86,15 @@ export default function AdminRegisterPage() {
                 if (result?.ok) {
                     router.push("/dashboard/admin");
                 } else {
-                    alert("Registration successful but login failed. Please login manually.");
+                    toast.warning("Registration successful but login failed. Please login manually.");
                     router.push("/login");
                 }
             } else {
-                alert(data.error || "Failed to register admin");
+                toast.error(data.error || "Failed to register admin");
             }
         } catch (error) {
             console.error("Error registering admin:", error);
-            alert("Failed to register admin");
+            toast.error("Failed to register admin");
         } finally {
             setLoading(false);
         }

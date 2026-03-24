@@ -71,30 +71,60 @@ model AccommodationProvider {
 }
 
 model Accommodation {
-  id                String                @id @default(uuid())
-  provider_id       String
-  name              String
-  type              String[]
-  amenities         String[]
-  rating            Float?
-  account_no        String?
-  budget            String[]
-  district          String
-  price_range_min   Float?
-  price_range_max   Float?
-  province          String?
-  interests         String[]
-  group_size        Int?
-  num_booking_dates Int?
-  prior_bookings    Int?
-  images            String[]
-  travel_style      String[]
-  location          String?
-  booking_price     Float?
-  provider          AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
-  bookings          Booking[]
+  id                     String                @id @default(uuid())
+  provider_id            String
+  name                   String
+  type                   String[]
+  amenities             String[]
+  rating                 Float?
+  account_no             String?
+  budget                 String[]
+  district               String
+  price_range_min        Float?
+  price_range_max        Float?
+  province               String?
+  interests              String[]
+  group_size             Int?
+  num_booking_dates      Int?
+  prior_bookings         Int?
+  images                 String[]
+  travel_style           String[]
+  location               String?
+  booking_price          Float?
+  online_payment_enabled Boolean               @default(true)
+
+  // Website template fields
+  description            String?               // Main about text
+  tagline                String?               // Short marketing tagline
+  check_in_time          String?               // e.g., "2:00 PM"
+  check_out_time         String?               // e.g., "11:00 AM"
+  house_rules            String[]              // Array of rules
+
+  // Website customization
+  theme_color            String?               @default("#4F46E5")  // Primary brand color
+  hero_image_index       Int?                  @default(0)          // Which image is hero
+  template_style         String?               @default("modern")   // modern, classic, luxury
+
+  // Additional sections (JSON for flexibility)
+  custom_sections        Json?                 // {facilities: [...], cuisines: [...], testimonials: [...]}
+
+  provider               AccommodationProvider @relation(fields: [provider_id], references: [provider_id])
+  bookings               Booking[]
+  blockedDates           BlockedDate[]
 
   @@map("accommodations")
+}
+
+model BlockedDate {
+  id               String        @id @default(uuid())
+  accommodation_id String
+  date             DateTime
+  reason           String?
+  created_at       DateTime      @default(now())
+  accommodation    Accommodation @relation(fields: [accommodation_id], references: [id], onDelete: Cascade)
+
+  @@unique([accommodation_id, date])
+  @@map("blocked_dates")
 }
 
 model Booking {
@@ -109,6 +139,8 @@ model Booking {
   description      String[]
   accommodation_id String?
   guide_id         String?
+  payment_method   PaymentMethod  @default(online)
+  is_paid          Boolean        @default(false)
   accommodation    Accommodation? @relation(fields: [accommodation_id], references: [id])
   guide            Guide?         @relation(fields: [guide_id], references: [user_id])
   user             User           @relation(fields: [user_id], references: [id])
@@ -226,4 +258,9 @@ enum PaymentStatus {
   captured
   cancelled
   failed
+}
+
+enum PaymentMethod {
+  online
+  pay_at_property
 }

@@ -100,6 +100,7 @@ export async function POST(req: NextRequest) {
                 province: data.province,
                 group_size: parseInt(data.group_size) || 0,
                 account_no: data.account_no,
+                online_payment_enabled: data.online_payment_enabled !== false,
                 // Initialize other fields
                 rating: 0,
                 num_booking_dates: 0,

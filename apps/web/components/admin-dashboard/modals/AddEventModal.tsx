@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { X, Upload, Trash2 } from "lucide-react";
+import { useToast } from "@/components/Toast";
 
 interface AddEventModalProps {
     onClose: () => void;
@@ -12,6 +13,7 @@ interface AddEventModalProps {
  * Modal for adding a new event
  */
 export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps) {
+    const toast = useToast();
     const [formData, setFormData] = useState({
         title: "",
         category: "",
@@ -54,13 +56,13 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
         Array.from(files).forEach((file) => {
             // Validate file type
             if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
-                alert(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
+                toast.error(`Invalid file type: ${file.name}. Only JPG, PNG, and WebP are allowed.`);
                 return;
             }
 
             // Validate file size (2MB max for original file)
             if (file.size > 2 * 1024 * 1024) {
-                alert(`File too large: ${file.name}. Maximum size is 2MB.`);
+                toast.error(`File too large: ${file.name}. Maximum size is 2MB.`);
                 return;
             }
 
@@ -100,7 +102,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
 
                     // Check if compressed image is still too large
                     if (compressedBase64.length > 1.5 * 1024 * 1024) {
-                        alert(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
+                        toast.error(`Compressed image is still too large: ${file.name}. Please use a smaller image.`);
                         return;
                     }
 
@@ -120,7 +122,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
         e.preventDefault();
 
         if (!formData.title || !formData.category || !formData.date || !formData.location) {
-            alert("Please fill in all required fields");
+            toast.error("Please fill in all required fields");
             return;
         }
 
@@ -140,15 +142,15 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
             });
 
             if (response.ok) {
-                alert("Event created successfully!");
+                toast.success("Event created successfully!");
                 onSuccess();
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to create event");
+                toast.error(data.error || "Failed to create event");
             }
         } catch (error) {
             console.error("Error creating event:", error);
-            alert("Error creating event");
+            toast.error("Error creating event");
         } finally {
             setLoading(false);
         }
@@ -158,13 +160,13 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="sticky top-0 bg-gradient-to-r from-orange-600 to-red-600 text-white p-6 rounded-t-2xl flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Add New Event</h2>
+                <div className="sticky top-0 bg-white border-b border-gray-100 p-6 rounded-t-2xl flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-gray-900">Add New Event</h2>
                     <button
                         onClick={onClose}
-                        className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500"
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                 </div>
 
@@ -180,7 +182,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                             name="title"
                             value={formData.title}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             placeholder="Enter event title"
                             required
                         />
@@ -196,7 +198,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                             name="category"
                             value={formData.category}
                             onChange={handleInputChange}
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                             placeholder="e.g., Festival, Concert, Workshop"
                             required
                         />
@@ -213,7 +215,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                                 name="date"
                                 value={formData.date}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 required
                             />
                         </div>
@@ -226,7 +228,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                                 name="location"
                                 value={formData.location}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                 placeholder="Event location"
                                 required
                             />
@@ -244,7 +246,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                                     type="text"
                                     value={desc}
                                     onChange={(e) => handleDescriptionChange(index, e.target.value)}
-                                    className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    className="flex-1 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                     placeholder={`Description point ${index + 1}`}
                                 />
                                 {formData.description.length > 1 && (
@@ -261,7 +263,7 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                         <button
                             type="button"
                             onClick={addDescriptionField}
-                            className="text-orange-600 hover:text-orange-700 text-sm font-semibold"
+                            className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
                         >
                             + Add Description Point
                         </button>
@@ -320,14 +322,14 @@ export default function AddEventModal({ onClose, onSuccess }: AddEventModalProps
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+                            className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? "Creating..." : "Create Event"}
                         </button>

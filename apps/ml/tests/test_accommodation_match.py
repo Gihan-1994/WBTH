@@ -4,8 +4,8 @@ Test script to fetch a specific accommodation and test ML recommendations.
 import os
 import json
 import requests
-import psycopg2
-from psycopg2.extras import RealDictCursor
+import psycopg
+from psycopg.rows import dict_row
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,8 +15,8 @@ FLASK_PORT = os.getenv('FLASK_PORT', '5001')
 
 def fetch_accommodation(accommodation_id: str):
     """Fetch accommodation details from database."""
-    conn = psycopg2.connect(DATABASE_URL)
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+    conn = psycopg.connect(DATABASE_URL, row_factory=dict_row)
+    cur = conn.cursor()
     
     query = """
         SELECT 
